@@ -1,0 +1,7 @@
+# Static website requirements
+# This file is minimal since it's a HTML/CSS/JS website
+
+# Web server (if using Python for serving)
+http-server==0.1.0
+
+# No other dependencies needed for static website
