@@ -3,695 +3,592 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PrimeTextile | Sport & Textile Branding Solutions</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>ANIMO - Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Base Styles */
-        :root {
-            --primary: #1a73e8;
-            --secondary: #ff6b00;
-            --dark: #333;
-            --light: #f8f9fa;
-            --gray: #6c757d;
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
         }
-        
+
         body {
-            line-height: 1.6;
-            color: var(--dark);
-            background-color: var(--light);
+            background: #011222; /* Navy deep blue */
+            min-height: 100vh;
+            padding: 20px;
         }
-        
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background-color: var(--primary);
-            color: white;
-            border-radius: 4px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .btn:hover {
-            background-color: #0d5bb9;
-            transform: translateY(-2px);
-        }
-        
-        .btn-whatsapp {
-            background-color: #25D366;
-        }
-        
-        .btn-whatsapp:hover {
-            background-color: #128C7E;
-        }
-        
-        .section {
-            padding: 80px 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        
-        .section-title h2 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            color: var(--dark);
-        }
-        
-        .section-title p {
-            color: var(--gray);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        /* Header Styles */
-        header {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+        /* Navigation Styles */
+        .navbar {
             position: fixed;
-            width: 100%;
             top: 0;
+            left: 0;
+            right: 0;
+            background: #00264d;
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             z-index: 1000;
         }
-        
-        .navbar {
+
+        .nav-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .logo span {
-            color: var(--secondary);
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 30px;
-        }
-        
-        .nav-links a {
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-        
-        .mobile-menu {
-            display: none;
-            font-size: 1.5rem;
+
+        /* Logo Styles */
+.logo {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #9dff00; /* Lemon color */
+    display: flex;
+    align-items: center;
+    height: 40px; /* Fixed height for consistency */
+}
+
+.logo-img {
+    height: 35px; /* Adjust this value to control logo size */
+    width: auto; /* Maintain aspect ratio */
+    max-width: 150px; /* Maximum width to prevent overflow */
+    object-fit: contain; /* Ensure image fits properly */
+}
+
+/* For smaller screens */
+@media (max-width: 480px) {
+    .logo-img {
+        height: 30px; /* Slightly smaller on mobile */
+        max-width: 120px;
+    }
+}
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5em;
             cursor: pointer;
+            color: #9dff00; /* Lemon color */
+            padding: 5px;
         }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-            padding: 180px 0 100px;
-            margin-top: 70px;
+
+        .nav-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 20px;
+            background: #00264d;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            padding: 10px 0;
+            min-width: 150px;
+            border: 1px solid #a6ff00;
         }
-        
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 30px;
-        }
-        
-        .hero-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        /* Services Section */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .service-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-        
-        .service-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .service-img {
-            height: 200px;
-            overflow: hidden;
-        }
-        
-        .service-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-        
-        .service-card:hover .service-img img {
-            transform: scale(1.1);
-        }
-        
-        .service-content {
-            padding: 25px;
-        }
-        
-        .service-content h3 {
-            margin-bottom: 15px;
-            color: var(--dark);
-        }
-        
-        .service-content p {
-            color: var(--gray);
-            margin-bottom: 20px;
-        }
-        
-        /* About Section */
-        .about {
-            background-color: white;
-        }
-        
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            align-items: center;
-        }
-        
-        .about-text h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: var(--dark);
-        }
-        
-        .about-text p {
-            margin-bottom: 20px;
-            color: var(--gray);
-        }
-        
-        .about-img {
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .about-img img {
-            width: 100%;
-            height: auto;
+
+        .nav-menu.active {
             display: block;
         }
-        
-        /* Products Section */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
+
+        .nav-menu a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #b3ff00; /* Lemon color */
+            transition: background 0.3s;
         }
-        
-        .product-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
+
+        .nav-menu a:hover {
+            background: #021c36;
         }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding-top: 80px;
         }
-        
-        .product-img {
-            height: 200px;
-            overflow: hidden;
+
+        /* Form Container */
+        .form-container {
+            background: #011120;
+            border-radius: 10px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 350px;
+            padding: 25px;
+            border: 1px solid #48ff00;
         }
-        
-        .product-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .product-content {
-            padding: 20px;
+
+        .form-header {
             text-align: center;
+            margin-bottom: 25px;
         }
-        
-        .product-content h3 {
+
+        .form-header h2 {
+            color: #5eff00; /* Lemon color */
             margin-bottom: 10px;
         }
-        
-        /* CTA Section */
-        .cta {
-            background: linear-gradient(135deg, var(--primary), #0d5bb9);
-            color: white;
-            text-align: center;
-            padding: 100px 0;
+
+        .form-header p {
+            color: #b3ff00; /* Lemon color */
+            opacity: 0.8;
         }
-        
-        .cta h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-        
-        .cta p {
-            max-width: 700px;
-            margin: 0 auto 30px;
-            font-size: 1.1rem;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--dark);
-            color: white;
-            padding: 70px 0 20px;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 50px;
-        }
-        
-        .footer-column h3 {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
+
+        .form-group {
             position: relative;
-            padding-bottom: 10px;
+            margin-bottom: 15px;
         }
-        
-        .footer-column h3::after {
-            content: '';
+
+        .form-group i {
             position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 40px;
-            height: 2px;
-            background-color: var(--secondary);
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9dff00; /* Lemon color */
+            font-size: 14px;
         }
-        
-        .footer-links {
-            list-style: none;
-        }
-        
-        .footer-links li {
-            margin-bottom: 10px;
-        }
-        
-        .footer-links a {
-            color: #bbb;
-            transition: color 0.3s;
-        }
-        
-        .footer-links a:hover {
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 10px 10px 35px;
+            border: 2px solid #04182c;
+            border-radius: 5px;
+            font-size: 13px;
+            transition: border-color 0.3s;
+            background: #001f3f;
             color: white;
         }
-        
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #88ff00;
         }
-        
-        .social-links a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transition: background-color 0.3s;
+
+        .form-group input::placeholder {
+            color: #ccc;
         }
-        
-        .social-links a:hover {
-            background-color: var(--primary);
+
+        .form-group select option {
+            background: #051b31;
+            color: white;
         }
-        
-        .copyright {
+
+        .access-key-link {
             text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #bbb;
-            font-size: 0.9rem;
+            margin: -5px 0 15px 0;
         }
-        
-        /* WhatsApp Float Button */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 60px;
-            height: 60px;
-            background-color: #25D366;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
-            z-index: 100;
-            transition: all 0.3s;
+
+        .access-key-link a {
+            color: #66ff00;
+            text-decoration: none;
+            font-size: 11px;
         }
-        
-        .whatsapp-float:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.7);
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: #a6ff00; /* Lemon color */
+            color: #031527; /* Navy blue */
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: bold;
         }
-        
-        /* Responsive Styles */
-        @media (max-width: 992px) {
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .about-img {
-                order: -1;
-            }
+
+        .btn:hover {
+            background: #73ff00;
         }
-        
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .mobile-menu {
-                display: block;
-            }
-            
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .section-title h2 {
-                font-size: 2rem;
-            }
+
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
         }
-        
-        @media (max-width: 576px) {
-            .hero {
-                padding: 150px 0 80px;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn {
-                width: 100%;
-                max-width: 250px;
-            }
+
+        .login-link a {
+            color: #9dff00;
+            text-decoration: none;
         }
+
+        /* Page Styles */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Merchant Page Styles */
+.merchant-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.merchant-card {
+    background: #021425;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s;
+    border: 2px solid #66ff00;
+}
+
+.merchant-card:hover {
+    transform: translateY(-2px);
+    border-color: #66ff00;
+}
+
+.merchant-image {
+    width: 50px;
+    height: 50px;
+    background: #051d35;
+    border-radius: 50%;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #5eff00;
+    overflow: hidden; /* Added to contain the image */
+    flex-shrink: 0; /* Prevents the circle from shrinking */
+}
+
+.merchant-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures image fills the circle without distortion */
+    border-radius: 50%; /* Makes the image itself circular */
+}
+
+.merchant-info {
+    flex: 1;
+}
+
+.merchant-name {
+    font-weight: bold;
+    margin-bottom: 3px;
+    font-size: 14px;
+    color: #51ff00;
+}
+
+.verified-badge {
+    color: #28a745;
+    font-size: 11px;
+}
+ /* About Page Styles */
+.about-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.about-image {
+    width: 100%;
+    height: auto;
+    min-height: 200px;
+    border-radius: 8px;
+    margin: 15px 0;
+    overflow: hidden;
+}
+
+.about-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.about-text {
+    line-height: 1.6;
+    color: #ffffff; /* White color */
+    font-size: 16px;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.about-text p {
+    margin-bottom: 15px;
+}
+
+/* Remove the form-container styling for about page */
+#about-page.form-container {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    max-width: 800px;
+    padding: 0;
+}
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <a href="#" class="logo">KASTREAM<span>BRANDING</span></a>
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#products">Products</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-                <div class="mobile-menu">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </nav>
+    <!-- Navigation Bar -->
+<nav class="navbar">
+    <div class="nav-content">
+        <div class="logo">
+            <img src="https://animoplatform.com/assets/logo.svg" alt="ANIMO" class="logo-img">
         </div>
-    </header>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <div class="nav-menu" id="navMenu">
+            <a href="#" onclick="showPage('about-page')">About</a>
+            <a href="#" onclick="showPage('registration-page')">Register</a>
+            <a href="#" onclick="showPage('login-page')">Login</a>
+        </div>
+    </div>
+</nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="container">
-            <h1>KASTREAM SPORTS AND KITS DESIGNING COMPANY</h1>
-            <p>We are a sportswear/kit designing and branding company specializing on sports designs/customizing and sales of sports kits including :jersey,boots,track suit,T-shirt,face cap,hoodies,trophy,medals,etc.</p>
-            <div class="hero-buttons">
-                <a href="https://wa.me/+2348086160215?text=Hi%2C%20I'm%20interested%20in%20your%20textile%20and%20sport%20branding%20services" class="btn btn-whatsapp" target="_blank">
-                    <i class="fab fa-whatsapp"></i> Contact on WhatsApp
-                </a>
-                <a href="#services" class="btn">Our Services</a>
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Registration Page -->
+        <div class="form-container page active" id="registration-page">
+            <div class="form-header">
+                <h2>Create Account</h2>
+                <p>Join ANIMO today</p>
+            </div>
+
+            <form id="registrationForm">
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" placeholder="Full Name" required>
+                </div>
+                
+                <div class="form-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" placeholder="Email" required>
+                </div>
+                
+                <div class="form-group">
+                    <i class="fas fa-user-tag"></i>
+                    <input type="text" placeholder="Username" required>
+                </div>
+                
+                <div class="form-group">
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" placeholder="Phone Number" required>
+                </div>
+                
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="Password" required>
+                </div>
+                
+                <div class="form-group">
+                    <i class="fas fa-globe"></i>
+                    <select required>
+                        <option value="">Select Country</option>
+                        <option value="nigeria">Nigeria</option>
+                        <option value="foreign">Foreign</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <i class="fas fa-key"></i>
+                    <input type="text" placeholder="Access Key" required id="accessKey">
+                </div>
+                
+                <div class="access-key-link">
+                    <a href="#" onclick="showPage('merchant-page')">Don't have access key? Click here</a>
+                </div>
+                
+                <div class="form-group">
+                    <i class="fas fa-box"></i>
+                    <select required>
+                        <option value="">Select Package</option>
+                        <option value="standard">Standard - 10k Naira</option>
+                        <option value="pro">Pro - 15k Naira</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn">Register</button>
+            </form>
+
+            <div class="login-link">
+                Already have an account? <a href="#" onclick="showPage('login-page')">Login here</a>
             </div>
         </div>
-    </section>
 
-    <!-- Services Section -->
-    <section class="section" id="services">
-        <div class="container">
-            <div class="section-title">
-                <h2>Our Services</h2>
-                <p>We offer a comprehensive range of textile and sport branding services to meet all your needs.</p>
+        <!-- Login Page -->
+        <div class="form-container page" id="login-page">
+            <div class="form-header">
+                <h2>Login</h2>
+                <p>Welcome back to ANIMO</p>
             </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-img">
-                        <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Custom Sportswear">
-                    </div>
-                    <div class="service-content">
-                        <h3>Custom Sportswear</h3>
-                        <p>High-performance sportswear with custom branding for teams, clubs, and organizations.</p>
-                        <a href="https://wa.me/+2348086160215?text=Hi%2C%20I'm%20interested%20in%20your%20Custom%20Sportswear%20services" class="btn btn-whatsapp" target="_blank">Get Quote</a>
-                    </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" placeholder="Username" required>
                 </div>
-                <div class="service-card">
-                    <div class="service-img">
-                        <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Team Uniforms">
-                    </div>
-                    <div class="service-content">
-                        <h3>Team Uniforms</h3>
-                        <p>Custom-designed uniforms that reflect your team's identity and enhance performance.</p>
-                        <a href="https://wa.me/+2348086160215?text=Hi%2C%20I'm%20interested%20in%20your%20Team%20Uniforms%20services" class="btn btn-whatsapp" target="_blank">Get Quote</a>
-                    </div>
+                
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="Password" required>
                 </div>
-                <div class="service-card">
-                    <div class="service-img">
-                        <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" alt="Branded Textiles">
-                    </div>
-                    <div class="service-content">
-                        <h3>Branded Textiles</h3>
-                        <p>Premium quality textiles with your logo and branding for promotional and corporate use.</p>
-                        <a href="https://wa.me/+2348086160215?text=Hi%2C%20I'm%20interested%20in%20your%20Branded%20Textiles%20services" class="btn btn-whatsapp" target="_blank">Get Quote</a>
-                    </div>
-                </div>
+                
+                <button type="submit" class="btn">Login</button>
+            </form>
+
+            <div class="login-link">
+                Don't have an account? <a href="#" onclick="showPage('registration-page')">Register here</a>
             </div>
         </div>
-    </section>
+        <!-- Merchant Page -->
+<div class="form-container page" id="merchant-page">
+    <div class="form-header">
+        <h2>Verified Merchants</h2>
+        <p>Get your access key from trusted merchants</p>
+    </div>
 
-    <!-- About Section -->
-    <section class="section about" id="about">
-        <div class="container">
+    <div class="merchant-grid">
+        <div class="merchant-card" onclick="redirectToWhatsApp('COACH DAVID', '2348086160215')">
+            <div class="merchant-image">
+                <img src="data:image/jpeg;base64,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" alt="COACH DAVID">
+            </div>
+            <div class="merchant-info">
+                <div class="merchant-name">COACH DAVID</div>
+                <div class="verified-badge">✓ Verified</div>
+            </div>
+        </div>
+        
+        <div class="merchant-card" onclick="redirectToWhatsApp('COACH HENRY', '2348124151942')">
+            <div class="merchant-image">
+                <img src="data:image/jpeg;base64,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" alt="COACH HENRY">
+            </div>
+            <div class="merchant-info">
+                <div class="merchant-name">COACH HENRY</div>
+                <div class="verified-badge">✓ Verified</div>
+            </div>
+        </div>
+    </div>
+</div> 
+    
+        <!-- About Page -->
+        <div class="form-container page" id="about-page">
+            <div class="form-header">
+                <h2>About ANIMO</h2>
+                <p>walk your way to financial freedom</p>
+            </div>
+
             <div class="about-content">
+                <div class="about-image">
+                    <img src="https://animoplatform.com/assets/about-image.jpeg"
+                </div>
                 <div class="about-text">
-                    <h2>About Katstream</h2>
-                    <p>With over 15 years of experience in the textile industry, PrimeTextile has established itself as a leading provider of premium sport and textile branding solutions.</p>
-                    <p>We combine innovative design with high-quality materials to create products that not only look great but also perform exceptionally well.</p>
-                    <p>Our team of experts works closely with clients to understand their unique needs and deliver customized solutions that exceed expectations.</p>
-                    <a href="https://wa.me/+2348086160215?text=Hi%2C%20I'd%20like%20to%20know%20more%20about%20PrimeTextile" class="btn btn-whatsapp" target="_blank">Learn More</a>
+                    <p>WHAT IS ANIMO?
+Animo is an innovative, people driven, and globally connected ecosystem built to redefine wealth creation and personal growth. Our purpose is to merge technology, community, and opportunity into one seamless platform where individuals can thrive.
+
+With Animo, you gain access to a dynamic affiliate marketing network, premium skill acquisition programs, and our groundbreaking walk-and-earn technology that transforms your daily steps into real income. Beyond this, we open doors to sustainable real estate opportunities and cutting-edge tech solutions designed to secure long-term financial freedom..</p>
+                    <br>
+                 <div class="about-image">
+                    <img src="https://animoplatform.com/assets/walk-and-earn.jpeg"
                 </div>
-                <div class="about-img">
-                    <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="About PrimeTextile">
+                <div class="about-text">
+                    <p>Turn your Sweat
+into Cash on Animo.
+With our groundbreaking walk-and-earn technology, your movement turns into momentum, and your momentum turns into real rewards. Every step counts..</p>
+                    <br>
+               <div class="about-image">
+                    <img src="https://animoplatform.com/assets/digital-real-estate.jpeg"
+                </div>
+                <div class="about-text">
+                    <p>Animo Digital
+Real Estate.
+Welcome to a new era of ownership. Buy valuable virtual properties, build your portfolio, and sell for profit as their value grows. Own the future.</p>
+                    <br>
+                 <div class="about-image">
+                    <img src="https://animoplatform.com/assets/play-games-and-earn.jpeg"
+                </div>
+                <div class="about-text">
+                    <p>Play Games on Animo
+and Earn Real Rewards.
+The fun just got real. Play games and earn rewards paid directly to your bank account. No gimmicks, just pure entertainment that pays you back.</p>
+                    <br>
+                <div class="about-image">
+                    <img src="https://animoplatform.com/assets/animo-is-universal.jpeg"
+                </div>
+                <div class="about-text">
+                    <p>Animo Is
+Universal.
+Anyone can get started on Animo from any part of the world and earn. Opportunity knows no boundaries, and neither does ANIMO.</p>
+                    <br>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Products Section -->
-    <section class="section" id="products">
-        <div class="container">
-            <div class="section-title">
-                <h2>Our Products</h2>
-                <p>Explore our range of high-quality textile and sport products.</p>
-            </div>
-            <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=735&q=80" alt="Jerseys">
-                    </div>
-                    <div class="product-content">
-                        <h3>Sport Jerseys</h3>
-                        <a href="https://wa.me/+2348086160215?text=Hi%2C%20I'm%20interested%20in%20your%20Sport%20Jerseys" class="btn btn-whatsapp" target="_blank">Inquire</a>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="https://images.unsplash.com+2348086160215/photo-1586351934193-6b655403ca71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Tracksuits">
-                    </div>
-                    <div class="product-content">
-                        <h3>Tracksuits</h3>
-                        <a href="https://wa.me/+2348086160215?text=Hi%2C%20I'm%20interested%20in%20your%20Tracksuits" class="btn btn-whatsapp" target="_blank">Inquire</a>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Training Wear">
-                    </div>
-                    <div class="product-content">
-                        <h3>Training Wear</h3>
-                        <a href="https://wa.me/+2348086160215?text=Hi%2C%20I'm%20interested%20in%20your%20Training%20Wear" class="btn btn-whatsapp" target="_blank">Inquire</a>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1072&q=80" alt="Promotional Textiles">
-                    </div>
-                    <div class="product-content">
-                        <h3>Promotional Textiles</h3>
-                        <a href="https://wa.me/+2348086160215?text=Hi%2C%20I'm%20interested%20in%20your%20Promotional%20Textiles" class="btn btn-whatsapp" target="_blank">Inquire</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="container">
-            <h2>Ready to Elevate Your Brand?</h2>
-            <p>Contact us today to discuss your textile and sport branding needs. Our team is ready to help you create the perfect solution for your organization.</p>
-            <a href="https://wa.me/+2348086160215?text=Hi%2C%20I'd%20like%20to%20discuss%20my%20textile%20and%20sport%20branding%20needs" class="btn btn-whatsapp" target="_blank">
-                <i class="fab fa-whatsapp"></i> Start a Conversation
-            </a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>kastream branding</h3>
-                    <p>kastream Enterprises and sport branding solutions for teams, organizations, and businesses worldwide.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h3>Quick Links</h3>
-                    <ul class="footer-links">
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#services">Services</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#products">Products</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Services</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Custom Sportswear</a></li>
-                        <li><a href="#">Team Uniforms</a></li>
-                        <li><a href="#">Branded Textiles</a></li>
-                        <li><a href="#">Promotional Items</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Contact Us</h3>
-                    <ul class="footer-links">
-                        <li><i class="fas fa-map-marker-alt"></i> 123 Textile Street, City, Country</li>
-                        <li><i class="fas fa-phone"></i> +1 234 567 8900</li>
-                        <li><i class="fas fa-envelope"></i> info@primetextile.com</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2025 kastream. All Rights Reserved.</p>
-            </div>
-        </div>	
-    </footer>
-
-    <!-- WhatsApp Float Button -->
-    <a href="https://wa.me/+2348086160215?text=Hi%2C%20I'm%20interested%20in%20your%20services" class="whatsapp-float" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    </div>
 
     <script>
-        // Mobile Menu Toggle
-        document.querySelector('.mobile-menu').addEventListener('click', function() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        });
+        // Navigation functions
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('active');
+        }
 
-        // Smooth Scrolling for Anchor Links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
             });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Close menu
+            document.getElementById('navMenu').classList.remove('active');
+        }
+
+        // Form submissions
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const accessKey = document.getElementById('accessKey').value;
+            
+            if (accessKey === 'PYTHOXFX1') {
+                alert('Registration successful!');
+                // Here you would typically send data to server
+            } else {
+                alert('Incorrect access key! Please use PYTHOXFX1');
+            }
         });
 
-        // Update WhatsApp number
-        // Replace '1234567890' with your actual WhatsApp number
-        // Format: country code + number without any special characters
-        // Example:+2348086160215 for US number (234)8086160215
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Incorrect username or password!');
+        });
+
+        function redirectToWhatsApp(merchantName) {
+            const message = `Hello, ${merchantName} i'm interested in getting ANIMO access key`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const navMenu = document.getElementById('navMenu');
+            const menuToggle = document.getElementById('menuToggle');
+            
+            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                navMenu.classList.remove('active');
+            }
+        });
+
+        // Initialize menu toggle
+        document.getElementById('menuToggle').addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleMenu();
+        });
     </script>
 </body>
 </html>
