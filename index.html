@@ -1,306 +1,1268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+        <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17657451171"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-17657451171');
+</script>
+<!-- Event snippet for Page view conversion page -->
+<script>
+  gtag('event', 'conversion', {
+      'send_to': 'AW-17657451171/saDVCOuflq4bEKOl3eNB',
+      'value': 1.0,
+      'currency': 'USD'
+  });
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complete Your Payment - Animo</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+    <title>Animo | Walk-and-Earn, Multi-Earnings System & Skill Acquisition</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Join Animo, the ecosystem that merges technology, community, and opportunity. Earn by walking, grow with our multi-earnings system, and gain high-demand skills. Start your journey toward your financial goals.">
+    <meta name="keywords" content="Animo, Animo Network, Animo Net, animonetwork, animonet, animolive, animonet.live, animo.live, animonet registration, Animo App, Animo Registration, Animo Platform, Animo Website, Animo Coupon Code, Is Animo Legit?, Is Animo Paying?, Animo Tutorials, Animo earning App, Fortunex, Magnus, Lumivox, Ludvena, Scaleheight, Promify, MIAMOR, MIAMOR App, MIAMOR Registration, MIAMOR Platform, MIAMOR Website, MIAMOR Withdrawal, MIAMOR Coupon Code, MIAMOR Tutorial, MIAMOR Earning App, walk and earn, multi-earnings system, skill acquisition, financial freedom, personal growth, real estate investment">
+    <link rel="canonical" href="https://animo.net.ng">
+
+    <!-- Open Graph / Facebook Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://animo.net.ng">
+    <meta property="og:title" content="Animo | Walk-and-Earn, Multi-Earnings System & Skill Acquisition">
+    <meta property="og:description" content="Join Animo, the ecosystem that merges technology, community, and opportunity. Earn by walking, grow with our multi-earnings system, and gain high-demand skills. Start your journey toward your financial goals.">
+    <meta property="og:image" content="https://animo.net.ng/assets/social-preview-image.jpg">
+
+    <!-- Twitter Meta Tags -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://animo.net.ng">
+    <meta property="twitter:title" content="Animo | Walk-and-Earn, Multi-Earnings System & Skill Acquisition">
+    <meta property="twitter:description" content="Join Animo, the ecosystem that merges technology, community, and opportunity. Earn by walking, grow with our multi-earnings system, and gain high-demand skills. Start your journey toward your financial goals.">
+    <meta property="twitter:image" content="https://animo.net.ng/assets/social-preview-image.jpg">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/favicon.PNG">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon.PNG">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon/favicon.PNG">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon.PNG">
+    <link rel="shortcut icon" href="/assets/favicon/favicon.PNG">
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- AOS (Animate on Scroll) CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Internal CSS -->
     <style>
         :root {
-            --primary-color: #B8E68C;
-            --bg-color: #03082E;
-            --card-bg: #0a1142;
+            --primary-color: #B8E68C; /* Light Green */
+            --bg-color: #03082E;      /* Deep Blue */
+            --secondary-btn-bg: #343a40;
+            --text-color-light: #ffffff;
+            --card-bg-color: #0a1142;
         }
-        
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color);
-            color: white;
+            color: var(--text-color-light);
+            overflow-x: hidden;
+        }
+
+        section {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-heading h2 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .section-heading h2 span {
+            color: var(--primary-color);
+        }
+
+        .section-heading p {
+            max-width: 600px;
+            margin: 1rem auto 0;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* --- Section Divider --- */
+        .section-divider::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(184, 230, 140, 0.2);
+            z-index: 3;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            transition: background-color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
+            padding: 1rem 0;
+            z-index: 1030;
+        }
+        
+        .navbar-scrolled {
+            background-color: rgba(3, 8, 46, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(184, 230, 140, 0.1);
+        }
+
+        .navbar-brand img {
+            height: 30px;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-color-light);
+            font-weight: 500;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .btn-join-us {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-join-us:hover {
+            background-color: var(--text-color-light);
+            color: var(--bg-color);
+        }
+        
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .navbar-toggler-icon {
+           background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* --- Hero Section --- */
+        #hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
-            padding: 20px 0;
+            padding-top: 100px; /* Space for fixed navbar */
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
         }
         
-        .payment-container {
+        .hero-content .hero-logo {
+            max-width: 280px;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-content .slogan {
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content .description {
+            font-size: 1.25rem;
+            font-weight: 500;
+            line-height: 1.6;
             max-width: 500px;
-            margin: 0 auto;
-            width: 100%;
+            margin-bottom: 2rem;
         }
-        
-        .logo-header {
+
+        .cta-buttons .btn {
+            padding: 0.8rem 2rem;
+            font-weight: 600;
+            border-radius: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+            margin: 0.5rem;
+            min-width: 180px;
             text-align: center;
-            margin-bottom: 30px;
+        }
+
+        .btn-get-started {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            border: 2px solid var(--primary-color);
         }
         
-        .logo-header img {
-            height: 40px;
+        .btn-get-started:hover {
+            background-color: transparent;
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-learn-more {
+            background-color: var(--secondary-btn-bg);
+            color: var(--text-color-light);
+            border: 2px solid var(--secondary-btn-bg);
+        }
+
+        .btn-learn-more:hover {
+            background-color: transparent;
+            color: var(--text-color-light);
+            border-color: var(--text-color-light);
+        }
+
+        .hero-image-wrapper {
+            position: absolute;
+            bottom: -1px;
+            z-index: 2;
+        }
+
+        .hero-image-wrapper img {
+            position: relative;
+            z-index: 2;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* --- About Section --- */
+        .about-heading {
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        .about-heading span {
+            color: var(--primary-color);
+        }
+
+        .about-text {
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.9;
+            font-size: 1rem;
+        }
+
+        .about-visual-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .about-visual {
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(184, 230, 140, 0.15);
+        }
+
+        /* --- Features Section --- */
+        .feature-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            height: 100%;
+        }
+        .feature-card-link:hover {
+            color: inherit;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg-color);
+            padding: 2.5rem 2rem;
+            border-radius: 10px;
+            border: 1px solid rgba(184, 230, 140, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: rgba(184, 230, 140, 0.4);
+        }
+
+        .feature-card .icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.7;
         }
         
-        .payment-card {
-            background: var(--card-bg);
+        /* --- Packages Section --- */
+        .package-card {
+            background-color: var(--card-bg-color);
+            padding: 3rem;
             border-radius: 15px;
             border: 1px solid rgba(184, 230, 140, 0.2);
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        
-        .loading-section {
             text-align: center;
-            padding: 40px 20px;
-        }
-        
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(184, 230, 140, 0.3);
-            border-top: 4px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .bank-details {
-            display: none;
-        }
-        
-        .bank-info {
-            background: rgba(184, 230, 140, 0.1);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            border: 1px solid rgba(184, 230, 140, 0.3);
-        }
-        
-        .bank-row {
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            position: relative; /* For the popular badge */
+            overflow: hidden; /* For the popular badge */
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
-        .bank-row:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
+
+        .package-card:hover {
+            transform: translateY(-5px);
         }
-        
-        .countdown-timer {
-            background: rgba(255, 0, 0, 0.1);
-            border: 1px solid rgba(255, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            margin: 25px 0;
+
+        .package-card.popular {
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 50px rgba(184, 230, 140, 0.15);
         }
-        
-        .timer {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #ff6b6b;
-            margin: 10px 0;
-        }
-        
-        .btn-telegram {
-            background: #0088cc;
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            width: 100%;
-            margin-top: 20px;
-            transition: all 0.3s;
-        }
-        
-        .btn-telegram:hover {
-            background: #0077b5;
-            transform: translateY(-2px);
-        }
-        
-        .btn-telegram i {
-            margin-right: 10px;
-        }
-        
-        .back-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        .back-link a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .package-info {
-            background: rgba(184, 230, 140, 0.15);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .copy-btn {
-            background: var(--primary-color);
+
+        .package-card.popular::before {
+            content: 'RECOMENDED';
+            position: absolute;
+            top: 25px;
+            right: -35px;
+            background-color: var(--primary-color);
             color: var(--bg-color);
-            border: none;
-            padding: 5px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-left: 10px;
+            padding: 8px 35px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transform: rotate(45deg);
+            z-index: 1;
+        }
+
+        .package-card h3 {
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+
+        .package-card .price {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+        
+        .package-card .price sup {
+            font-size: 1.8rem;
+            top: -1em;
+        }
+
+        .package-card .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 2rem 0;
+            text-align: left;
+            flex-grow: 1; /* Pushes button to the bottom */
+        }
+
+        .package-card .features-list li {
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .package-card .features-list li i {
+            color: var(--primary-color);
+            margin-right: 0.8rem;
+        }
+
+
+        /* --- FAQs Section --- */
+        #faqs .accordion {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        #faqs .accordion-item {
+            background-color: var(--card-bg-color);
+            border: 1px solid rgba(184, 230, 140, 0.1);
+            margin-bottom: 1rem;
+            border-radius: 5px !important;
+        }
+
+        #faqs .accordion-header .accordion-button {
+            background-color: var(--card-bg-color);
+            color: var(--text-color-light);
+            font-weight: 600;
+            border-radius: 5px !important;
+            box-shadow: none;
+        }
+        
+        #faqs .accordion-header .accordion-button:not(.collapsed) {
+            background-color: #0d1550;
+            color: var(--primary-color);
+        }
+
+        #faqs .accordion-body {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+        }
+
+        #faqs .accordion-button::after {
+            filter: brightness(0) invert(1);
+        }
+        
+        /* --- Footer --- */
+        footer {
+            background-color: #020624;
+            padding: 80px 0 0;
             font-size: 0.9rem;
         }
+
+        footer .footer-logo {
+            height: 35px;
+            margin-bottom: 1rem;
+        }
         
-        .copy-btn:hover {
-            background: #9cd473;
+        footer p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+        }
+        
+        footer p a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        footer p a:hover {
+            text-decoration: underline;
+        }
+
+        footer h5 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        footer .footer-links a {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            margin-bottom: 0.8rem;
+            transition: color 0.3s;
+        }
+        
+        footer .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(184, 230, 140, 0.1);
+            padding: 1.5rem 0;
+            margin-top: 4rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .powered-by-btn {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: #B8E68C; /* amber */
+            color: #000000;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 11px;
+            box-shadow: 0 4px 10px rgba(0, 255, 34, 0.25);
+            text-align: center;
+            text-decoration: none;
+            z-index: 9999;
+            transition: all 0.3s ease;
+            line-height: 1.3;
+        }
+
+        .powered-by-btn:hover {
+        background: linear-gradient(to right, #2b643b, #B8E68C);
+        color: #090c09;
+        transform: scale(1.05);
+        box-shadow: 0 6px 14px rgba(0, 53, 29, 0.35);
+        }
+
+        /* --- Payment Modal Styles --- */
+        .modal-content {
+            background-color: var(--card-bg-color);
+            border: 1px solid rgba(184, 230, 140, 0.2);
+            border-radius: 15px;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(184, 230, 140, 0.2);
+            padding: 1rem 1.5rem;
+        }
+
+        .btn-close-white {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+
+        .bank-row {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .bank-row:last-child {
+            border-bottom: none;
+        }
+
+        .countdown-box {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        /* --- Responsive Design --- */
+
+        /* Mobile View */
+        @media (max-width: 991.98px) {
+            section {
+                padding: 80px 0;
+            }
+
+            .section-heading h2 {
+                font-size: 2.8rem;
+            }
+
+            .navbar {
+                /* background-color: var(--bg-color); */
+            }
+            
+            #hero {
+              text-align: left;
+              padding-top: 120px;
+              min-height: auto; /* Allow section to grow with content */
+              display: block; /* Stack content and image vertically */
+              padding-bottom: 0;
+              background-image: url(./assets/background-mobile.png);
+              background-size: cover;
+              background-position: center bottom;
+              background-repeat: no-repeat;
+            }
+
+            .hero-content {
+                width: 100%;
+            }
+
+            .hero-content .hero-logo {
+                max-width: 240px;
+            }
+
+            .hero-content .slogan {
+                font-size: 1rem;
+            }
+            
+            .hero-content .description {
+                font-size: 1rem;
+                line-height: 1.5;
+            }
+
+            .navbar-collapse {
+                background-color: rgba(3, 8, 46, 0.7);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                padding: 1rem;
+                text-align: center;
+                border-radius: 5px;
+                margin-top: 0.5rem;
+            }
+            
+            .cta-buttons {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cta-buttons .btn {
+                width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+                padding: 0.7rem 1.8rem;
+                font-size: 0.85rem;
+            }
+
+            .hero-image-wrapper {
+                position: relative; /* Take image out of absolute positioning */
+                bottom: auto;
+                left: auto;
+                transform: none;
+                width: 100%;
+                margin-top: 3rem; /* Space between content and image */
+            }
+            .hero-image-wrapper img {
+                width: 100%;
+                max-width: 100%;
+                margin-left: 0;
+            }
+
+            /* About Section Mobile */
+            .about-heading {
+                font-size: 2.8rem;
+                text-align: center;
+            }
+            .about-text {
+                text-align: left;
+                font-size: 0.9rem;
+            }
+            .about-visual-wrapper {
+                margin-top: 3rem;
+            }
+            
+            .package-card {
+                padding: 2rem;
+            }
+
+            /* Footer Mobile */
+            footer {
+                text-align: center;
+            }
+            .footer-links, .social-icons {
+                margin-top: 2rem;
+                text-align: center;
+            }
+
+            /* Modal Mobile */
+            .modal-dialog {
+                margin: 10px;
+            }
+        }
+
+        /* Desktop View */
+        @media (min-width: 992px) {
+            #hero {
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                padding-top: 100px;
+                background-image: url(./assets/background-desktop.png);
+                background-size: cover;
+                background-position: center center;
+                background-repeat: no-repeat;
+            }
+            .navbar {
+                background-color: transparent;
+            }
+            .hero-content .description {
+                font-size: 1.3rem;
+            }
+            .cta-buttons {
+                display: flex;
+                flex-direction: row;
+            }
+             .cta-buttons .btn {
+                margin-left: 0;
+            }
+            .hero-image-wrapper {
+                position: absolute; /* Re-apply absolute for desktop */
+                width: 45%;
+                max-width: 600px;
+                right: 5%;
+                left: auto;
+                bottom: -1px;
+                transform: none;
+                margin-top: 0; /* Reset mobile margin */
+            }
+            .hero-image-wrapper img {
+                width: 100%; /* Reset mobile image styles */
+                max-width: 100%;
+                margin-left: 0;
+            }
         }
     </style>
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Animo",
+      "url": "https://animo.net.ng/",
+      "logo": "https://animo.net.ng/assets/logo.svg",
+      "description": "Animo is an innovative, people driven, and globally connected ecosystem built to offer new avenues for personal and financial growth. Our purpose is to merge technology, community, and opportunity into one seamless platform where individuals can thrive.",
+      "sameAs": []
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "How does the 'Walk-and-Earn' feature actually work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our groundbreaking technology uses your smartphone's built-in sensors to track your steps. As you walk, you accumulate points within the Animo app which can then be converted into real income or used within our ecosystem. It's a simple, powerful way to monetize your daily activity."
+        }
+      },{
+        "@type": "Question",
+        "name": "What kind of skills can I learn through Animo?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We offer a curated selection of premium skill acquisition programs focused on high-demand areas such as digital marketing, financial literacy, e-commerce, and modern tech skills. Our goal is to provide practical knowledge that translates directly into earning opportunities."
+        }
+      },{
+        "@type": "Question",
+        "name": "What is the Multi-Earnings System?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Multi-Earnings System is a core part of Animo, offering various ways to generate income beyond the walk-and-earn feature. We provide all the tools, training, and support you need to succeed, regardless of your prior experience."
+        }
+      },{
+        "@type": "Question",
+        "name": "Is Animo available in my country?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, Animo is a globally connected ecosystem. Our platform is designed to be accessible to individuals from all over the world, empowering a diverse community to walk their path to prosperity together."
+        }
+      }]
+    }
+    </script>
 </head>
 <body>
-    <div class="container">
-        <div class="payment-container">
-            <div class="logo-header">
-                <img src="./assets/logo.svg" alt="Animo Logo">
-            </div>
-            
-            <div class="payment-card">
-                <!-- Loading Section -->
-                <div id="loadingSection" class="loading-section">
-                    <div class="spinner"></div>
-                    <h3>Generating Bank Details</h3>
-                    <p>Please wait while we prepare your secure payment details...</p>
-                </div>
-                
-                <!-- Bank Details Section -->
-                <div id="bankDetailsSection" class="bank-details">
-                    <div class="package-info">
-                        <h4 id="packageName">1-Year Plan</h4>
-                        <h2 id="packageAmount" style="color: #B8E68C;">₦15,000</h2>
-                        <p>Complete payment within 5 minutes</p>
-                    </div>
-                    
-                    <h4 class="text-center mb-4">Make Transfer To:</h4>
-                    
-                    <div class="bank-info">
-                        <div class="bank-row">
-                            <span><strong>Bank Name:</strong></span>
-                            <span>GUARANTY TRUST BANK (GTB)</span>
-                        </div>
-                        <div class="bank-row">
-                            <span><strong>Account Name:</strong></span>
-                            <span>ANIMO NETWORK LTD</span>
-                        </div>
-                        <div class="bank-row">
-                            <span><strong>Account Number:</strong></span>
-                            <span>
-                                <strong id="accountNumber">6606092804</strong>
-                                <button class="copy-btn" onclick="copyAccountNumber()">
-                                    <i class="fas fa-copy"></i> Copy
-                                </button>
-                            </span>
-                        </div>
-                        <div class="bank-row">
-                            <span><strong>Amount:</strong></span>
-                            <span><strong id="displayAmount">₦15,000.00</strong></span>
-                        </div>
-                    </div>
-                    
-                    <!-- Countdown Timer -->
-                    <div class="countdown-timer">
-                        <p><i class="fas fa-clock"></i> Complete payment within:</p>
-                        <div class="timer" id="countdown">05:00</div>
-                        <p>This session will expire after 5 minutes</p>
-                    </div>
-                    
-                    <!-- Important Instructions -->
-                    <div class="alert alert-warning">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <strong>Important:</strong>
-                        <ul class="mb-0 mt-2">
-                            <li>Use your registered email as payment reference</li>
-                            <li>Keep your transaction receipt for verification</li>
-                            <li>Click the button below only AFTER making transfer</li>
-                        </ul>
-                    </div>
-                    
-                    <!-- Telegram Button -->
-                    <button id="telegramBtn" class="btn-telegram" onclick="redirectToTelegram()" disabled>
-                        <i class="fab fa-telegram"></i> I HAVE MADE PAYMENT
+
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <img src="./assets/logo.svg" alt="Animo Logo">
+                </a>
+
+                <div class="d-flex align-items-center">
+                    <a href="#packages" class="btn btn-join-us d-lg-none me-2">Join US</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
                     </button>
+                </div>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#hero">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#features">Features</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#packages">Packages</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://youtube.com/@legit_update">Videos</a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link" href="#faqs">FAQs</a>
+                        </li>
+                    </ul>
+                    <a href="#packages" class="btn btn-join-us ms-lg-3 d-none d-lg-block">Join US</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="section-divider">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="hero-content" data-aos="fade-up">
+                            <img src="./assets/logo.svg" alt="Animo" class="hero-logo">
+                            <p class="slogan">Walk with purpose......</p>
+                            <h1 class="description">
+                                A Platform Merging Technology, Community, and Opportunity to Help You Grow
+                            </h1>
+                            <div class="cta-buttons">
+                                <button class="btn btn-get-started" onclick="openPaymentModal('1year')">Get Started</button>
+                                <a href="#about" class="btn btn-learn-more">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image-wrapper" data-aos="fade-up" data-aos-delay="200">
+                <img src="./assets/hero-image.png" alt="A happy man in a green sweater holding a smartphone, celebrating success with Animo.">
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section-divider">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6" data-aos="fade-right">
+                        <div class="about-content">
+                            <h2 class="about-heading">WHAT IS <span>ANIMO?</span></h2>
+                            <p class="about-text">
+                                Animo is an innovative, people driven, and globally connected ecosystem built to provide new avenues for personal and financial growth. Our purpose is to merge technology, community, and opportunity into one seamless platform where individuals can thrive.
+                                <br><br>
+                                With Animo, you gain access to a dynamic multi-earnings system, premium skill acquisition programs, and our groundbreaking walk-and-earn technology that transforms your daily steps into real income. Beyond this, we open doors to sustainable real estate opportunities and cutting-edge tech solutions designed to help you work towards long-term financial goals.
+                                <br><br>
+                                Here, you are not just earning, you are building, evolving, and pioneering your future. Animo is a platform where innovation meets opportunity, helping you take steps toward your goals.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
+                        <div class="about-visual-wrapper">
+                            <img src="./assets/about-image.jpg" alt="A promotional flag with the Animo logo at an event, representing the Animo community." class="about-visual img-fluid" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="section-divider">
+            <div class="container">
+                <div class="section-heading" data-aos="fade-up">
+                    <h2>Our Key <span>Features</span></h2>
+                    <p>Discover the core components of the Animo ecosystem, designed to empower your journey of personal and financial growth.</p>
+                </div>
+                <div class="row gy-4">
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up">
+                        <a href="#packages" class="feature-card-link">
+                            <div class="feature-card">
+                                <i class="fas fa-walking icon" aria-hidden="true"></i>
+                                <h3>Walk-and-Earn</h3>
+                                <p>Transform your daily steps into real, tangible income with our innovative technology that rewards you for staying active.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                        <a href="#packages" class="feature-card-link">
+                            <div class="feature-card">
+                                <i class="fas fa-layer-group icon" aria-hidden="true"></i>
+                                <h3>Multi-Earnings System</h3>
+                                <p>Tap into a dynamic and globally connected ecosystem with multiple income streams designed to expand your earning potential.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                        <a href="#packages" class="feature-card-link">
+                            <div class="feature-card">
+                                <i class="fas fa-graduation-cap icon" aria-hidden="true"></i>
+                                <h3>Skill Acquisition</h3>
+                                <p>Access premium programs and courses designed to equip you with high-demand skills for the future.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                        <a href="#packages" class="feature-card-link">
+                             <div class="feature-card">
+                                <i class="fas fa-home-alt icon" aria-hidden="true"></i>
+                                <h3>Real Estate</h3>
+                                <p>We open doors to sustainable real estate opportunities, helping you build long-term, generational wealth.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                        <a href="#packages" class="feature-card-link">
+                             <div class="feature-card">
+                                <i class="fas fa-microchip icon" aria-hidden="true"></i>
+                                <h3>Tech Solutions</h3>
+                                <p>Leverage cutting-edge technology solutions designed to secure and accelerate your financial freedom.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                        <a href="#packages" class="feature-card-link">
+                             <div class="feature-card">
+                                <i class="fas fa-seedling icon" aria-hidden="true"></i>
+                                <h3>Personal Growth</h3>
+                                <p>Animo is more than an earning platform; it's an ecosystem built to foster personal and financial evolution.</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Packages Section -->
+        <section id="packages" class="section-divider">
+            <div class="container">
+                <div class="section-heading" data-aos="fade-up">
+                    <h2>Choose Your <span>Animo Plan</span></h2>
+                    <p>Select the plan that best fits your journey and unlock full access to the Animo ecosystem.</p>
+                </div>
+                <div class="row justify-content-center gy-4">
+                    <!-- 6-Month Plan -->
+                    <div class="col-lg-5 col-md-8" data-aos="fade-up" data-aos-delay="100">
+                        <div class="package-card h-100">
+                            <h3>6-Month Plan</h3>
+                            <div class="price"><sup>₦</sup>10,000</div>
+                            <p>Full access for 6 months.</p>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle" aria-hidden="true"></i> Full Access to Walk-and-Earn System</li>
+                                <li><i class="fas fa-check-circle" aria-hidden="true"></i> Entry into Animo Affiliate Network</li>
+                                <li><i class="fas fa-check-circle" aria-hidden="true"></i> Access to All Premium Skill Courses</li>
+                                <li><i class="fas fa-check-circle" aria-hidden="true"></i> Eligibility for Real Estate Opportunities</li>
+                                <li><i class="fas fa-check-circle" aria-hidden="true"></i> Access to Earning Opportunities</li>
+                            </ul>
+                            <button class="btn btn-join-us w-100 py-3" onclick="openPaymentModal('6months')">Get Started Today</button>
+                        </div>
+                    </div>
+                    <!-- 1-Year Plan (Popular) -->
+                    <div class="col-lg-5 col-md-8" data-aos="fade-up" data-aos-delay="200">
+                        <div class="package-card popular h-100">
+                            <h3>1-Year Plan</h3>
+                            <div class="price"><sup>₦</sup>15,000</div>
+                            <p>Full access for 12 months.</p>
+                             <ul class="features-list">
+                                <li><i class="fas fa-check-circle" aria-hidden="true"></i> Full Access to Walk-and-Earn System</li>
+                                <li><i class="fas fa-check-circle" aria-hidden="true"></i> Entry into Animo Affiliate Network</li>
+                                <li><i class="fas fa-check-circle" aria-hidden="true"></i> Access to All Premium Skill Courses</li>
+                                <li><i class="fas fa-check-circle" aria-hidden="true"></i> Eligibility for Real Estate Opportunities</li>
+                                <li><i class="fas fa-check-circle" aria-hidden="true"></i> Access to Earning Opportunities</li>
+                            </ul>
+                            <button class="btn btn-join-us w-100 py-3" onclick="openPaymentModal('1year')">Get Started Today</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQs Section -->
+        <section id="faqs" class="section-divider">
+            <div class="container">
+                <div class="section-heading" data-aos="fade-up">
+                    <h2>Frequently Asked <span>Questions</span></h2>
+                    <p>Have questions? We've got answers. Here are some of the most common inquiries we receive about Animo.</p>
+                </div>
+
+                <div class="accordion" id="faqAccordion" data-aos="fade-up">
+                    <!-- FAQ 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                How does the 'Walk-and-Earn' feature actually work?
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Our groundbreaking technology uses your smartphone's built-in sensors to track your steps. As you walk, you accumulate points within the Animo app which can then be converted into real income or used within our ecosystem. It's a simple, powerful way to monetize your daily activity.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FAQ 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                What kind of skills can I learn through Animo?
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                We offer a curated selection of premium skill acquisition programs focused on high-demand areas such as digital marketing, financial literacy, e-commerce, and modern tech skills. Our goal is to provide practical knowledge that translates directly into earning opportunities.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FAQ 3 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                What is the Multi-Earnings System?
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                The Multi-Earnings System is a core part of Animo, offering various ways to generate income beyond the walk-and-earn feature. We provide all the tools, training, and support you need to succeed, regardless of your prior experience.
+                            </div>
+                        </div>
+                    </div>
+                     <!-- FAQ 4 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                Is Animo available in my country?
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Yes, Animo is a globally connected ecosystem. Our platform is designed to be accessible to individuals from all over the world, empowering a diverse community to walk their path to prosperity together.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-lg-4">
+                    <img src="./assets/logo.svg" alt="Animo Logo" class="footer-logo">
+                    <p>Animo is a platform where innovation meets opportunity, helping you take steps toward your goals.</p>
+                </div>
+                <div class="col-lg-2 offset-lg-2">
+                    <h5>Quick Links</h5>
+                    <div class="footer-links">
+                        <a href="#hero">Home</a>
+                        <a href="#about">About</a>
+                        <a href="#features">Features</a>
+                        <a href="https://youtube.com/@legit_update">Videos</a>
+                        <a href="#faqs">FAQs</a>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <h5>GET STARTED</h5>
+                    <p>
+                        Ready To Begin Your Journey Of Financial Growth?, 
+                        <a href="#packages" style="color: #B8E68C; text-decoration: none; font-weight: 600;">Click Here To Get Started</a>.
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="built" style="color: white; font-weight: 500;">
+                    Built By <a href="https://t.me/m/W5ktMbhXYTA8" style="color: #B8E68C; text-decoration: none;">DEPHILANTROPIST VENTURES</a>
+                </div>
+                &copy; 2025 Animo. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+    <a href="https://t.me/m/W5ktMbhXYTA8" class="powered-by-btn" target="_blank" title="Chat DEPHILANTROPIST VENTURES">
+    <small>Built by<br><strong>DEPHILANTROPIST VENTURES</strong></small>
+  </a>
+
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header" style="background: #0a1142; border-bottom: 1px solid rgba(184, 230, 140, 0.2);">
+                    <img src="./assets/logo.svg" alt="Animo" height="30">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <!-- Modal Body -->
+                <div class="modal-body p-0">
+                    <!-- Loading Section -->
+                    <div id="modalLoading" class="text-center py-5" style="background: #0a1142;">
+                        <div class="spinner-border text-success" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <h5 class="mt-3" style="color: #B8E68C;">Generating Bank Details</h5>
+                        <p class="text-white-50">Please wait while we prepare your secure payment details...</p>
+                    </div>
                     
-                    <div class="text-center mt-3">
-                        <small style="color: rgba(255,255,255,0.6);">
-                            <i class="fas fa-lock"></i> Secure Payment • Powered by Animo
-                        </small>
+                    <!-- Bank Details Section -->
+                    <div id="modalBankDetails" style="display: none; background: #0a1142;">
+                        <!-- Package Info -->
+                        <div class="package-header text-center py-4" style="background: rgba(184, 230, 140, 0.1);">
+                            <h5 id="modalPackageName" class="mb-1">1-Year Plan</h5>
+                            <h2 id="modalPackageAmount" class="fw-bold" style="color: #B8E68C;">₦15,000</h2>
+                            <small class="text-white-50">Complete payment within 5 minutes</small>
+                        </div>
+                        
+                        <div class="p-4">
+                            <h6 class="text-center mb-3">Make Transfer To:</h6>
+                            
+                            <!-- Bank Details Card -->
+                            <div class="bank-card" style="background: rgba(184, 230, 140, 0.05); border: 1px solid rgba(184, 230, 140, 0.2); border-radius: 10px; padding: 20px;">
+                                <!-- Bank Row 1 -->
+                                <div class="bank-row d-flex justify-content-between mb-3 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <span class="text-white-50">Bank Name:</span>
+                                    <span class="fw-medium">GUARANTY TRUST BANK</span>
+                                </div>
+                                <!-- Bank Row 2 -->
+                                <div class="bank-row d-flex justify-content-between mb-3 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <span class="text-white-50">Account Name:</span>
+                                    <span class="fw-medium">ANIMO NETWORK LTD</span>
+                                </div>
+                                <!-- Bank Row 3 -->
+                                <div class="bank-row d-flex justify-content-between mb-3 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <span class="text-white-50">Account Number:</span>
+                                    <div class="d-flex align-items-center">
+                                        <span class="fw-bold me-2" id="modalAccountNumber">6606092804</span>
+                                        <button class="btn btn-sm" onclick="copyToClipboard('6606092804')" style="background: #B8E68C; color: #03082E; padding: 2px 10px; font-size: 12px;">
+                                            <i class="fas fa-copy"></i> Copy
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Bank Row 4 -->
+                                <div class="bank-row d-flex justify-content-between">
+                                    <span class="text-white-50">Amount:</span>
+                                    <span class="fw-bold" id="modalAmountDisplay">₦15,000.00</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Countdown Timer -->
+                            <div class="countdown-box text-center mt-4 py-3" style="background: rgba(255, 107, 107, 0.1); border: 1px solid rgba(255, 107, 107, 0.3); border-radius: 10px;">
+                                <p class="mb-2"><i class="fas fa-clock text-danger"></i> Complete payment within:</p>
+                                <h2 id="modalCountdown" class="fw-bold text-danger">05:00</h2>
+                                <small class="text-white-50">Session expires after 5 minutes</small>
+                            </div>
+                            
+                            <!-- Instructions -->
+                            <div class="alert alert-warning mt-3" style="background: rgba(255, 193, 7, 0.1); border-color: rgba(255, 193, 7, 0.3); color: #ffd700;">
+                                <small>
+                                    <i class="fas fa-info-circle"></i>
+                                    <strong>Important:</strong>
+                                    <ul class="mb-0 mt-2 ps-3">
+                                        <li>Use your email as payment reference</li>
+                                        <li>Keep transaction receipt for verification</li>
+                                        <li>Click button only AFTER making transfer</li>
+                                    </ul>
+                                </small>
+                            </div>
+                            
+                            <!-- Telegram Button -->
+                            <button id="modalTelegramBtn" class="btn w-100 py-3 mt-2" onclick="openTelegramWithMessage()" disabled style="background: #0088cc; color: white;">
+                                <i class="fab fa-telegram"></i> I HAVE MADE PAYMENT
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="back-link">
-                    <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Homepage</a>
+                <!-- Modal Footer -->
+                <div class="modal-footer" style="background: #0a1142; border-top: 1px solid rgba(184, 230, 140, 0.1);">
+                    <small class="text-white-50">
+                        <i class="fas fa-lock"></i> Secure Payment • Powered by Animo
+                    </small>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- jQuery 3.7.1 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
+    <!-- Bootstrap 5.3.3 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- AOS (Animate on Scroll) JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Internal JS -->
     <script>
-        // Get package from URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const packageType = urlParams.get('package') || '1year';
-        const packageName = packageType === '6months' ? '6-Month Plan' : '1-Year Plan';
-        const packageAmount = packageType === '6months' ? '₦10,000' : '₦15,000';
-        const amountNumber = packageType === '6months' ? '10000' : '15000';
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 120,
+        });
         
-        // Simulate loading delay (3 seconds)
-        setTimeout(() => {
-            document.getElementById('loadingSection').style.display = 'none';
-            document.getElementById('bankDetailsSection').style.display = 'block';
+        // Navbar scroll effect
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbar = document.querySelector('.navbar');
+            const scrollThreshold = 1;
+
+            const handleScroll = () => {
+                if (window.scrollY > scrollThreshold) {
+                    navbar.classList.add('navbar-scrolled');
+                } else {
+                    navbar.classList.remove('navbar-scrolled');
+                }
+            };
+
+            window.addEventListener('scroll', handleScroll);
+            handleScroll();
+        });
+
+        // Payment Modal Functions
+        let countdownInterval;
+        let selectedPackage = '';
+
+        function openPaymentModal(packageType) {
+            selectedPackage = packageType;
             
-            // Update package info
-            document.getElementById('packageName').textContent = packageName;
-            document.getElementById('packageAmount').textContent = packageAmount;
-            document.getElementById('displayAmount').textContent = packageAmount + '.00';
+            // Reset modal state
+            document.getElementById('modalLoading').style.display = 'block';
+            document.getElementById('modalBankDetails').style.display = 'none';
+            document.getElementById('modalTelegramBtn').disabled = true;
+            document.getElementById('modalTelegramBtn').innerHTML = '<i class="fab fa-telegram"></i> I HAVE MADE PAYMENT';
             
-            // Start countdown timer
-            startCountdown();
+            // Set package details
+            if (packageType === '6months') {
+                document.getElementById('modalPackageName').textContent = '6-Month Plan';
+                document.getElementById('modalPackageAmount').textContent = '₦10,000';
+                document.getElementById('modalAmountDisplay').textContent = '₦10,000.00';
+            } else {
+                document.getElementById('modalPackageName').textContent = '1-Year Plan';
+                document.getElementById('modalPackageAmount').textContent = '₦15,000';
+                document.getElementById('modalAmountDisplay').textContent = '₦15,000.00';
+            }
             
-            // Enable Telegram button after 10 seconds (simulating transfer time)
+            // Show modal
+            const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+            paymentModal.show();
+            
+            // Simulate loading delay
             setTimeout(() => {
-                document.getElementById('telegramBtn').disabled = false;
-            }, 10000);
-            
-        }, 3000);
-        
-        // Countdown timer function
-        function startCountdown() {
+                document.getElementById('modalLoading').style.display = 'none';
+                document.getElementById('modalBankDetails').style.display = 'block';
+                
+                // Start countdown
+                startModalCountdown();
+                
+                // Enable Telegram button after 10 seconds
+                setTimeout(() => {
+                    document.getElementById('modalTelegramBtn').disabled = false;
+                }, 10000);
+                
+            }, 2000);
+        }
+
+        function startModalCountdown() {
             let minutes = 5;
             let seconds = 0;
-            const countdownElement = document.getElementById('countdown');
-            const telegramBtn = document.getElementById('telegramBtn');
+            const countdownElement = document.getElementById('modalCountdown');
+            const telegramBtn = document.getElementById('modalTelegramBtn');
             
-            const timer = setInterval(() => {
+            // Clear any existing interval
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            countdownInterval = setInterval(() => {
                 if (seconds === 0) {
                     if (minutes === 0) {
-                        clearInterval(timer);
+                        clearInterval(countdownInterval);
                         countdownElement.innerHTML = 'EXPIRED';
                         countdownElement.style.color = '#ff0000';
                         telegramBtn.disabled = true;
                         telegramBtn.innerHTML = '<i class="fas fa-clock"></i> SESSION EXPIRED';
-                        alert('Payment session expired! Please refresh the page to generate new payment details.');
                         return;
                     }
                     minutes--;
@@ -320,35 +1282,43 @@
                 }
             }, 1000);
         }
-        
-        // Copy account number function
-        function copyAccountNumber() {
-            const accountNumber = '6606092804';
-            navigator.clipboard.writeText(accountNumber).then(() => {
-                const btn = event.target.closest('.copy-btn');
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Show copied feedback
+                const btn = event.target.closest('button');
                 const originalText = btn.innerHTML;
                 btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
                 btn.style.background = '#4CAF50';
                 
                 setTimeout(() => {
                     btn.innerHTML = originalText;
-                    btn.style.background = '';
+                    btn.style.background = '#B8E68C';
                 }, 2000);
             });
         }
-        
-        // Redirect to Telegram with pre-filled message
-        function redirectToTelegram() {
+
+        function openTelegramWithMessage() {
+            const packageName = selectedPackage === '6months' ? '6-Month Plan' : '1-Year Plan';
+            const packageAmount = selectedPackage === '6months' ? '₦10,000' : '₦15,000';
+            
             const message = `Hello ANIMO official, I have made payments for ${packageName} (${packageAmount}). My receipt is below 👇`;
             const telegramUrl = `https://t.me/pythox1?text=${encodeURIComponent(message)}`;
+            
             window.open(telegramUrl, '_blank');
             
-            // Show confirmation
-            alert('Opening Telegram... Please send your payment receipt screenshot to complete verification.');
+            // Close modal after 1 second
+            setTimeout(() => {
+                bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
+            }, 1000);
         }
-        
-        // Update page title with package info
-        document.title = `Pay ${packageAmount} - ${packageName} | Animo`;
+
+        // Clear interval when modal is closed
+        document.getElementById('paymentModal').addEventListener('hidden.bs.modal', function () {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+        });
     </script>
 </body>
 </html>
