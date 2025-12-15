@@ -7,7 +7,6 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'AW-17657451171');
     </script>
     <!-- Event snippet for Page view conversion page -->
@@ -81,13 +80,11 @@
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <!-- AOS (Animate on Scroll) CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
+    <!-- Internal CSS -->
+    <style>
         :root {
             --primary-color: #9dff00; /* Lemon color from first code */
             --bg-color: #011222; /* Navy deep blue from first code */
@@ -95,94 +92,80 @@
             --text-color-light: #ffffff;
         }
 
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color-light);
-            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* Navigation Styles */
+        section {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        /* --- Navbar --- */
         .navbar {
-            background: #00264d;
-            padding: 15px 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
+            transition: background-color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
+            padding: 1rem 0;
+            z-index: 1030;
+        }
+        
+        .navbar-scrolled {
+            background-color: rgba(3, 8, 46, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(157, 255, 0, 0.1);
         }
 
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
+        .navbar-brand img {
+            height: 30px;
         }
 
-        .logo {
-            font-size: 1.8em;
-            font-weight: bold;
+        .navbar-nav .nav-link {
+            color: var(--text-color-light);
+            font-weight: 500;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
             color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            height: 40px;
         }
 
-        .logo-img {
-            height: 35px;
-            width: auto;
-            max-width: 150px;
-            object-fit: contain;
-        }
-
-        .menu-toggle {
-            background: none;
-            border: none;
-            font-size: 1.5em;
-            cursor: pointer;
-            color: var(--primary-color);
-            padding: 5px;
-        }
-
-        .nav-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 20px;
-            background: #00264d;
+        .btn-join-us {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
             border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            padding: 10px 0;
-            min-width: 150px;
-            border: 1px solid var(--primary-color);
+            border: none;
+            transition: all 0.3s;
         }
 
-        .nav-menu.active {
-            display: block;
+        .btn-join-us:hover {
+            background-color: var(--text-color-light);
+            color: var(--bg-color);
+        }
+        
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .navbar-toggler-icon {
+           background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
 
-        .nav-menu a {
-            display: block;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: var(--primary-color);
-            transition: background 0.3s;
-        }
-
-        .nav-menu a:hover {
-            background: #021c36;
-        }
-
-        /* Main Content */
-        .main-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* Main Content Container */
+        .main-container {
+            padding-top: 100px;
             min-height: 100vh;
-            padding: 100px 20px 20px;
         }
 
         /* Form Container */
@@ -193,7 +176,8 @@
             width: 100%;
             max-width: 400px;
             padding: 30px;
-            border: 1px solid #48ff00;
+            border: 1px solid var(--primary-color);
+            margin: 0 auto;
         }
 
         .form-header {
@@ -224,6 +208,7 @@
             transform: translateY(-50%);
             color: var(--primary-color);
             font-size: 14px;
+            z-index: 2;
         }
 
         .form-group input,
@@ -354,6 +339,8 @@
             color: var(--primary-color);
             margin-right: 10px;
             font-size: 12px;
+            position: static;
+            transform: none;
         }
 
         /* Loading Screen Styles */
@@ -557,13 +544,62 @@
             padding: 0;
         }
 
+        /* Footer */
+        footer {
+            background-color: #020624;
+            padding: 80px 0 0;
+            font-size: 0.9rem;
+            margin-top: 50px;
+        }
+
+        footer .footer-logo {
+            height: 35px;
+            margin-bottom: 1rem;
+        }
+        
+        footer p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+        }
+        
+        footer p a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        footer p a:hover {
+            text-decoration: underline;
+        }
+
+        footer h5 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        footer .footer-links a {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            margin-bottom: 0.8rem;
+            transition: color 0.3s;
+        }
+        
+        footer .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(157, 255, 0, 0.1);
+            padding: 1.5rem 0;
+            margin-top: 4rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
-            .logo-img {
-                height: 30px;
-                max-width: 120px;
-            }
-
             .form-container {
                 padding: 20px;
                 max-width: 100%;
@@ -584,10 +620,20 @@
             .package-price {
                 font-size: 22px;
             }
+
+            footer {
+                padding: 40px 0 0;
+                text-align: center;
+            }
+
+            .footer-links, .social-icons {
+                margin-top: 2rem;
+                text-align: center;
+            }
         }
 
         @media (max-width: 480px) {
-            .main-content {
+            .main-container {
                 padding: 80px 15px 15px;
             }
 
@@ -602,268 +648,325 @@
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-content">
-            <div class="logo">
-                <img src="https://animoplatform.com/assets/logo.svg" alt="ANIMO" class="logo-img">
-            </div>
-            <button class="menu-toggle" id="menuToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            
-            <div class="nav-menu" id="navMenu">
-                <a href="#" onclick="showPage('about-page')">About</a>
-                <a href="#" onclick="showPage('registration-page')">Register</a>
-                <a href="#" onclick="showPage('login-page')">Login</a>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Main Content Area -->
-    <div class="main-content">
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <img src="https://animoplatform.com/assets/logo.svg" alt="ANIMO Logo">
+                </a>
+
+                <div class="d-flex align-items-center">
+                    <a href="#" onclick="showPage('registration-page')" class="btn btn-join-us d-lg-none me-2">Join US</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" onclick="showPage('about-page')">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showPage('registration-page')">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showPage('login-page')">Login</a>
+                        </li>
+                    </ul>
+                    <a href="#" onclick="showPage('registration-page')" class="btn btn-join-us ms-lg-3 d-none d-lg-block">Join US</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
         <!-- Registration Page -->
-        <div class="form-container page active" id="registration-page">
-            <div class="form-header">
-                <h2>Create Your Account</h2>
-                <p>Fill in the details to get started</p>
-            </div>
+        <section class="section-divider">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="form-container page active" id="registration-page">
+                            <div class="form-header">
+                                <h2>Create Your Account</h2>
+                                <p>Fill in the details to get started</p>
+                            </div>
 
-            <form id="registrationForm">
-                <div class="form-group">
-                    <i class="fas fa-user"></i>
-                    <input type="text" placeholder="Full Name" required id="fullName">
-                </div>
-                
-                <div class="form-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" placeholder="Email" required id="email">
-                </div>
-                
-                <div class="form-group">
-                    <i class="fas fa-user-tag"></i>
-                    <input type="text" placeholder="Username" required id="username">
-                </div>
-                
-                <div class="form-group">
-                    <i class="fas fa-phone"></i>
-                    <input type="tel" placeholder="Phone Number" required id="phone">
-                </div>
-                
-                <div class="form-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Password" required id="password">
-                </div>
-                
-                <div class="form-group">
-                    <i class="fas fa-globe"></i>
-                    <select required id="country">
-                        <option value="">Select Country</option>
-                        <option value="nigeria">Nigeria</option>
-                        <option value="foreign">Foreign</option>
-                    </select>
-                </div>
-                
-                <button type="submit" class="btn">Register & Choose Package</button>
-            </form>
+                            <form id="registrationForm">
+                                <div class="form-group">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" placeholder="Full Name" required id="fullName">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <i class="fas fa-envelope"></i>
+                                    <input type="email" placeholder="Email" required id="email">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <i class="fas fa-user-tag"></i>
+                                    <input type="text" placeholder="Username" required id="username">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <i class="fas fa-phone"></i>
+                                    <input type="tel" placeholder="Phone Number" required id="phone">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" placeholder="Password" required id="password">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <i class="fas fa-globe"></i>
+                                    <select required id="country">
+                                        <option value="">Select Country</option>
+                                        <option value="nigeria">Nigeria</option>
+                                        <option value="foreign">Foreign</option>
+                                    </select>
+                                </div>
+                                
+                                <button type="submit" class="btn">Register & Choose Package</button>
+                            </form>
 
-            <div class="login-link">
-                Already have an account? <a href="#" onclick="showPage('login-page')">login here</a>
-            </div>
-        </div>
+                            <div class="login-link">
+                                Already have an account? <a href="#" onclick="showPage('login-page')">login here</a>
+                            </div>
+                        </div>
 
-        <!-- Package Selection Page -->
-        <div class="form-container page" id="package-page">
-            <div class="form-header">
-                <h2>Choose Your Package</h2>
-                <p>Select the package that suits you best</p>
-            </div>
+                        <!-- Package Selection Page -->
+                        <div class="form-container page" id="package-page">
+                            <div class="form-header">
+                                <h2>Choose Your Package</h2>
+                                <p>Select the package that suits you best</p>
+                            </div>
 
-            <div class="package-container">
-                <div class="package-card" onclick="selectPackage('silver')" id="silverPackage">
-                    <div class="package-header">
-                        <div class="package-name">SILVER PACKAGE</div>
-                        <div class="package-price">₦10,000</div>
-                    </div>
-                    <ul class="package-features">
-                        <li><i class="fas fa-check"></i> Basic Walk-and-Earn Access</li>
-                        <li><i class="fas fa-check"></i> Digital Real Estate Starter</li>
-                        <li><i class="fas fa-check"></i> 3 Gaming Rewards Daily</li>
-                        <li><i class="fas fa-check"></i> Basic Affiliate Program</li>
-                        <li><i class="fas fa-check"></i> Email Support</li>
-                    </ul>
-                </div>
+                            <div class="package-container">
+                                <div class="package-card" onclick="selectPackage('silver')" id="silverPackage">
+                                    <div class="package-header">
+                                        <div class="package-name">SILVER PACKAGE</div>
+                                        <div class="package-price">₦10,000</div>
+                                    </div>
+                                    <ul class="package-features">
+                                        <li><i class="fas fa-check"></i> Basic Walk-and-Earn Access</li>
+                                        <li><i class="fas fa-check"></i> Digital Real Estate Starter</li>
+                                        <li><i class="fas fa-check"></i> 3 Gaming Rewards Daily</li>
+                                        <li><i class="fas fa-check"></i> Basic Affiliate Program</li>
+                                        <li><i class="fas fa-check"></i> Email Support</li>
+                                    </ul>
+                                </div>
 
-                <div class="package-card" onclick="selectPackage('gold')" id="goldPackage">
-                    <div class="package-header">
-                        <div class="package-name">GOLD PACKAGE</div>
-                        <div class="package-price">₦15,000</div>
-                    </div>
-                    <ul class="package-features">
-                        <li><i class="fas fa-check"></i> Premium Walk-and-Earn (2x Rewards)</li>
-                        <li><i class="fas fa-check"></i> Advanced Digital Real Estate</li>
-                        <li><i class="fas fa-check"></i> Unlimited Gaming Rewards</li>
-                        <li><i class="fas fa-check"></i> Premium Affiliate Program (15% Commission)</li>
-                        <li><i class="fas fa-check"></i> Priority 24/7 Support</li>
-                        <li><i class="fas fa-check"></i> Early Access to New Features</li>
-                        <li><i class="fas fa-check"></i> Monthly Photo Contest Entry</li>
-                    </ul>
-                </div>
-            </div>
+                                <div class="package-card" onclick="selectPackage('gold')" id="goldPackage">
+                                    <div class="package-header">
+                                        <div class="package-name">GOLD PACKAGE</div>
+                                        <div class="package-price">₦15,000</div>
+                                    </div>
+                                    <ul class="package-features">
+                                        <li><i class="fas fa-check"></i> Premium Walk-and-Earn (2x Rewards)</li>
+                                        <li><i class="fas fa-check"></i> Advanced Digital Real Estate</li>
+                                        <li><i class="fas fa-check"></i> Unlimited Gaming Rewards</li>
+                                        <li><i class="fas fa-check"></i> Premium Affiliate Program (15% Commission)</li>
+                                        <li><i class="fas fa-check"></i> Priority 24/7 Support</li>
+                                        <li><i class="fas fa-check"></i> Early Access to New Features</li>
+                                        <li><i class="fas fa-check"></i> Monthly Photo Contest Entry</li>
+                                    </ul>
+                                </div>
+                            </div>
 
-            <button class="btn" onclick="proceedToPayment()" id="proceedBtn" disabled>Proceed to Payment</button>
-        </div>
+                            <button class="btn" onclick="proceedToPayment()" id="proceedBtn" disabled>Proceed to Payment</button>
+                        </div>
 
-        <!-- Loading Screen -->
-        <div class="form-container page" id="loading-page">
-            <div class="loading-screen">
-                <div class="spinner"></div>
-                <div class="loading-text">Generating Account Details...</div>
-                <div class="loading-text" style="font-size: 14px; margin-top: 10px; color: #b3ff00;">
-                    Please wait while we set up your account
-                </div>
-            </div>
-        </div>
+                        <!-- Loading Screen -->
+                        <div class="form-container page" id="loading-page">
+                            <div class="loading-screen">
+                                <div class="spinner"></div>
+                                <div class="loading-text">Generating Account Details...</div>
+                                <div class="loading-text" style="font-size: 14px; margin-top: 10px; color: #b3ff00;">
+                                    Please wait while we set up your account
+                                </div>
+                            </div>
+                        </div>
 
-        <!-- Payment Gateway Page -->
-        <div class="form-container page" id="payment-page">
-            <div class="payment-container">
-                <div class="payment-header">
-                    <div class="payment-logo">ANIMO PAY</div>
-                    <div>Secure Payment Gateway</div>
-                    <div class="payment-amount" id="paymentAmount">₦10,000</div>
-                </div>
+                        <!-- Payment Gateway Page -->
+                        <div class="form-container page" id="payment-page">
+                            <div class="payment-container">
+                                <div class="payment-header">
+                                    <div class="payment-logo">ANIMO PAY</div>
+                                    <div>Secure Payment Gateway</div>
+                                    <div class="payment-amount" id="paymentAmount">₦10,000</div>
+                                </div>
 
-                <div class="payment-details">
-                    <div class="detail-row">
-                        <span>Package:</span>
-                        <span id="selectedPackageName">Silver Package</span>
-                    </div>
-                    <div class="detail-row">
-                        <span>Account Name:</span>
-                        <span id="accountName">Loading...</span>
-                    </div>
-                    <div class="detail-row">
-                        <span>Transaction ID:</span>
-                        <span id="transactionId">ANIMO-001234</span>
-                    </div>
-                    <div class="detail-row">
-                        <span>Date:</span>
-                        <span id="paymentDate">Loading...</span>
-                    </div>
-                </div>
+                                <div class="payment-details">
+                                    <div class="detail-row">
+                                        <span>Package:</span>
+                                        <span id="selectedPackageName">Silver Package</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Account Name:</span>
+                                        <span id="accountName">Loading...</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Transaction ID:</span>
+                                        <span id="transactionId">ANIMO-001234</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Date:</span>
+                                        <span id="paymentDate">Loading...</span>
+                                    </div>
+                                </div>
 
-                <div class="countdown-timer">
-                    <div class="timer-text">Complete payment within:</div>
-                    <div class="timer" id="countdown">05:00</div>
-                </div>
+                                <div class="countdown-timer">
+                                    <div class="timer-text">Complete payment within:</div>
+                                    <div class="timer" id="countdown">05:00</div>
+                                </div>
 
-                <div class="payment-methods">
-                    <div class="payment-method" onclick="selectPaymentMethod('card')">
-                        <i class="fas fa-credit-card"></i>
-                        <span>Card Payment</span>
-                    </div>
-                    <div class="payment-method" onclick="selectPaymentMethod('bank')">
-                        <i class="fas fa-university"></i>
-                        <span>Bank Transfer</span>
-                    </div>
-                    <div class="payment-method" onclick="selectPaymentMethod('mobile')">
-                        <i class="fas fa-mobile-alt"></i>
-                        <span>Mobile Money</span>
-                    </div>
-                    <div class="payment-method" onclick="selectPaymentMethod('ussd')">
-                        <i class="fas fa-qrcode"></i>
-                        <span>USSD</span>
-                    </div>
-                </div>
+                                <div class="payment-methods">
+                                    <div class="payment-method" onclick="selectPaymentMethod('card')">
+                                        <i class="fas fa-credit-card"></i>
+                                        <span>Card Payment</span>
+                                    </div>
+                                    <div class="payment-method" onclick="selectPaymentMethod('bank')">
+                                        <i class="fas fa-university"></i>
+                                        <span>Bank Transfer</span>
+                                    </div>
+                                    <div class="payment-method" onclick="selectPaymentMethod('mobile')">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        <span>Mobile Money</span>
+                                    </div>
+                                    <div class="payment-method" onclick="selectPaymentMethod('ussd')">
+                                        <i class="fas fa-qrcode"></i>
+                                        <span>USSD</span>
+                                    </div>
+                                </div>
 
-                <button class="payment-button" onclick="processPayment()" id="payButton">
-                    <i class="fas fa-lock"></i> Pay Now Securely
-                </button>
+                                <button class="payment-button" onclick="processPayment()" id="payButton">
+                                    <i class="fas fa-lock"></i> Pay Now Securely
+                                </button>
 
-                <button class="made-payment-btn" onclick="redirectToTelegram()">
-                    I Have Made The Payment
-                </button>
-            </div>
-        </div>
+                                <button class="made-payment-btn" onclick="redirectToTelegram()">
+                                    I Have Made The Payment
+                                </button>
+                            </div>
+                        </div>
 
-        <!-- Login Page -->
-        <div class="form-container page" id="login-page">
-            <div class="form-header">
-                <h2>Login</h2>
-                <p>Welcome back to ANIMO</p>
-            </div>
+                        <!-- Login Page -->
+                        <div class="form-container page" id="login-page">
+                            <div class="form-header">
+                                <h2>Login</h2>
+                                <p>Welcome back to ANIMO</p>
+                            </div>
 
-            <form id="loginForm">
-                <div class="form-group">
-                    <i class="fas fa-user"></i>
-                    <input type="text" placeholder="Username" required>
-                </div>
-                
-                <div class="form-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Password" required>
-                </div>
-                
-                <button type="submit" class="btn">Login</button>
-            </form>
+                            <form id="loginForm">
+                                <div class="form-group">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" placeholder="Username" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" placeholder="Password" required>
+                                </div>
+                                
+                                <button type="submit" class="btn">Login</button>
+                            </form>
 
-            <div class="login-link">
-                Don't have an account? <a href="#" onclick="showPage('registration-page')">Register here</a>
-            </div>
-        </div>
-    
-        <!-- About Page -->
-        <div class="form-container page" id="about-page">
-            <div class="form-header">
-                <h2>About ANIMO</h2>
-                <p>walk your way to financial freedom</p>
-            </div>
+                            <div class="login-link">
+                                Don't have an account? <a href="#" onclick="showPage('registration-page')">Register here</a>
+                            </div>
+                        </div>
 
-            <div class="about-content">
-                <div class="about-image">
-                    <img src="https://animoplatform.com/assets/about-image.jpeg" alt="About ANIMO">
-                </div>
-                <div class="about-text">
-                    <p>WHAT IS ANIMO?
+                        <!-- About Page -->
+                        <div class="form-container page" id="about-page">
+                            <div class="form-header">
+                                <h2>About ANIMO</h2>
+                                <p>walk your way to financial freedom</p>
+                            </div>
+
+                            <div class="about-content">
+                                <div class="about-image">
+                                    <img src="https://animoplatform.com/assets/about-image.jpeg" alt="About ANIMO">
+                                </div>
+                                <div class="about-text">
+                                    <p>WHAT IS ANIMO?
 Animo is an innovative, people driven, and globally connected ecosystem built to redefine wealth creation and personal growth. Our purpose is to merge technology, community, and opportunity into one seamless platform where individuals can thrive.
 
 With Animo, you gain access to a dynamic affiliate marketing network, premium skill acquisition programs, and our groundbreaking walk-and-earn technology that transforms your daily steps into real income. Beyond this, we open doors to sustainable real estate opportunities and cutting-edge tech solutions designed to secure long-term financial freedom.</p>
-                    
-                    <div class="about-image">
-                        <img src="https://animoplatform.com/assets/walk-and-earn.jpeg" alt="Walk and Earn">
+                                    
+                                    <div class="about-image">
+                                        <img src="https://animoplatform.com/assets/walk-and-earn.jpeg" alt="Walk and Earn">
+                                    </div>
+                                    <p>Turn your Sweat into Cash on Animo. With our groundbreaking walk-and-earn technology, your movement turns into momentum, and your momentum turns into real rewards. Every step counts.</p>
+                                    
+                                    <div class="about-image">
+                                        <img src="https://animoplatform.com/assets/digital-real-estate.jpeg" alt="Digital Real Estate">
+                                    </div>
+                                    <p>Animo Digital Real Estate. Welcome to a new era of ownership. Buy valuable virtual properties, build your portfolio, and sell for profit as their value grows. Own the future.</p>
+                                    
+                                    <div class="about-image">
+                                        <img src="https://animoplatform.com/assets/play-games-and-earn.jpeg" alt="Play Games and Earn">
+                                    </div>
+                                    <p>Play Games on Animo and Earn Real Rewards. The fun just got real. Play games and earn rewards paid directly to your bank account. No gimmicks, just pure entertainment that pays you back.</p>
+                                    
+                                    <div class="about-image">
+                                        <img src="https://animoplatform.com/assets/animo-is-universal.jpeg" alt="ANIMO is Universal">
+                                    </div>
+                                    <p>Animo Is Universal. Anyone can get started on Animo from any part of the world and earn. Opportunity knows no boundaries, and neither does ANIMO.</p>
+                                    
+                                    <div class="about-image">
+                                        <img src="https://animoplatform.com/assets/earn-as-you-snap.jpeg" alt="Earn as You Snap">
+                                    </div>
+                                    <p>Earn As You Snap! Post ANIMO content on your Snapchat story and get rewarded for spreading the movement. Influence made simple and profitable.</p>
+                                    
+                                    <div class="about-image">
+                                        <img src="https://animoplatform.com/assets/photo-contest.jpeg" alt="ANIMO Monthly Photo Contest">
+                                    </div>
+                                    <p>ANIMO MONTHLY PHOTO CONTEST</p>
+                                    <p>Win Prizes up to N500,000! This is your chance to step into the spotlight, inspire others, and become the official ambassador of Animo.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <p>Turn your Sweat into Cash on Animo. With our groundbreaking walk-and-earn technology, your movement turns into momentum, and your momentum turns into real rewards. Every step counts.</p>
-                    
-                    <div class="about-image">
-                        <img src="https://animoplatform.com/assets/digital-real-estate.jpeg" alt="Digital Real Estate">
-                    </div>
-                    <p>Animo Digital Real Estate. Welcome to a new era of ownership. Buy valuable virtual properties, build your portfolio, and sell for profit as their value grows. Own the future.</p>
-                    
-                    <div class="about-image">
-                        <img src="https://animoplatform.com/assets/play-games-and-earn.jpeg" alt="Play Games and Earn">
-                    </div>
-                    <p>Play Games on Animo and Earn Real Rewards. The fun just got real. Play games and earn rewards paid directly to your bank account. No gimmicks, just pure entertainment that pays you back.</p>
-                    
-                    <div class="about-image">
-                        <img src="https://animoplatform.com/assets/animo-is-universal.jpeg" alt="ANIMO is Universal">
-                    </div>
-                    <p>Animo Is Universal. Anyone can get started on Animo from any part of the world and earn. Opportunity knows no boundaries, and neither does ANIMO.</p>
-                    
-                    <div class="about-image">
-                        <img src="https://animoplatform.com/assets/earn-as-you-snap.jpeg" alt="Earn as You Snap">
-                    </div>
-                    <p>Earn As You Snap! Post ANIMO content on your Snapchat story and get rewarded for spreading the movement. Influence made simple and profitable.</p>
-                    
-                    <div class="about-image">
-                        <img src="https://animoplatform.com/assets/photo-contest.jpeg" alt="ANIMO Monthly Photo Contest">
-                    </div>
-                    <p>ANIMO MONTHLY PHOTO CONTEST</p>
-                    <p>Win Prizes up to N500,000! This is your chance to step into the spotlight, inspire others, and become the official ambassador of Animo.</p>
                 </div>
             </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-lg-4">
+                    <img src="https://animoplatform.com/assets/logo.svg" alt="ANIMO Logo" class="footer-logo">
+                    <p>ANIMO is a platform where innovation meets opportunity, helping you take steps toward your goals.</p>
+                </div>
+                <div class="col-lg-2 offset-lg-2">
+                    <h5>Quick Links</h5>
+                    <div class="footer-links">
+                        <a href="#" onclick="showPage('about-page')">About</a>
+                        <a href="#" onclick="showPage('registration-page')">Register</a>
+                        <a href="#" onclick="showPage('login-page')">Login</a>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <h5>GET STARTED</h5>
+                    <p>
+                        Ready To Begin Your Journey Of Financial Growth?, 
+                        <a href="#" onclick="showPage('registration-page')">Click Here To Get Started</a>.
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="built" style="color: white; font-weight: 500;">
+                    ANIMO Platform - Walk Your Way to Financial Freedom
+                </div>
+                &copy; 2025 ANIMO. All Rights Reserved.
+            </div>
         </div>
-    </div>
+    </footer>
 
     <!-- jQuery 3.7.1 -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -871,18 +974,40 @@ With Animo, you gain access to a dynamic affiliate marketing network, premium sk
     <!-- Bootstrap 5.3.3 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
+    <!-- AOS (Animate on Scroll) JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
     <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 120,
+        });
+        
+        // Navbar scroll effect
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbar = document.querySelector('.navbar');
+            const scrollThreshold = 1;
+
+            const handleScroll = () => {
+                if (window.scrollY > scrollThreshold) {
+                    navbar.classList.add('navbar-scrolled');
+                } else {
+                    navbar.classList.remove('navbar-scrolled');
+                }
+            };
+
+            window.addEventListener('scroll', handleScroll);
+            handleScroll();
+        });
+
         // Global variables
         let selectedPackage = '';
         let countdownInterval;
         let timeLeft = 300; // 5 minutes in seconds
 
         // Navigation functions
-        function toggleMenu() {
-            const navMenu = document.getElementById('navMenu');
-            navMenu.classList.toggle('active');
-        }
-
         function showPage(pageId) {
             // Hide all pages
             document.querySelectorAll('.page').forEach(page => {
@@ -892,8 +1017,10 @@ With Animo, you gain access to a dynamic affiliate marketing network, premium sk
             // Show selected page
             document.getElementById(pageId).classList.add('active');
             
-            // Close menu
-            document.getElementById('navMenu').classList.remove('active');
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
             
             // Scroll to top
             window.scrollTo(0, 0);
@@ -1048,22 +1175,6 @@ With Animo, you gain access to a dynamic affiliate marketing network, premium sk
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             alert('Login functionality would be implemented here.');
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', function(e) {
-            const navMenu = document.getElementById('navMenu');
-            const menuToggle = document.getElementById('menuToggle');
-            
-            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
-                navMenu.classList.remove('active');
-            }
-        });
-
-        // Initialize menu toggle
-        document.getElementById('menuToggle').addEventListener('click', function(e) {
-            e.stopPropagation();
-            toggleMenu();
         });
 
         // Initialize on page load
