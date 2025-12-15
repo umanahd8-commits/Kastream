@@ -80,9 +80,6 @@
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- AOS (Animate on Scroll) CSS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
     <!-- Internal CSS -->
     <style>
         :root {
@@ -278,69 +275,86 @@
             display: block;
         }
 
-        /* Package Selection Styles */
+        /* Package Selection Styles - Using Second Code's Format */
         .package-container {
             margin-top: 20px;
         }
 
         .package-card {
-            background: #021425;
-            border-radius: 8px;
-            padding: 25px;
+            background-color: #0a1142;
+            padding: 3rem;
+            border-radius: 15px;
+            border: 1px solid rgba(184, 230, 140, 0.2);
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             margin-bottom: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
         }
 
         .package-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-5px);
+        }
+
+        .package-card.popular {
             border-color: var(--primary-color);
+            box-shadow: 0 10px 50px rgba(184, 230, 140, 0.15);
         }
 
-        .package-card.selected {
-            border-color: var(--primary-color);
-            background: #021c36;
+        .package-card.popular::before {
+            content: 'RECOMMENDED';
+            position: absolute;
+            top: 25px;
+            right: -35px;
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            padding: 8px 35px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transform: rotate(45deg);
+            z-index: 1;
         }
 
-        .package-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .package-name {
-            font-size: 20px;
+        .package-card h3 {
+            font-weight: 700;
+            font-size: 1.8rem;
             color: var(--primary-color);
-            font-weight: bold;
         }
 
-        .package-price {
-            font-size: 24px;
+        .package-card .price {
+            font-size: 3.5rem;
+            font-weight: 700;
             color: var(--primary-color);
-            font-weight: bold;
+            margin: 1rem 0;
+        }
+        
+        .package-card .price sup {
+            font-size: 1.8rem;
+            top: -1em;
         }
 
-        .package-features {
+        .package-card .features-list {
             list-style: none;
-            padding-left: 0;
+            padding: 0;
+            margin: 2rem 0;
+            text-align: left;
+            flex-grow: 1;
         }
 
-        .package-features li {
-            color: #b3ff00;
-            margin-bottom: 10px;
-            font-size: 14px;
+        .package-card .features-list li {
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.8);
             display: flex;
             align-items: center;
         }
 
-        .package-features li i {
+        .package-card .features-list li i {
             color: var(--primary-color);
-            margin-right: 10px;
-            font-size: 12px;
-            position: static;
-            transform: none;
+            margin-right: 0.8rem;
+            font-size: 14px;
         }
 
         /* Loading Screen Styles */
@@ -370,7 +384,7 @@
             margin-top: 20px;
         }
 
-        /* Payment Gateway Styles */
+        /* Payment Gateway Styles - Simplified Bank Details */
         .payment-container {
             padding: 20px;
         }
@@ -394,19 +408,65 @@
             margin: 10px 0;
         }
 
-        .payment-details {
+        .bank-details-container {
             background: #021425;
             border-radius: 8px;
-            padding: 20px;
+            padding: 25px;
             margin-bottom: 20px;
+            border: 1px solid var(--primary-color);
         }
 
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
+        .bank-details-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .bank-detail-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(157, 255, 0, 0.2);
+        }
+
+        .bank-detail-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .bank-detail-label {
             color: #b3ff00;
             font-size: 14px;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .bank-detail-value {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid rgba(157, 255, 0, 0.1);
+        }
+
+        .copy-btn {
+            background: var(--primary-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #73ff00;
         }
 
         .countdown-timer {
@@ -430,54 +490,31 @@
             font-family: monospace;
         }
 
-        .payment-methods {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .payment-method {
+        .payment-instructions {
             background: #021425;
             border-radius: 8px;
             padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
+            margin-bottom: 20px;
         }
 
-        .payment-method:hover {
-            border-color: var(--primary-color);
+        .instructions-list {
+            list-style: none;
+            padding-left: 0;
         }
 
-        .payment-method i {
-            font-size: 24px;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .payment-method span {
+        .instructions-list li {
             color: #b3ff00;
+            margin-bottom: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .instructions-list li i {
+            color: var(--primary-color);
+            margin-right: 10px;
             font-size: 12px;
-        }
-
-        .payment-button {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.3s;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-        }
-
-        .payment-button:hover {
-            background: #218838;
+            margin-top: 3px;
         }
 
         .made-payment-btn {
@@ -497,6 +534,19 @@
 
         .made-payment-btn:hover {
             background: #e65c00;
+        }
+
+        /* Error Message for Login */
+        .error-message {
+            color: #ff4444;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
         }
 
         /* About Page Styles */
@@ -605,20 +655,15 @@
                 max-width: 100%;
             }
 
-            .payment-methods {
-                grid-template-columns: 1fr;
-            }
-
             .package-card {
-                padding: 20px;
+                padding: 2rem;
             }
 
-            .package-name {
-                font-size: 18px;
-            }
-
-            .package-price {
-                font-size: 22px;
+            .package-card.popular::before {
+                top: 15px;
+                right: -40px;
+                padding: 6px 30px;
+                font-size: 0.7rem;
             }
 
             footer {
@@ -643,6 +688,14 @@
 
             .timer {
                 font-size: 28px;
+            }
+
+            .package-card {
+                padding: 1.5rem;
+            }
+
+            .package-card .price {
+                font-size: 2.5rem;
             }
         }
     </style>
@@ -688,7 +741,7 @@
         <section class="section-divider">
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-lg-6">
+                    <div class="col-lg-8">
                         <div class="form-container page active" id="registration-page">
                             <div class="form-header">
                                 <h2>Create Your Account</h2>
@@ -739,45 +792,51 @@
                         </div>
 
                         <!-- Package Selection Page -->
-                        <div class="form-container page" id="package-page">
+                        <div class="page" id="package-page">
                             <div class="form-header">
                                 <h2>Choose Your Package</h2>
                                 <p>Select the package that suits you best</p>
                             </div>
 
-                            <div class="package-container">
-                                <div class="package-card" onclick="selectPackage('silver')" id="silverPackage">
-                                    <div class="package-header">
-                                        <div class="package-name">SILVER PACKAGE</div>
-                                        <div class="package-price">₦10,000</div>
+                            <div class="row justify-content-center gy-4">
+                                <!-- 10k Package (6-Month Plan) -->
+                                <div class="col-lg-5 col-md-8" data-aos="fade-up" data-aos-delay="100">
+                                    <div class="package-card" onclick="selectPackage('silver')" id="silverPackage">
+                                        <h3>6-Month Plan</h3>
+                                        <div class="price"><sup>₦</sup>10,000</div>
+                                        <p>Full access for 6 months</p>
+                                        <ul class="features-list">
+                                            <li><i class="fas fa-check-circle" aria-hidden="true"></i> Basic Walk-and-Earn Access</li>
+                                            <li><i class="fas fa-check-circle" aria-hidden="true"></i> Digital Real Estate Starter</li>
+                                            <li><i class="fas fa-check-circle" aria-hidden="true"></i> 3 Gaming Rewards Daily</li>
+                                            <li><i class="fas fa-check-circle" aria-hidden="true"></i> Basic Affiliate Program</li>
+                                            <li><i class="fas fa-check-circle" aria-hidden="true"></i> Email Support</li>
+                                        </ul>
                                     </div>
-                                    <ul class="package-features">
-                                        <li><i class="fas fa-check"></i> Basic Walk-and-Earn Access</li>
-                                        <li><i class="fas fa-check"></i> Digital Real Estate Starter</li>
-                                        <li><i class="fas fa-check"></i> 3 Gaming Rewards Daily</li>
-                                        <li><i class="fas fa-check"></i> Basic Affiliate Program</li>
-                                        <li><i class="fas fa-check"></i> Email Support</li>
-                                    </ul>
                                 </div>
-
-                                <div class="package-card" onclick="selectPackage('gold')" id="goldPackage">
-                                    <div class="package-header">
-                                        <div class="package-name">GOLD PACKAGE</div>
-                                        <div class="package-price">₦15,000</div>
+                                
+                                <!-- 15k Package (1-Year Plan) - RECOMMENDED -->
+                                <div class="col-lg-5 col-md-8" data-aos="fade-up" data-aos-delay="200">
+                                    <div class="package-card popular" onclick="selectPackage('gold')" id="goldPackage">
+                                        <h3>1-Year Plan</h3>
+                                        <div class="price"><sup>₦</sup>15,000</div>
+                                        <p>Full access for 12 months</p>
+                                        <ul class="features-list">
+                                            <li><i class="fas fa-check-circle" aria-hidden="true"></i> Premium Walk-and-Earn (2x Rewards)</li>
+                                            <li><i class="fas fa-check-circle" aria-hidden="true"></i> Advanced Digital Real Estate</li>
+                                            <li><i class="fas fa-check-circle" aria-hidden="true"></i> Unlimited Gaming Rewards</li>
+                                            <li><i class="fas fa-check-circle" aria-hidden="true"></i> Premium Affiliate Program (15% Commission)</li>
+                                            <li><i class="fas fa-check-circle" aria-hidden="true"></i> Priority 24/7 Support</li>
+                                            <li><i class="fas fa-check-circle" aria-hidden="true"></i> Early Access to New Features</li>
+                                            <li><i class="fas fa-check-circle" aria-hidden="true"></i> Monthly Photo Contest Entry</li>
+                                        </ul>
                                     </div>
-                                    <ul class="package-features">
-                                        <li><i class="fas fa-check"></i> Premium Walk-and-Earn (2x Rewards)</li>
-                                        <li><i class="fas fa-check"></i> Advanced Digital Real Estate</li>
-                                        <li><i class="fas fa-check"></i> Unlimited Gaming Rewards</li>
-                                        <li><i class="fas fa-check"></i> Premium Affiliate Program (15% Commission)</li>
-                                        <li><i class="fas fa-check"></i> Priority 24/7 Support</li>
-                                        <li><i class="fas fa-check"></i> Early Access to New Features</li>
-                                        <li><i class="fas fa-check"></i> Monthly Photo Contest Entry</li>
-                                    </ul>
                                 </div>
                             </div>
 
-                            <button class="btn" onclick="proceedToPayment()" id="proceedBtn" disabled>Proceed to Payment</button>
+                            <div class="text-center mt-4">
+                                <button class="btn" onclick="proceedToPayment()" id="proceedBtn" disabled style="max-width: 300px; margin: 0 auto;">Proceed to Payment</button>
+                            </div>
                         </div>
 
                         <!-- Loading Screen -->
@@ -800,23 +859,62 @@
                                     <div class="payment-amount" id="paymentAmount">₦10,000</div>
                                 </div>
 
-                                <div class="payment-details">
-                                    <div class="detail-row">
-                                        <span>Package:</span>
-                                        <span id="selectedPackageName">Silver Package</span>
+                                <div class="bank-details-container">
+                                    <div class="bank-details-header">
+                                        Bank Transfer Details
                                     </div>
-                                    <div class="detail-row">
-                                        <span>Account Name:</span>
-                                        <span id="accountName">Loading...</span>
+                                    
+                                    <div class="bank-detail-item">
+                                        <div class="bank-detail-label">Bank Name</div>
+                                        <div class="bank-detail-value">
+                                            Zenith Bank
+                                            <button class="copy-btn" onclick="copyToClipboard('Zenith Bank')">
+                                                <i class="fas fa-copy"></i> Copy
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="detail-row">
-                                        <span>Transaction ID:</span>
-                                        <span id="transactionId">ANIMO-001234</span>
+                                    
+                                    <div class="bank-detail-item">
+                                        <div class="bank-detail-label">Account Name</div>
+                                        <div class="bank-detail-value">
+                                            ANIMO TECHNOLOGY
+                                            <button class="copy-btn" onclick="copyToClipboard('ANIMO TECHNOLOGY')">
+                                                <i class="fas fa-copy"></i> Copy
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="detail-row">
-                                        <span>Date:</span>
-                                        <span id="paymentDate">Loading...</span>
+                                    
+                                    <div class="bank-detail-item">
+                                        <div class="bank-detail-label">Account Number</div>
+                                        <div class="bank-detail-value">
+                                            1234567890
+                                            <button class="copy-btn" onclick="copyToClipboard('1234567890')">
+                                                <i class="fas fa-copy"></i> Copy
+                                            </button>
+                                        </div>
                                     </div>
+                                    
+                                    <div class="bank-detail-item">
+                                        <div class="bank-detail-label">Amount to Pay</div>
+                                        <div class="bank-detail-value" id="bankAmount">
+                                            ₦10,000
+                                            <button class="copy-btn" onclick="copyToClipboard('₦10,000')">
+                                                <i class="fas fa-copy"></i> Copy
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="payment-instructions">
+                                    <div class="bank-details-header">
+                                        Payment Instructions
+                                    </div>
+                                    <ul class="instructions-list">
+                                        <li><i class="fas fa-check"></i> Transfer the exact amount shown above to the bank details provided</li>
+                                        <li><i class="fas fa-check"></i> Use your registered name as the transfer reference</li>
+                                        <li><i class="fas fa-check"></i> Keep your transaction receipt for verification</li>
+                                        <li><i class="fas fa-check"></i> Click "I Have Made The Payment" after completing the transfer</li>
+                                    </ul>
                                 </div>
 
                                 <div class="countdown-timer">
@@ -824,31 +922,8 @@
                                     <div class="timer" id="countdown">05:00</div>
                                 </div>
 
-                                <div class="payment-methods">
-                                    <div class="payment-method" onclick="selectPaymentMethod('card')">
-                                        <i class="fas fa-credit-card"></i>
-                                        <span>Card Payment</span>
-                                    </div>
-                                    <div class="payment-method" onclick="selectPaymentMethod('bank')">
-                                        <i class="fas fa-university"></i>
-                                        <span>Bank Transfer</span>
-                                    </div>
-                                    <div class="payment-method" onclick="selectPaymentMethod('mobile')">
-                                        <i class="fas fa-mobile-alt"></i>
-                                        <span>Mobile Money</span>
-                                    </div>
-                                    <div class="payment-method" onclick="selectPaymentMethod('ussd')">
-                                        <i class="fas fa-qrcode"></i>
-                                        <span>USSD</span>
-                                    </div>
-                                </div>
-
-                                <button class="payment-button" onclick="processPayment()" id="payButton">
-                                    <i class="fas fa-lock"></i> Pay Now Securely
-                                </button>
-
                                 <button class="made-payment-btn" onclick="redirectToTelegram()">
-                                    I Have Made The Payment
+                                    <i class="fas fa-check-circle"></i> I Have Made The Payment
                                 </button>
                             </div>
                         </div>
@@ -863,12 +938,17 @@
                             <form id="loginForm">
                                 <div class="form-group">
                                     <i class="fas fa-user"></i>
-                                    <input type="text" placeholder="Username" required>
+                                    <input type="text" placeholder="Username" required id="loginUsername">
                                 </div>
                                 
                                 <div class="form-group">
                                     <i class="fas fa-lock"></i>
-                                    <input type="password" placeholder="Password" required>
+                                    <input type="password" placeholder="Password" required id="loginPassword">
+                                </div>
+                                
+                                <!-- Error message for invalid login -->
+                                <div class="error-message" id="loginError">
+                                    Invalid username or password! Please check your details and try again.
                                 </div>
                                 
                                 <button type="submit" class="btn">Login</button>
@@ -880,7 +960,7 @@
                         </div>
 
                         <!-- About Page -->
-                        <div class="form-container page" id="about-page">
+                        <div class="page" id="about-page">
                             <div class="form-header">
                                 <h2>About ANIMO</h2>
                                 <p>walk your way to financial freedom</p>
@@ -974,34 +1054,7 @@ With Animo, you gain access to a dynamic affiliate marketing network, premium sk
     <!-- Bootstrap 5.3.3 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-    <!-- AOS (Animate on Scroll) JS -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
     <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 120,
-        });
-        
-        // Navbar scroll effect
-        document.addEventListener('DOMContentLoaded', () => {
-            const navbar = document.querySelector('.navbar');
-            const scrollThreshold = 1;
-
-            const handleScroll = () => {
-                if (window.scrollY > scrollThreshold) {
-                    navbar.classList.add('navbar-scrolled');
-                } else {
-                    navbar.classList.remove('navbar-scrolled');
-                }
-            };
-
-            window.addEventListener('scroll', handleScroll);
-            handleScroll();
-        });
-
         // Global variables
         let selectedPackage = '';
         let countdownInterval;
@@ -1094,13 +1147,23 @@ With Animo, you gain access to a dynamic affiliate marketing network, premium sk
             const now = new Date();
             
             // Update package name and amount
+            let packageName = '';
+            let amount = '';
+            
             if (selectedPackage === 'silver') {
+                packageName = '6-Month Plan (Silver)';
+                amount = '₦10,000';
                 document.getElementById('selectedPackageName').textContent = 'Silver Package';
-                document.getElementById('paymentAmount').textContent = '₦10,000';
             } else {
+                packageName = '1-Year Plan (Gold)';
+                amount = '₦15,000';
                 document.getElementById('selectedPackageName').textContent = 'Gold Package';
-                document.getElementById('paymentAmount').textContent = '₦15,000';
             }
+            
+            // Update payment amount
+            document.getElementById('paymentAmount').textContent = amount;
+            document.getElementById('bankAmount').innerHTML = amount + 
+                ' <button class="copy-btn" onclick="copyToClipboard(\'' + amount + '\')"><i class="fas fa-copy"></i> Copy</button>';
             
             // Update account name
             document.getElementById('accountName').textContent = registrationData.fullName || 'User Account';
@@ -1147,38 +1210,61 @@ With Animo, you gain access to a dynamic affiliate marketing network, premium sk
             }
         }
 
-        function selectPaymentMethod(method) {
-            // Remove selected class from all methods
-            document.querySelectorAll('.payment-method').forEach(method => {
-                method.style.borderColor = 'transparent';
+        // Copy to clipboard function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Show temporary success message
+                const btn = event.target.closest('.copy-btn');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                btn.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy text. Please copy manually.');
             });
-            
-            // Add selected style to chosen method
-            event.currentTarget.style.borderColor = '#9dff00';
-        }
-
-        function processPayment() {
-            // In a real implementation, this would integrate with ANIMO payment gateway
-            alert('This is a simulation. In a real implementation, this would redirect to ANIMO payment gateway.');
-            
-            // For demo purposes, auto-redirect after 3 seconds
-            setTimeout(() => {
-                redirectToTelegram();
-            }, 3000);
         }
 
         function redirectToTelegram() {
             window.open('https://t.me/pythox1', '_blank');
         }
 
-        // Login form submission
+        // Login form submission - Always shows invalid details
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Login functionality would be implemented here.');
+            
+            // Always show error message for invalid login
+            document.getElementById('loginError').classList.add('show');
+            
+            // Clear the form
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            
+            // Focus back to username field
+            document.getElementById('loginUsername').focus();
         });
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
+            // Navbar scroll effect
+            const navbar = document.querySelector('.navbar');
+            const scrollThreshold = 1;
+
+            const handleScroll = () => {
+                if (window.scrollY > scrollThreshold) {
+                    navbar.classList.add('navbar-scrolled');
+                } else {
+                    navbar.classList.remove('navbar-scrolled');
+                }
+            };
+
+            window.addEventListener('scroll', handleScroll);
+            handleScroll();
+            
             // Check if we have stored registration data
             const storedData = localStorage.getItem('registrationData');
             if (storedData) {
