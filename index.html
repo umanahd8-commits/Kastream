@@ -18,7 +18,7 @@
         });
     </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ANIMO - Walk Your Way to Financial Freedom</title>
     
     <!-- SEO Meta Tags -->
@@ -92,6 +92,9 @@
         html {
             scroll-behavior: smooth;
             overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            touch-action: manipulation;
         }
 
         body {
@@ -99,6 +102,8 @@
             background-color: var(--bg-color);
             color: var(--text-color-light);
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
         }
 
         section {
@@ -234,7 +239,7 @@
             padding: 12px 12px 12px 40px;
             border: 2px solid #04182c;
             border-radius: 5px;
-            font-size: 14px;
+            font-size: 16px;
             transition: border-color 0.3s;
             background: #001f3f;
             color: white;
@@ -690,6 +695,21 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
+        /* Disable text selection and zoom */
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        input, textarea, select {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .form-container {
@@ -754,6 +774,13 @@
 
             .section-title {
                 font-size: 1.5rem;
+            }
+        }
+
+        /* Prevent zoom on mobile */
+        @media (max-width: 768px) {
+            input, select, textarea {
+                font-size: 16px !important;
             }
         }
     </style>
@@ -914,7 +941,7 @@
                                 <div class="payment-header">
                                     <div class="payment-logo">ANIMO PAY</div>
                                     <div>Secure Payment Gateway</div>
-                                    <div class="payment-amount" id="paymentAmount">₦10,000</div>
+                                    <div class="payment-amount" id="paymentAmount">₦0</div>
                                 </div>
 
                                 <div class="bank-details-container">
@@ -955,8 +982,8 @@
                                     <div class="bank-detail-item">
                                         <div class="bank-detail-label">Amount to Pay</div>
                                         <div class="bank-detail-value" id="bankAmount">
-                                            ₦10,000
-                                            <button class="copy-btn" onclick="copyToClipboard('₦10,000')">
+                                            <span id="bankAmountText">₦0</span>
+                                            <button class="copy-btn" onclick="copyBankAmount()">
                                                 <i class="fas fa-copy"></i> Copy
                                             </button>
                                         </div>
@@ -1142,6 +1169,7 @@
         let selectedPackage = '';
         let countdownInterval;
         let timeLeft = 300; // 5 minutes in seconds
+        let selectedPackageAmount = '₦0';
 
         // Navigation functions
         function showPage(pageId) {
@@ -1195,8 +1223,10 @@
             // Add selected class to chosen package
             if (packageType === 'silver') {
                 document.getElementById('silverPackage').classList.add('selected');
+                selectedPackageAmount = '₦10,000';
             } else {
                 document.getElementById('goldPackage').classList.add('selected');
+                selectedPackageAmount = '₦15,000';
             }
             
             // Enable proceed button
@@ -1217,7 +1247,7 @@
                 // Show payment page
                 showPage('payment-page');
                 
-                // Update payment details
+                // Update payment details with selected package amount
                 updatePaymentDetails();
                 
                 // Start countdown timer
@@ -1229,27 +1259,21 @@
             const registrationData = JSON.parse(localStorage.getItem('registrationData') || '{}');
             const now = new Date();
             
+            // Update payment amount based on selected package
+            document.getElementById('paymentAmount').textContent = selectedPackageAmount;
+            document.getElementById('bankAmountText').textContent = selectedPackageAmount;
+            
             // Update package name and amount
             let packageName = '';
-            let amount = '';
             
             if (selectedPackage === 'silver') {
                 packageName = '6-Month Plan (Silver)';
-                amount = '₦10,000';
-                document.getElementById('selectedPackageName').textContent = 'Silver Package';
             } else {
                 packageName = '1-Year Plan (Gold)';
-                amount = '₦15,000';
-                document.getElementById('selectedPackageName').textContent = 'Gold Package';
             }
             
-            // Update payment amount
-            document.getElementById('paymentAmount').textContent = amount;
-            document.getElementById('bankAmount').innerHTML = amount + 
-                ' <button class="copy-btn" onclick="copyToClipboard(\'' + amount + '\')"><i class="fas fa-copy"></i> Copy</button>';
-            
             // Update account name
-            document.getElementById('accountName').textContent = registrationData.fullName || 'User Account';
+            const accountName = registrationData.fullName || 'User Account';
             
             // Update date
             const formattedDate = now.toLocaleDateString('en-US', {
@@ -1257,11 +1281,9 @@
                 month: 'long',
                 day: 'numeric'
             });
-            document.getElementById('paymentDate').textContent = formattedDate;
             
             // Generate random transaction ID
             const transactionId = 'ANIMO-' + Math.floor(100000 + Math.random() * 900000);
-            document.getElementById('transactionId').textContent = transactionId;
         }
 
         function startCountdown() {
@@ -1310,6 +1332,11 @@
                 console.error('Failed to copy: ', err);
                 alert('Failed to copy text. Please copy manually.');
             });
+        }
+
+        function copyBankAmount() {
+            const amount = document.getElementById('bankAmountText').textContent;
+            copyToClipboard(amount);
         }
 
         function redirectToTelegram() {
@@ -1379,6 +1406,21 @@
                     selectPackage('gold');
                 });
             }
+
+            // Prevent zoom on double tap for mobile
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(event) {
+                const now = (new Date()).getTime();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+
+            // Prevent zoom on pinch
+            document.addEventListener('gesturestart', function(e) {
+                e.preventDefault();
+            });
         });
     </script>
 </body>
