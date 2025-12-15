@@ -102,8 +102,29 @@
         }
 
         section {
-            padding: 120px 0;
+            padding: 80px 0;
             position: relative;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-heading h2 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .section-heading h2 span {
+            color: var(--primary-color);
+        }
+
+        .section-heading p {
+            max-width: 600px;
+            margin: 1rem auto 0;
+            color: rgba(255, 255, 255, 0.7);
         }
 
         /* --- Navbar --- */
@@ -161,8 +182,7 @@
 
         /* Main Content Container */
         .main-container {
-            padding-top: 100px;
-            min-height: 100vh;
+            padding-top: 80px;
         }
 
         /* Form Container */
@@ -174,7 +194,7 @@
             max-width: 400px;
             padding: 30px;
             border: 1px solid var(--primary-color);
-            margin: 0 auto;
+            margin: 0 auto 40px;
         }
 
         .form-header {
@@ -291,11 +311,20 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             margin-bottom: 20px;
+            cursor: pointer;
         }
 
         .package-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+            border-color: rgba(157, 255, 0, 0.4);
+        }
+
+        .package-card.selected {
+            border-color: var(--primary-color);
+            background: #021c36;
             transform: translateY(-5px);
         }
 
@@ -549,18 +578,36 @@
             display: block;
         }
 
-        /* About Page Styles */
+        /* About Page Styles - Using Second Code Format */
         .about-content {
             text-align: center;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
+        }
+
+        .about-heading {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        .about-heading span {
+            color: var(--primary-color);
+        }
+
+        .about-text {
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.9;
+            font-size: 1rem;
+            text-align: left;
         }
 
         .about-image {
             width: 100%;
             height: auto;
-            min-height: 200px;
+            min-height: 300px;
             border-radius: 8px;
             margin: 20px 0;
             overflow: hidden;
@@ -573,31 +620,26 @@
             border-radius: 8px;
         }
 
-        .about-text {
-            line-height: 1.6;
-            color: var(--text-color-light);
-            font-size: 16px;
-            text-align: left;
-            margin-top: 20px;
+        .about-section {
+            margin-bottom: 60px;
         }
 
-        .about-text p {
-            margin-bottom: 20px;
+        .about-section:last-child {
+            margin-bottom: 0;
         }
 
-        /* Remove the form-container styling for about page */
-        #about-page.form-container {
-            background: transparent;
-            border: none;
-            box-shadow: none;
-            max-width: 800px;
-            padding: 0;
+        .section-title {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
         }
 
         /* Footer */
         footer {
             background-color: #020624;
-            padding: 80px 0 0;
+            padding: 60px 0 0;
             font-size: 0.9rem;
             margin-top: 50px;
         }
@@ -643,7 +685,7 @@
         .footer-bottom {
             border-top: 1px solid rgba(157, 255, 0, 0.1);
             padding: 1.5rem 0;
-            margin-top: 4rem;
+            margin-top: 3rem;
             text-align: center;
             color: rgba(255, 255, 255, 0.5);
         }
@@ -666,6 +708,14 @@
                 font-size: 0.7rem;
             }
 
+            .about-heading {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
             footer {
                 padding: 40px 0 0;
                 text-align: center;
@@ -679,7 +729,7 @@
 
         @media (max-width: 480px) {
             .main-container {
-                padding: 80px 15px 15px;
+                padding: 70px 15px 15px;
             }
 
             .form-container {
@@ -696,6 +746,14 @@
 
             .package-card .price {
                 font-size: 2.5rem;
+            }
+
+            .about-heading {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -720,13 +778,13 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#" onclick="showPage('about-page')">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" onclick="showPage('registration-page')">Register</a>
+                            <a class="nav-link active" href="#" onclick="showPage('registration-page')">Register</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" onclick="showPage('login-page')">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#about-section">About</a>
                         </li>
                     </ul>
                     <a href="#" onclick="showPage('registration-page')" class="btn btn-join-us ms-lg-3 d-none d-lg-block">Join US</a>
@@ -738,10 +796,10 @@
     <!-- Main Content -->
     <main class="main-container">
         <!-- Registration Page -->
-        <section class="section-divider">
+        <section>
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-lg-8">
+                    <div class="col-lg-6">
                         <div class="form-container page active" id="registration-page">
                             <div class="form-header">
                                 <h2>Create Your Account</h2>
@@ -800,7 +858,7 @@
 
                             <div class="row justify-content-center gy-4">
                                 <!-- 10k Package (6-Month Plan) -->
-                                <div class="col-lg-5 col-md-8" data-aos="fade-up" data-aos-delay="100">
+                                <div class="col-lg-5 col-md-8">
                                     <div class="package-card" onclick="selectPackage('silver')" id="silverPackage">
                                         <h3>6-Month Plan</h3>
                                         <div class="price"><sup>₦</sup>10,000</div>
@@ -816,7 +874,7 @@
                                 </div>
                                 
                                 <!-- 15k Package (1-Year Plan) - RECOMMENDED -->
-                                <div class="col-lg-5 col-md-8" data-aos="fade-up" data-aos-delay="200">
+                                <div class="col-lg-5 col-md-8">
                                     <div class="package-card popular" onclick="selectPackage('gold')" id="goldPackage">
                                         <h3>1-Year Plan</h3>
                                         <div class="price"><sup>₦</sup>15,000</div>
@@ -958,57 +1016,82 @@
                                 Don't have an account? <a href="#" onclick="showPage('registration-page')">Register here</a>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                        <!-- About Page -->
-                        <div class="page" id="about-page">
-                            <div class="form-header">
-                                <h2>About ANIMO</h2>
-                                <p>walk your way to financial freedom</p>
-                            </div>
+        <!-- About Page (Shown below Registration) -->
+        <section id="about-section" style="background: rgba(1, 18, 34, 0.5);">
+            <div class="container">
+                <div class="about-section">
+                    <h2 class="about-heading">WHAT IS <span>ANIMO?</span></h2>
+                    <div class="about-image">
+                        <img src="https://animoplatform.com/assets/about-image.jpeg" alt="About ANIMO">
+                    </div>
+                    <div class="about-text">
+                        <p>Animo is an innovative, people driven, and globally connected ecosystem built to redefine wealth creation and personal growth. Our purpose is to merge technology, community, and opportunity into one seamless platform where individuals can thrive.</p>
+                        <p>With Animo, you gain access to a dynamic affiliate marketing network, premium skill acquisition programs, and our groundbreaking walk-and-earn technology that transforms your daily steps into real income. Beyond this, we open doors to sustainable real estate opportunities and cutting-edge tech solutions designed to secure long-term financial freedom.</p>
+                    </div>
+                </div>
 
-                            <div class="about-content">
-                                <div class="about-image">
-                                    <img src="https://animoplatform.com/assets/about-image.jpeg" alt="About ANIMO">
-                                </div>
-                                <div class="about-text">
-                                    <p>WHAT IS ANIMO?
-Animo is an innovative, people driven, and globally connected ecosystem built to redefine wealth creation and personal growth. Our purpose is to merge technology, community, and opportunity into one seamless platform where individuals can thrive.
+                <div class="about-section">
+                    <h3 class="section-title">Walk-and-Earn Technology</h3>
+                    <div class="about-image">
+                        <img src="https://animoplatform.com/assets/walk-and-earn.jpeg" alt="Walk and Earn">
+                    </div>
+                    <div class="about-text">
+                        <p>Turn your sweat into cash on Animo. With our groundbreaking walk-and-earn technology, your movement turns into momentum, and your momentum turns into real rewards. Every step counts.</p>
+                    </div>
+                </div>
 
-With Animo, you gain access to a dynamic affiliate marketing network, premium skill acquisition programs, and our groundbreaking walk-and-earn technology that transforms your daily steps into real income. Beyond this, we open doors to sustainable real estate opportunities and cutting-edge tech solutions designed to secure long-term financial freedom.</p>
-                                    
-                                    <div class="about-image">
-                                        <img src="https://animoplatform.com/assets/walk-and-earn.jpeg" alt="Walk and Earn">
-                                    </div>
-                                    <p>Turn your Sweat into Cash on Animo. With our groundbreaking walk-and-earn technology, your movement turns into momentum, and your momentum turns into real rewards. Every step counts.</p>
-                                    
-                                    <div class="about-image">
-                                        <img src="https://animoplatform.com/assets/digital-real-estate.jpeg" alt="Digital Real Estate">
-                                    </div>
-                                    <p>Animo Digital Real Estate. Welcome to a new era of ownership. Buy valuable virtual properties, build your portfolio, and sell for profit as their value grows. Own the future.</p>
-                                    
-                                    <div class="about-image">
-                                        <img src="https://animoplatform.com/assets/play-games-and-earn.jpeg" alt="Play Games and Earn">
-                                    </div>
-                                    <p>Play Games on Animo and Earn Real Rewards. The fun just got real. Play games and earn rewards paid directly to your bank account. No gimmicks, just pure entertainment that pays you back.</p>
-                                    
-                                    <div class="about-image">
-                                        <img src="https://animoplatform.com/assets/animo-is-universal.jpeg" alt="ANIMO is Universal">
-                                    </div>
-                                    <p>Animo Is Universal. Anyone can get started on Animo from any part of the world and earn. Opportunity knows no boundaries, and neither does ANIMO.</p>
-                                    
-                                    <div class="about-image">
-                                        <img src="https://animoplatform.com/assets/earn-as-you-snap.jpeg" alt="Earn as You Snap">
-                                    </div>
-                                    <p>Earn As You Snap! Post ANIMO content on your Snapchat story and get rewarded for spreading the movement. Influence made simple and profitable.</p>
-                                    
-                                    <div class="about-image">
-                                        <img src="https://animoplatform.com/assets/photo-contest.jpeg" alt="ANIMO Monthly Photo Contest">
-                                    </div>
-                                    <p>ANIMO MONTHLY PHOTO CONTEST</p>
-                                    <p>Win Prizes up to N500,000! This is your chance to step into the spotlight, inspire others, and become the official ambassador of Animo.</p>
-                                </div>
-                            </div>
-                        </div>
+                <div class="about-section">
+                    <h3 class="section-title">Digital Real Estate</h3>
+                    <div class="about-image">
+                        <img src="https://animoplatform.com/assets/digital-real-estate.jpeg" alt="Digital Real Estate">
+                    </div>
+                    <div class="about-text">
+                        <p>Animo Digital Real Estate. Welcome to a new era of ownership. Buy valuable virtual properties, build your portfolio, and sell for profit as their value grows. Own the future.</p>
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h3 class="section-title">Play Games and Earn</h3>
+                    <div class="about-image">
+                        <img src="https://animoplatform.com/assets/play-games-and-earn.jpeg" alt="Play Games and Earn">
+                    </div>
+                    <div class="about-text">
+                        <p>Play Games on Animo and Earn Real Rewards. The fun just got real. Play games and earn rewards paid directly to your bank account. No gimmicks, just pure entertainment that pays you back.</p>
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h3 class="section-title">ANIMO is Universal</h3>
+                    <div class="about-image">
+                        <img src="https://animoplatform.com/assets/animo-is-universal.jpeg" alt="ANIMO is Universal">
+                    </div>
+                    <div class="about-text">
+                        <p>Animo Is Universal. Anyone can get started on Animo from any part of the world and earn. Opportunity knows no boundaries, and neither does ANIMO.</p>
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h3 class="section-title">Earn As You Snap!</h3>
+                    <div class="about-image">
+                        <img src="https://animoplatform.com/assets/earn-as-you-snap.jpeg" alt="Earn as You Snap">
+                    </div>
+                    <div class="about-text">
+                        <p>Earn As You Snap! Post ANIMO content on your Snapchat story and get rewarded for spreading the movement. Influence made simple and profitable.</p>
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h3 class="section-title">ANIMO Monthly Photo Contest</h3>
+                    <div class="about-image">
+                        <img src="https://animoplatform.com/assets/photo-contest.jpeg" alt="ANIMO Monthly Photo Contest">
+                    </div>
+                    <div class="about-text">
+                        <p>Win Prizes up to N500,000! This is your chance to step into the spotlight, inspire others, and become the official ambassador of Animo.</p>
                     </div>
                 </div>
             </div>
@@ -1026,7 +1109,7 @@ With Animo, you gain access to a dynamic affiliate marketing network, premium sk
                 <div class="col-lg-2 offset-lg-2">
                     <h5>Quick Links</h5>
                     <div class="footer-links">
-                        <a href="#" onclick="showPage('about-page')">About</a>
+                        <a href="#about-section">About</a>
                         <a href="#" onclick="showPage('registration-page')">Register</a>
                         <a href="#" onclick="showPage('login-page')">Login</a>
                     </div>
@@ -1075,7 +1158,7 @@ With Animo, you gain access to a dynamic affiliate marketing network, premium sk
                 link.classList.remove('active');
             });
             
-            // Scroll to top
+            // Scroll to top of the page
             window.scrollTo(0, 0);
         }
 
@@ -1100,7 +1183,7 @@ With Animo, you gain access to a dynamic affiliate marketing network, premium sk
             showPage('package-page');
         });
 
-        // Package selection
+        // Package selection - FIXED
         function selectPackage(packageType) {
             selectedPackage = packageType;
             
@@ -1279,6 +1362,22 @@ With Animo, you gain access to a dynamic affiliate marketing network, premium sk
                 } catch (e) {
                     console.error('Error parsing stored data:', e);
                 }
+            }
+
+            // Initialize package selection
+            const silverPackage = document.getElementById('silverPackage');
+            const goldPackage = document.getElementById('goldPackage');
+            
+            if (silverPackage) {
+                silverPackage.addEventListener('click', function() {
+                    selectPackage('silver');
+                });
+            }
+            
+            if (goldPackage) {
+                goldPackage.addEventListener('click', function() {
+                    selectPackage('gold');
+                });
             }
         });
     </script>
