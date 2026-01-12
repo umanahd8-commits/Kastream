@@ -421,14 +421,14 @@
     </div>
 
     <div class="login-card">
-        <form>
+        <form id="loginForm">
             <div class="form-group">
                 <span class="label">
                     <i class="fas fa-user-circle"></i> ID
                 </span>
                 <div class="input-with-icon">
                     <i class="fas fa-user input-icon"></i>
-                    <input type="text" placeholder="Username or Email Address">
+                    <input type="text" id="loginId" placeholder="Username or Email Address" required>
                 </div>
             </div>
 
@@ -439,7 +439,7 @@
                 <div class="password-wrapper">
                     <div class="input-with-icon">
                         <i class="fas fa-key input-icon"></i>
-                        <input type="password" id="password" placeholder="Enter your password">
+                        <input type="password" id="password" placeholder="Enter your password" required>
                     </div>
                     <i class="fa-regular fa-eye-slash toggle-password" id="toggleEye"></i>
                 </div>
@@ -460,6 +460,54 @@
     </div>
 
     <script>
+        // Form Submission
+        const loginForm = document.getElementById('loginForm');
+        
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+            
+            // Gather data
+            const formData = {
+                loginId: document.getElementById('loginId').value,
+                password: document.getElementById('password').value
+            };
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Success
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    alert('Login successful!');
+                    window.location.href = 'in.html'; // Redirect to dashboard
+                } else {
+                    // Error
+                    alert(data.message || 'Login failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
+        });
+
         // Toggle password visibility
         const togglePassword = document.querySelector('#toggleEye');
         const password = document.querySelector('#password');

@@ -494,14 +494,14 @@
             <p>Fill in all details correctly to get started</p>
         </div>
 
-        <form>
+        <form id="registerForm">
             <div class="form-group">
                 <label>
                     <i class="fas fa-user"></i> Fullname
                 </label>
                 <div class="input-with-icon">
                     <i class="fas fa-user input-icon"></i>
-                    <input type="text" placeholder="Enter your full name">
+                    <input type="text" id="fullName" placeholder="Enter your full name" required>
                 </div>
             </div>
 
@@ -511,7 +511,7 @@
                 </label>
                 <div class="input-with-icon">
                     <i class="fas fa-envelope input-icon"></i>
-                    <input type="email" placeholder="your.email@example.com">
+                    <input type="email" id="email" placeholder="your.email@example.com" required>
                 </div>
             </div>
 
@@ -521,7 +521,7 @@
                 </label>
                 <div class="input-with-icon">
                     <i class="fas fa-at input-icon"></i>
-                    <input type="text" placeholder="Choose a username">
+                    <input type="text" id="username" placeholder="Choose a username" required>
                 </div>
             </div>
 
@@ -531,7 +531,7 @@
                 </label>
                 <div class="input-with-icon">
                     <i class="fas fa-user-tie input-icon"></i>
-                    <input type="text" placeholder="Referrer username or ID">
+                    <input type="text" id="referrer" placeholder="Referrer username or ID">
                 </div>
             </div>
 
@@ -541,8 +541,8 @@
                 </label>
                 <div class="input-with-icon">
                     <i class="fas fa-map-marker-alt input-icon"></i>
-                    <select>
-                        <option>Select Country</option>
+                    <select id="country" required>
+                        <option value="">Select Country</option>
                         <option value="NG">Nigeria</option>
                         <option value="Other">Other countries</option>
                     </select>
@@ -557,7 +557,7 @@
                 <div class="password-container">
                     <div class="input-with-icon">
                         <i class="fas fa-key input-icon"></i>
-                        <input type="password" id="password" placeholder="Create a strong password">
+                        <input type="password" id="password" placeholder="Create a strong password" required>
                     </div>
                     <i class="fa-regular fa-eye-slash toggle-password" id="toggleEye"></i>
                 </div>
@@ -569,7 +569,7 @@
                 </label>
                 <div class="input-with-icon">
                     <i class="fas fa-mobile-alt input-icon"></i>
-                    <input type="tel" placeholder="Your phone number">
+                    <input type="tel" id="phone" placeholder="Your phone number" required>
                 </div>
             </div>
 
@@ -579,7 +579,7 @@
                 </label>
                 <div class="input-with-icon">
                     <i class="fas fa-ticket-alt input-icon"></i>
-                    <input type="text" placeholder="Enter coupon code">
+                    <input type="text" id="couponCode" placeholder="Enter coupon code">
                 </div>
             </div>
 
@@ -594,18 +594,18 @@
                 </label>
                 <div class="input-with-icon">
                     <i class="fas fa-box-open input-icon"></i>
-                    <select>
-                        <option>Select Package</option>
-                        <option>Basic </option>
-                        <option>Premium </option>
-                        <option>Enterprise </option>
+                    <select id="packageType" required>
+                        <option value="">Select Package</option>
+                        <option value="Basic">Basic </option>
+                        <option value="Premium">Premium </option>
+                        <option value="Enterprise">Enterprise </option>
                     </select>
                     <i class="fas fa-chevron-down select-icon"></i>
                 </div>
             </div>
 
             <div class="terms-container">
-                <input type="checkbox" id="terms">
+                <input type="checkbox" id="terms" required>
                 <label for="terms">
                     Terms & Conditions
                 </label>
@@ -623,6 +623,68 @@
     </div>
 
     <script>
+        // Form Submission
+        const registerForm = document.getElementById('registerForm');
+        
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = registerForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+            
+            // Gather data
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                username: document.getElementById('username').value,
+                referrer: document.getElementById('referrer').value,
+                country: document.getElementById('country').value,
+                password: document.getElementById('password').value,
+                phone: document.getElementById('phone').value,
+                couponCode: document.getElementById('couponCode').value,
+                packageType: document.getElementById('packageType').value,
+                terms: document.getElementById('terms').checked
+            };
+
+            // Basic Client-side Validation (HTML5 'required' handles most empty checks)
+            if (formData.password.length < 6) {
+                alert('Password must be at least 6 characters long.');
+                return;
+            }
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Success
+                    alert('Registration successful! Redirecting to login...');
+                    // Store token if needed, or just redirect
+                    // localStorage.setItem('token', data.token);
+                    window.location.href = 'login.html';
+                } else {
+                    // Error
+                    alert(data.message || 'Registration failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
+        });
+
         // Toggle password visibility
         const togglePassword = document.querySelector('#toggleEye');
         const password = document.querySelector('#password');
