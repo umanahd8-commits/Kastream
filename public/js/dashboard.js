@@ -83,10 +83,78 @@ document.addEventListener('DOMContentLoaded', async () => {
         dropdownMenu.classList.toggle('active');
     });
 
-    // Close dropdown when clicking outside
+    // Notification Logic
+    const notificationBtn = document.getElementById('notificationBtn');
+    const notificationModal = document.getElementById('notificationModal');
+    const closeNotificationModal = document.getElementById('closeNotificationModal');
+    const notificationBadge = document.getElementById('notificationBadge');
+    const notificationList = document.getElementById('notificationList');
+
+    // Fetch Notifications
+    async function fetchNotifications() {
+        try {
+            const response = await fetch('/api/notifications', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (response.ok) {
+                const notifications = await response.json();
+                renderNotifications(notifications);
+            }
+        } catch (error) {
+            console.error('Error fetching notifications:', error);
+            notificationList.innerHTML = '<div class="notification-item" style="text-align: center; color: var(--text-medium);">Failed to load</div>';
+        }
+    }
+
+    function renderNotifications(notifications) {
+        if (notifications.length === 0) {
+            notificationList.innerHTML = '<div class="notification-item" style="text-align: center; color: var(--text-medium);">No new notifications</div>';
+            notificationBadge.style.display = 'none';
+            return;
+        }
+
+        notificationBadge.textContent = notifications.length;
+        notificationBadge.style.display = 'flex';
+
+        notificationList.innerHTML = notifications.map(n => `
+            <div class="notification-item">
+                <div class="notification-title">
+                    ${n.type === 'personal' ? '<i class="fas fa-user-circle" style="color: var(--primary-blue); margin-right: 5px;"></i>' : '<i class="fas fa-bullhorn" style="color: var(--accent-yellow); margin-right: 5px;"></i>'}
+                    ${n.type === 'personal' ? 'Personal Message' : 'Announcement'}
+                </div>
+                <div class="notification-message">${n.message}</div>
+                <div class="notification-time">${new Date(n.date).toLocaleDateString()} ${new Date(n.date).toLocaleTimeString()}</div>
+            </div>
+        `).join('');
+    }
+
+    notificationBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        notificationModal.classList.add('active');
+        dropdownMenu.classList.remove('active'); // Close profile if open
+    });
+
+    closeNotificationModal.addEventListener('click', () => {
+        notificationModal.classList.remove('active');
+    });
+
+    // Close modal when clicking outside content
+    notificationModal.addEventListener('click', (e) => {
+        if (e.target === notificationModal) {
+            notificationModal.classList.remove('active');
+        }
+    });
+
+    // Close dropdowns when clicking outside
     document.addEventListener('click', () => {
         dropdownMenu.classList.remove('active');
     });
+
+    // Initial fetch
+    fetchNotifications();
 
     // Logout Logic
     logoutBtn.addEventListener('click', () => {
