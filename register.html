@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration - CASHX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0066da 0%, #004a9e 100%);
+            --secondary-gradient: linear-gradient(135deg, #00bcd4 0%, #008ba3 100%);
+            --primary-blue: #0066da;
+            --secondary-blue: #00bcd4;
+            --accent-yellow: #ffb100;
+            --light-blue: #e8f4ff;
+            --dark-blue: #003366;
+            --text-dark: #1a1a1a;
+            --text-medium: #666;
+            --text-light: #888;
+            --input-border: #d1e3ff;
+            --card-shadow: 0 20px 40px rgba(0, 102, 218, 0.1);
+            --button-shadow: 0 10px 25px rgba(0, 102, 218, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #f5fbff 0%, #e8f4ff 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            color: var(--text-dark);
+        }
+
+        /* Navigation Menu */
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .hamburger-menu {
+            background: var(--primary-gradient);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 102, 218, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 102, 218, 0.3);
+        }
+
+        .hamburger-line {
+            width: 22px;
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            min-width: 220px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            border: 1px solid var(--input-border);
+            overflow: hidden;
+        }
+
+        .nav-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown a:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            padding-left: 25px;
+        }
+
+        .nav-dropdown a i {
+            width: 20px;
+            text-align: center;
+            color: var(--primary-blue);
+        }
+
+        .nav-dropdown a:last-child {
+            border-bottom: none;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .logo-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+        }
+
+        .logo {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 10px 20px rgba(0, 102, 218, 0.15);
+        }
+
+        .logo-badge {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: var(--accent-yellow);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            border: 3px solid white;
+        }
+
+        .header-section h2 {
+            margin: 10px 0 5px;
+            font-weight: 700;
+            font-size: 28px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-text {
+            color: var(--secondary-blue);
+            font-size: 16px;
+            font-weight: 500;
+            margin-top: 0;
+        }
+
+        .card {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 102, 218, 0.1);
+            margin-top: 10px;
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .card-header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--dark-blue);
+            margin-bottom: 10px;
+        }
+
+        .card-header p {
+            color: var(--text-medium);
+            font-size: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-medium);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        label i {
+            color: var(--primary-blue);
+            width: 16px;
+            text-align: center;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-blue);
+            font-size: 16px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 2px solid var(--input-border);
+            background-color: white;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-dark);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(0, 102, 218, 0.1);
+        }
+
+        input::placeholder {
+            color: #a0aec0;
+        }
+
+        .select-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-blue);
+            pointer-events: none;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--primary-blue);
+            font-size: 18px;
+            transition: color 0.2s;
+        }
+
+        .toggle-password:hover {
+            color: var(--secondary-blue);
+        }
+
+        .referrer-note {
+            font-size: 13px;
+            color: var(--text-medium);
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .referrer-note i {
+            color: var(--secondary-blue);
+        }
+
+        .coupon-code-text {
+            font-size: 14px;
+            margin: 20px 0;
+            color: var(--text-medium);
+            text-align: center;
+            padding: 15px;
+            background: var(--light-blue);
+            border-radius: 12px;
+            border-left: 4px solid var(--secondary-blue);
+        }
+
+        .coupon-code-text a {
+            color: var(--secondary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .coupon-code-text a:hover {
+            color: var(--primary-blue);
+            text-decoration: underline;
+        }
+
+        .terms-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 25px 0 30px;
+            padding: 15px;
+            background: var(--light-blue);
+            border-radius: 12px;
+        }
+
+        .terms-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary-blue);
+            margin-top: 2px;
+        }
+
+        .terms-container label {
+            color: var(--text-dark);
+            font-size: 14px;
+            margin: 0;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .terms-container b {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .btn-signup {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--button-shadow);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 102, 218, 0.4);
+        }
+
+        .btn-signup:active {
+            transform: translateY(0);
+        }
+
+        .btn-signup i {
+            font-size: 18px;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 15px;
+            color: var(--text-medium);
+        }
+
+        .footer-text a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .footer-text a:hover {
+            color: var(--secondary-blue);
+            text-decoration: underline;
+        }
+
+        .security-notice {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .security-notice i {
+            color: #4CAF50;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 30px 20px;
+            }
+            
+            .header-section h2 {
+                font-size: 24px;
+            }
+            
+            .card-header h1 {
+                font-size: 22px;
+            }
+            
+            .nav-container {
+                top: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Menu -->
+    <div class="nav-container">
+        <div class="hamburger-menu" id="hamburgerMenu">
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
+        </div>
+        
+        <div class="nav-dropdown" id="navDropdown">
+            <a href="index.html">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="login.html">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Login</span>
+            </a>
+            <a href="merchants.html">
+                <i class="fas fa-ticket-alt"></i>
+                <span>Buy Coupon Code</span>
+            </a>
+            <a href="reviews.html">
+                <i class="fas fa-star"></i>
+                <span>Check Reviews</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="header-section">
+        <div class="logo-container">
+            <img src="https://i.ibb.co/ZzNFQbRx/918-CFC59-9989-4-D61-8605-1-BFDAADADD57.jpg" alt="CASHX Logo" class="logo">
+            <div class="logo-badge">
+                <i class="fas fa-check"></i>
+            </div>
+        </div>
+        <h2>Welcome to CASHX</h2>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h1>Complete Your Registration</h1>
+            <p>Fill in all details correctly to get started</p>
+        </div>
+
+        <form>
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-user"></i> Fullname
+                </label>
+                <div class="input-with-icon">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" placeholder="Enter your full name">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-envelope"></i> Email Address
+                </label>
+                <div class="input-with-icon">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" placeholder="your.email@example.com">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-at"></i> Username
+                </label>
+                <div class="input-with-icon">
+                    <i class="fas fa-at input-icon"></i>
+                    <input type="text" placeholder="Choose a username">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-user-friends"></i> Referrer (Optional)
+                </label>
+                <div class="input-with-icon">
+                    <i class="fas fa-user-tie input-icon"></i>
+                    <input type="text" placeholder="Referrer username or ID">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-globe"></i> Country
+                </label>
+                <div class="input-with-icon">
+                    <i class="fas fa-map-marker-alt input-icon"></i>
+                    <select>
+                        <option>Select Country</option>
+                        <option value="NG">Nigeria</option>
+                        <option value="Other">Other countries</option>
+                    </select>
+                    <i class="fas fa-chevron-down select-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-lock"></i> Password
+                </label>
+                <div class="password-container">
+                    <div class="input-with-icon">
+                        <i class="fas fa-key input-icon"></i>
+                        <input type="password" id="password" placeholder="Create a strong password">
+                    </div>
+                    <i class="fa-regular fa-eye-slash toggle-password" id="toggleEye"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-phone"></i> Phone Number
+                </label>
+                <div class="input-with-icon">
+                    <i class="fas fa-mobile-alt input-icon"></i>
+                    <input type="tel" placeholder="Your phone number">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-tag"></i> Coupon Code
+                </label>
+                <div class="input-with-icon">
+                    <i class="fas fa-ticket-alt input-icon"></i>
+                    <input type="text" placeholder="Enter coupon code">
+                </div>
+            </div>
+
+            <p class="coupon-code-text">
+                <i class="fas fa-gift"></i> Don't have a CASHX coupon code? 
+                <a href="merchants.html">Click here.</a>
+            </p>
+
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-cube"></i> Package
+                </label>
+                <div class="input-with-icon">
+                    <i class="fas fa-box-open input-icon"></i>
+                    <select>
+                        <option>Select Package</option>
+                        <option>Basic </option>
+                        <option>Premium </option>
+                        <option>Enterprise </option>
+                    </select>
+                    <i class="fas fa-chevron-down select-icon"></i>
+                </div>
+            </div>
+
+            <div class="terms-container">
+                <input type="checkbox" id="terms">
+                <label for="terms">
+                    Terms & Conditions
+                </label>
+            </div>
+
+            <button type="submit" class="btn-signup">
+                <i class="fas fa-user-plus"></i> Create Account
+            </button>
+        </form>
+
+        <p class="footer-text">
+            Already have an account? <a href="login.html">Sign In Here</a>
+        </p>
+
+    </div>
+
+    <script>
+        // Toggle password visibility
+        const togglePassword = document.querySelector('#toggleEye');
+        const password = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function (e) {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // Add focus effects for inputs
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.parentElement.classList.add('focused');
+            });
+            input.addEventListener('blur', function() {
+                this.parentElement.parentElement.classList.remove('focused');
+            });
+        });
+
+        // Hamburger menu functionality
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const navDropdown = document.getElementById('navDropdown');
+
+        hamburgerMenu.addEventListener('click', function() {
+            navDropdown.classList.toggle('active');
+            // Animate hamburger lines
+            const lines = this.querySelectorAll('.hamburger-line');
+            lines[0].style.transform = navDropdown.classList.contains('active') ? 'rotate(45deg) translate(5px, 5px)' : 'none';
+            lines[1].style.opacity = navDropdown.classList.contains('active') ? '0' : '1';
+            lines[2].style.transform = navDropdown.classList.contains('active') ? 'rotate(-45deg) translate(7px, -6px)' : 'none';
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!navDropdown.contains(event.target) && !hamburgerMenu.contains(event.target)) {
+                navDropdown.classList.remove('active');
+                const lines = hamburgerMenu.querySelectorAll('.hamburger-line');
+                lines[0].style.transform = 'none';
+                lines[1].style.opacity = '1';
+                lines[2].style.transform = 'none';
+            }
+        });
+    </script>
+
+</body>
+</html>
