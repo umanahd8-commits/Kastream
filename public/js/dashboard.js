@@ -1,14 +1,44 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // Check Authentication
     const token = localStorage.getItem('token');
-    const userStr = localStorage.getItem('user');
 
-    if (!token || !userStr) {
+    if (!token) {
         window.location.href = 'login.html';
         return;
     }
 
-    const user = JSON.parse(userStr);
+    let user = null;
+    
+    try {
+        // Fetch fresh user data
+        const response = await fetch('/api/auth/me', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            user = await response.json();
+            // Update local storage with fresh data
+            localStorage.setItem('user', JSON.stringify(user));
+        } else {
+            // Token might be expired or invalid
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+            return;
+        }
+    } catch (error) {
+        console.error('Failed to fetch user data:', error);
+        // Fallback to local storage if network fails
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+            user = JSON.parse(userStr);
+        } else {
+            window.location.href = 'login.html';
+            return;
+        }
+    }
 
     // Populate UI
     document.getElementById('navUsername').textContent = user.username;

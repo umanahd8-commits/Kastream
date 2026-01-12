@@ -129,4 +129,48 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// Auth Middleware
+const verifyToken = (req, res, next) => {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+
+    if (!token) {
+        return res.status(401).json({ message: 'Access denied. No token provided.' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        req.user = decoded;
+        next();
+    } catch (error) {
+        res.status(400).json({ message: 'Invalid token.' });
+    }
+};
+
+// Get Current User (Protected)
+router.get('/me', verifyToken, (req, res) => {
+    try {
+        const users = getUsers();
+        const user = users.find(u => u.id === req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            fullName: user.fullName,
+            packageType: user.packageType,
+            referrer: user.referrer,
+            balance: user.balance || 0,
+            availableTasks: user.availableTasks || 0,
+            country: user.country
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 module.exports = router;
