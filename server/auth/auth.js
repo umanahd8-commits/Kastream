@@ -64,7 +64,7 @@ router.post('/register', async (req, res) => {
         saveUsers(users);
 
         // Generate Token
-        const token = jwt.sign({ id: newUser.id, username: newUser.username }, SECRET_KEY, { expiresIn: '1h' });
+        const token = jwt.sign({ id: newUser.id, username: newUser.username }, SECRET_KEY, { expiresIn: '30m' });
 
         res.status(201).json({ 
             message: 'User registered successfully', 
@@ -73,7 +73,8 @@ router.post('/register', async (req, res) => {
                 id: newUser.id,
                 username: newUser.username,
                 email: newUser.email,
-                fullName: newUser.fullName
+                fullName: newUser.fullName,
+                country: newUser.country
             }
         });
     } catch (error) {
@@ -105,7 +106,7 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, { expiresIn: '30m' });
 
         res.json({ 
             message: 'Login successful', 
@@ -114,7 +115,12 @@ router.post('/login', async (req, res) => {
                 id: user.id,
                 username: user.username,
                 email: user.email,
-                fullName: user.fullName
+                fullName: user.fullName,
+                packageType: user.packageType,
+                referrer: user.referrer,
+                balance: user.balance || 0,
+                availableTasks: user.availableTasks || 0,
+                country: user.country
             }
         });
     } catch (error) {
