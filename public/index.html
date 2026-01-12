@@ -896,11 +896,10 @@
         });
 
         // CTA button functionality
-        const ctaButtons = document.querySelectorAll('.btn-primary, .cta-btn');
+        const ctaButtons = document.querySelectorAll('.cta-btn');
         ctaButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-                alert('Redirecting to registration page...');
-                // In production: window.location.href = 'register.html';
+                window.location.href = 'register.html';
             });
         });
 
