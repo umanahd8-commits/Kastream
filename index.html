@@ -40,18 +40,105 @@
             color: var(--text-dark);
         }
 
+        /* Navigation Menu */
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .hamburger-menu {
+            background: var(--primary-gradient);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 102, 218, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 102, 218, 0.3);
+        }
+
+        .hamburger-line {
+            width: 22px;
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            min-width: 220px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            border: 1px solid var(--input-border);
+            overflow: hidden;
+        }
+
+        .nav-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown a:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            padding-left: 25px;
+        }
+
+        .nav-dropdown a i {
+            width: 20px;
+            text-align: center;
+            color: var(--primary-blue);
+        }
+
+        .nav-dropdown a:last-child {
+            border-bottom: none;
+        }
+
         .header-section {
             text-align: center;
             margin-bottom: 30px;
             width: 100%;
-            max-width: 450px;
+            max-width: 500px;
         }
 
         .logo-container {
             position: relative;
             width: 100px;
             height: 100px;
-            margin: 0 auto 15px;
+            margin: 0 auto 20px;
         }
 
         .logo {
@@ -90,15 +177,11 @@
             background-clip: text;
         }
 
-        .sub-header {
+        .welcome-text {
             color: var(--secondary-blue);
             font-size: 16px;
             font-weight: 500;
             margin-top: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
         }
 
         .card {
@@ -109,6 +192,7 @@
             padding: 40px;
             box-shadow: var(--card-shadow);
             border: 1px solid rgba(0, 102, 218, 0.1);
+            margin-top: 10px;
         }
 
         .card-header {
@@ -212,6 +296,19 @@
             color: var(--secondary-blue);
         }
 
+        .referrer-note {
+            font-size: 13px;
+            color: var(--text-medium);
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .referrer-note i {
+            color: var(--secondary-blue);
+        }
+
         .coupon-code-text {
             font-size: 14px;
             margin: 20px 0;
@@ -258,6 +355,7 @@
             font-size: 14px;
             margin: 0;
             flex: 1;
+            cursor: pointer;
         }
 
         .terms-container b {
@@ -342,10 +440,43 @@
             .card-header h1 {
                 font-size: 22px;
             }
+            
+            .nav-container {
+                top: 15px;
+                right: 15px;
+            }
         }
     </style>
 </head>
 <body>
+
+    <!-- Navigation Menu -->
+    <div class="nav-container">
+        <div class="hamburger-menu" id="hamburgerMenu">
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
+        </div>
+        
+        <div class="nav-dropdown" id="navDropdown">
+            <a href="index.html">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="login.html">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Login</span>
+            </a>
+            <a href="merchants.html">
+                <i class="fas fa-ticket-alt"></i>
+                <span>Buy Coupon Code</span>
+            </a>
+            <a href="reviews.html">
+                <i class="fas fa-star"></i>
+                <span>Check Reviews</span>
+            </a>
+        </div>
+    </div>
 
     <div class="header-section">
         <div class="logo-container">
@@ -354,10 +485,7 @@
                 <i class="fas fa-check"></i>
             </div>
         </div>
-        <h2>Welcome Back</h2>
-        <p class="sub-header">
-            <i class="fas fa-user-tie"></i> Joining under Admin
-        </p>
+        <h2>Welcome to CASHX</h2>
     </div>
 
     <div class="card">
@@ -399,6 +527,16 @@
 
             <div class="form-group">
                 <label>
+                    <i class="fas fa-user-friends"></i> Referrer (Optional)
+                </label>
+                <div class="input-with-icon">
+                    <i class="fas fa-user-tie input-icon"></i>
+                    <input type="text" placeholder="Referrer username or ID">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
                     <i class="fas fa-globe"></i> Country
                 </label>
                 <div class="input-with-icon">
@@ -406,7 +544,7 @@
                     <select>
                         <option>Select Country</option>
                         <option value="NG">Nigeria</option>
-                        <option value="fg">Other countries</option>
+                        <option value="Other">Other countries</option>
                     </select>
                     <i class="fas fa-chevron-down select-icon"></i>
                 </div>
@@ -441,7 +579,7 @@
                 </label>
                 <div class="input-with-icon">
                     <i class="fas fa-ticket-alt input-icon"></i>
-                    <input type="text" placeholder="Enter coupon code ">
+                    <input type="text" placeholder="Enter coupon code">
                 </div>
             </div>
 
@@ -458,8 +596,8 @@
                     <i class="fas fa-box-open input-icon"></i>
                     <select>
                         <option>Select Package</option>
-                        <option>Basic</option>
-                        <option>Premium</option>
+                        <option>Basic </option>
+                        <option>Premium </option>
                         <option>Enterprise </option>
                     </select>
                     <i class="fas fa-chevron-down select-icon"></i>
@@ -482,7 +620,14 @@
             Already have an account? <a href="login.html">Sign In Here</a>
         </p>
 
+        <div class="security-notice">
+            <i class="fas fa-shield-alt"></i>
+            Your information is secured with 256-bit SSL encryption
+        </div>
+    </div>
+
     <script>
+        // Toggle password visibility
         const togglePassword = document.querySelector('#toggleEye');
         const password = document.querySelector('#password');
 
@@ -502,6 +647,30 @@
             input.addEventListener('blur', function() {
                 this.parentElement.parentElement.classList.remove('focused');
             });
+        });
+
+        // Hamburger menu functionality
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const navDropdown = document.getElementById('navDropdown');
+
+        hamburgerMenu.addEventListener('click', function() {
+            navDropdown.classList.toggle('active');
+            // Animate hamburger lines
+            const lines = this.querySelectorAll('.hamburger-line');
+            lines[0].style.transform = navDropdown.classList.contains('active') ? 'rotate(45deg) translate(5px, 5px)' : 'none';
+            lines[1].style.opacity = navDropdown.classList.contains('active') ? '0' : '1';
+            lines[2].style.transform = navDropdown.classList.contains('active') ? 'rotate(-45deg) translate(7px, -6px)' : 'none';
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!navDropdown.contains(event.target) && !hamburgerMenu.contains(event.target)) {
+                navDropdown.classList.remove('active');
+                const lines = hamburgerMenu.querySelectorAll('.hamburger-line');
+                lines[0].style.transform = 'none';
+                lines[1].style.opacity = '1';
+                lines[2].style.transform = 'none';
+            }
         });
     </script>
 
