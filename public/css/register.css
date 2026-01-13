@@ -23,7 +23,6 @@
 body {
     font-family: 'Inter', sans-serif;
     background: linear-gradient(180deg, #f5fbff 0%, #e8f4ff 100%);
-    /* Background image added below */
     background-image: url('https://i.ibb.co/jvj1N0bQ/Gemini-Generated-Image-fv7489fv7489fv74.png');
     background-size: cover;
     background-position: center;
@@ -35,11 +34,9 @@ body {
     align-items: center;
     padding: 40px 20px;
     color: var(--text-dark);
-    /* Add overlay for better readability */
     position: relative;
 }
 
-/* Add an overlay to improve text visibility */
 body::before {
     content: '';
     position: fixed;
