@@ -1,7 +1,7 @@
 module.exports = {
   apps: [{
     name: "kastream-server",
-    script: "./server/index.js",
+    script: "./server/start.js",
     instances: 1,
     autorestart: true,
     watch: false,
