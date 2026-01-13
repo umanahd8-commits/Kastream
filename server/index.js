@@ -3,12 +3,21 @@ const path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
+
 const authRoutes = require('./auth/auth');
 const notificationRoutes = require('./routes/notifications');
 const verifyToken = require('./middleware/auth');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+
+// ACME webroot (matches certbot config)
+app.use(
+    "/.well-known/acme-challenge",
+    express.static("/var/www/letsencrypt")
+);
 
 // Middleware
 app.use(morgan('dev'));
@@ -22,10 +31,35 @@ app.use('/api/auth', authRoutes);
 // Protected Routes
 app.use('/api/notifications', verifyToken, notificationRoutes);
 
-// Fallback to index.html for SPA-like behavior (optional, but good for some setups)
-// Or just let express.static handle it.
-// Since we have specific html files, we can just rely on static serving.
+// HTTPS certs paths
+const SSL_KEY = "/etc/letsencrypt/live/cashx.name.ng/privkey.pem";
+const SSL_CERT = "/etc/letsencrypt/live/cashx.name.ng/fullchain.pem";
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running on http://0.0.0.0:${PORT}`);
-});
+// Check if we are in Local Development (Windows) or Production (Linux/EC2)
+if (process.platform === 'win32') {
+    // Local Development Fallback
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Development Server is running on http://0.0.0.0:${PORT}`);
+    });
+} else {
+    // Production/EC2 Mode
+
+    // Always start HTTP server (needed for certbot renew)
+    http.createServer((req, res) => {
+        if (req.url.startsWith("/.well-known/acme-challenge/")) return app(req, res);
+        const host = req.headers.host || "cashx.name.ng";
+        res.writeHead(301, { Location: `https://${host}${req.url}` });
+        res.end();
+    }).listen(80, "0.0.0.0", () => console.log("HTTP Server running on port 80"));
+
+    // Start HTTPS only if certs exist/readable
+    if (fs.existsSync(SSL_KEY) && fs.existsSync(SSL_CERT)) {
+        https.createServer(
+            { key: fs.readFileSync(SSL_KEY), cert: fs.readFileSync(SSL_CERT) },
+            app
+        ).listen(443, "0.0.0.0", () => console.log("HTTPS Server running on port 443"));
+    } else {
+        console.log("SSL certs not found/readable; HTTPS not started yet.");
+    }
+}
