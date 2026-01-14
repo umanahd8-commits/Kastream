@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fintech User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- General Reset and Typography --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0e1725 0%, #15283f 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: #2c3e50;
+        }
+
+        /* --- Main Card Container --- */
+        .profile-card {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0, 82, 204, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            padding-bottom: 25px;
+            border: 1px solid rgba(0, 123, 255, 0.08);
+        }
+
+        /* --- Profile Photo Section --- */
+        .profile-header {
+            background: linear-gradient(135deg, #0052D4 0%, #007bff 100%);
+            padding: 45px 20px 35px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            margin-bottom: 10px;
+            position: relative;
+            text-align: center;
+        }
+
+        .photo-frame {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            margin-bottom: 15px;
+            background-color: white;
+            position: relative;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-frame::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+        }
+
+        .user-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .user-title {
+            font-size: 0.9rem;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        /* --- Status Indicator --- */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #4cd964;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* --- Accordion (The Bars) Styling --- */
+        .accordion-container {
+            padding: 0 25px;
+        }
+
+        .accordion {
+            background-color: #ffffff;
+            color: #2c3e50;
+            cursor: pointer;
+            padding: 20px 20px;
+            width: 100%;
+            text-align: left;
+            border: 1px solid #e8edf5;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            outline: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .accordion:hover {
+            background-color: #f8fafd;
+            border-color: #007bff;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .active, .accordion:active {
+            background-color: #f0f7ff;
+            color: #007bff;
+            border-color: #007bff;
+        }
+
+        /* Icon and title alignment */
+        .accordion-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .accordion-icon {
+            margin-right: 12px;
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* The arrow icon */
+        .accordion-arrow {
+            color: #a0aec0;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .active .accordion-arrow {
+            color: #007bff;
+            transform: rotate(180deg);
+        }
+
+        /* --- The Hidden Content --- */
+        .panel {
+            padding: 0 20px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            margin-bottom: 12px;
+            border-radius: 0 0 14px 14px;
+        }
+
+        /* --- Content Styling (Text & Form) --- */
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid #f0f4f8;
+            font-size: 15px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #718096;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-label i {
+            margin-right: 10px;
+            color: #007bff;
+            font-size: 0.9rem;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: right;
+        }
+
+        /* --- Form Styling --- */
+        .bank-form {
+            padding-top: 20px;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #5a6c7d;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group label i {
+            margin-right: 10px;
+            color: #007bff;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 14px 14px 42px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            color: #2c3e50;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 42px;
+            color: #a0aec0;
+            font-size: 1rem;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to right, #007bff, #0052D4);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+        }
+
+        .save-btn i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .save-btn:hover {
+            background: linear-gradient(to right, #0069d9, #0041b2);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.25);
+        }
+
+        .save-btn:active {
+            transform: translateY(0);
+        }
+
+        /* --- Verification Badge --- */
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            background-color: #e8f7ed;
+            color: #2ecc71;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .verified-badge i {
+            margin-right: 5px;
+            font-size: 0.7rem;
+        }
+
+        /* --- Footer --- */
+        .profile-footer {
+            text-align: center;
+            padding: 20px 25px 0;
+            color: #a0aec0;
+            font-size: 0.85rem;
+            border-top: 1px solid #f0f4f8;
+            margin-top: 10px;
+        }
+
+        .profile-footer a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<div class="profile-card">
+    <div class="profile-header">
+        <div class="photo-frame">
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="User Profile">
+        </div>
+        <div class="user-name">Alex Johnson</div>
+        <div class="user-title">Premium Account Holder</div>
+        
+        <div class="status-indicator">
+            <div class="status-dot"></div>
+            <span>Active • Last login: Today, 09:42</span>
+        </div>
+    </div>
+
+    <div class="accordion-container">
+        
+        <button class="accordion">
+            <div class="accordion-title">
+                <div class="accordion-icon"><i class="fas fa-user-circle"></i></div>
+                Personal Information
+            </div>
+            <div class="accordion-arrow"><i class="fas fa-chevron-down"></i></div>
+        </button>
+        <div class="panel">
+            <div class="info-row">
+                <span class="info-label">
+                    <i class="fas fa-user"></i>
+                    Full Name
+                </span>
+                <span class="info-value">
+                    Alex Johnson
+                    <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
+                </span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">
+                    <i class="fas fa-envelope"></i>
+                    Email Address
+                </span>
+                <span class="info-value">alex.j@example.com</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">
+                    <i class="fas fa-phone"></i>
+                    Phone Number
+                </span>
+                <span class="info-value">+234 801 234 5678</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">
+                    <i class="fas fa-id-card"></i>
+                    Customer ID
+                </span>
+                <span class="info-value">FIN-789432</span>
+            </div>
+        </div>
+
+        <button class="accordion">
+            <div class="accordion-title">
+                <div class="accordion-icon"><i class="fas fa-credit-card"></i></div>
+                Payment & Banking
+            </div>
+            <div class="accordion-arrow"><i class="fas fa-chevron-down"></i></div>
+        </button>
+        <div class="panel">
+            <form class="bank-form" onsubmit="event.preventDefault(); saveBankDetails();">
+                <div class="form-group">
+                    <label for="bankName">
+                        <i class="fas fa-university"></i>
+                        Bank Name
+                    </label>
+                    <i class="fas fa-bank input-icon"></i>
+                    <input type="text" id="bankName" placeholder="e.g. First Bank Nigeria" required>
+                </div>
+                <div class="form-group">
+                    <label for="accountName">
+                        <i class="fas fa-user-tag"></i>
+                        Account Name
+                    </label>
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="accountName" placeholder="e.g. Alex Johnson" required>
+                </div>
+                <div class="form-group">
+                    <label for="accountNumber">
+                        <i class="fas fa-hashtag"></i>
+                        Account Number
+                    </label>
+                    <i class="fas fa-wallet input-icon"></i>
+                    <input type="number" id="accountNumber" placeholder="0123456789" required>
+                </div>
+                <button type="submit" class="save-btn">
+                    <i class="fas fa-save"></i>
+                    Save Bank Details
+                </button>
+            </form>
+        </div>
+
+        <button class="accordion">
+            <div class="accordion-title">
+                <div class="accordion-icon"><i class="fas fa-shield-alt"></i></div>
+                Security & Preferences
+            </div>
+            <div class="accordion-arrow"><i class="fas fa-chevron-down"></i></div>
+        </button>
+        <div class="panel">
+            <div class="info-row">
+                <span class="info-label">
+                    <i class="fas fa-lock"></i>
+                    2FA Authentication
+                </span>
+                <span class="info-value">Enabled</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">
+                    <i class="fas fa-bell"></i>
+                    Notification Settings
+                </span>
+                <span class="info-value">Push & Email</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">
+                    <i class="fas fa-globe"></i>
+                    Language
+                </span>
+                <span class="info-value">English (US)</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Logic to handle the opening and closing of accordion items
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            // Toggle the "active" class on the button
+            this.classList.toggle("active");
+
+            // Select the panel immediately following the button
+            var panel = this.nextElementSibling;
+
+            // Toggle logic for max-height to create slide animation
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null;
+            } else {
+                // Close any other open panels
+                closeAllPanels(this);
+                panel.style.maxHeight = panel.scrollHeight + "px";
+            }
+        });
+    }
+
+    // Function to close all panels except the one being opened
+    function closeAllPanels(currentAccordion) {
+        var allAccordions = document.getElementsByClassName("accordion");
+        for (var j = 0; j < allAccordions.length; j++) {
+            if (allAccordions[j] !== currentAccordion) {
+                allAccordions[j].classList.remove("active");
+                var otherPanel = allAccordions[j].nextElementSibling;
+                otherPanel.style.maxHeight = null;
+            }
+        }
+    }
+
+    // Save bank details function
+    function saveBankDetails() {
+        const bankName = document.getElementById('bankName').value;
+        const accountName = document.getElementById('accountName').value;
+        const accountNumber = document.getElementById('accountNumber').value;
+        
+        if (bankName && accountName && accountNumber) {
+            // Create a success message
+            const form = document.querySelector('.bank-form');
+            const originalButton = form.querySelector('.save-btn');
+            
+            // Change button to show success state
+            originalButton.innerHTML = '<i class="fas fa-check-circle"></i> Details Saved Successfully!';
+            originalButton.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+            originalButton.style.boxShadow = '0 4px 12px rgba(46, 204, 113, 0.3)';
+            
+            // Reset after 3 seconds
+            setTimeout(() => {
+                originalButton.innerHTML = '<i class="fas fa-save"></i> Save Bank Details';
+                originalButton.style.background = 'linear-gradient(to right, #007bff, #0052D4)';
+                originalButton.style.boxShadow = '0 4px 12px rgba(0, 123, 255, 0.2)';
+            }, 3000);
+        }
+    }
+
+    // Open the first accordion by default
+    document.addEventListener("DOMContentLoaded", function() {
+        if (acc.length > 0) {
+            acc[0].click();
+        }
+    });
+</script>
+
+</body>
+</html>
