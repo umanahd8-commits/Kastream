@@ -3,870 +3,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cashx/dashboard</title>
+    <title>Premium Dashboard | Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
-            --primary-bg: #0f172a;
-            --secondary-bg: #1e293b;
-            --card-bg: #ffffff;
-            --accent-blue: #3b82f6;
-            --accent-green: #10b981;
-            --accent-purple: #8b5cf6;
-            --accent-orange: #f59e0b;
-            --text-dark: #1e293b;
-            --text-light: #64748b;
-            --text-white: #f8fafc;
-            --border-radius: 16px;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg-dark: #0a1219;
+            --card-dark: #121d26;
+            --text-gray: #94a3b8;
+            --accent-green: #a3e635;
+            --accent-red: #8b0000;
+            --sidebar-width: 260px;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
 
         body {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            color: var(--text-dark);
-            min-height: 100vh;
-            padding-bottom: 80px;
-        }
-
-        /* --- Header --- */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 24px;
-            background: var(--primary-bg);
-            color: var(--text-white);
-            position: relative;
-            box-shadow: var(--shadow);
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .avatar {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 20px;
+            background-color: var(--bg-dark);
             color: white;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .welcome-text p {
-            font-size: 13px;
-            color: #94a3b8;
-            font-weight: 500;
-        }
-
-        .welcome-text h2 {
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .header-actions {
+            overflow-x: hidden;
             display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .icon-btn {
-            width: 44px;
-            height: 44px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-            cursor: pointer;
-            color: var(--text-white);
-            transition: var(--transition);
-            font-size: 18px;
-        }
-
-        .icon-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ef4444;
-            color: white;
-            font-size: 10px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
             justify-content: center;
         }
 
-        /* --- Hamburger Dropdown --- */
-        .hamburger-dropdown {
-            position: relative;
-        }
-
-        .dropdown-content {
-            position: absolute;
-            top: 120%;
-            right: 0;
-            background: var(--card-bg);
-            min-width: 220px;
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: var(--transition);
-            z-index: 1000;
-            padding: 12px 0;
-        }
-
-        .dropdown-content.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 20px;
-            text-decoration: none;
-            color: var(--text-dark);
-            transition: var(--transition);
-            border-left: 3px solid transparent;
-        }
-
-        .dropdown-item:hover {
-            background: #f8fafc;
-            border-left-color: var(--accent-blue);
-            padding-left: 24px;
-        }
-
-        .dropdown-icon {
-            width: 18px;
-            height: 18px;
-            color: var(--accent-blue);
-            text-align: center;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #e2e8f0;
-            margin: 8px 20px;
-        }
-
-        .logout-item {
-            color: #ef4444;
-        }
-
-        .logout-item .dropdown-icon {
-            color: #ef4444;
-        }
-
-        /* --- Main Container --- */
-        .container {
-            padding: 24px;
-            max-width: 480px;
-            margin: 0 auto;
-        }
-
-        /* --- Balance Card --- */
-        .balance-card {
-            background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
-            border-radius: var(--border-radius);
-            padding: 28px;
-            position: relative;
-            margin-bottom: 28px;
-            color: white;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .balance-card::before {
-            content: '';
-            position: absolute;
+        .sidebar {
+            position: fixed;
+            left: calc(-1 * var(--sidebar-width));
             top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            width: var(--sidebar-width);
+            height: 100%;
+            background: #1e293b;
+            z-index: 2000;
+            transition: 0.3s;
+            padding: 20px;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
         }
 
-        .card-header {
+        .sidebar.active { left: 0; }
+
+        .sidebar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
         }
 
-        .currency-toggle {
-            display: flex;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 6px;
-            border-radius: 20px;
-        }
-
-        .currency-tab {
-            padding: 6px 16px;
-            border-radius: 16px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .currency-tab.active {
-            background: var(--accent-green);
-            color: var(--text-dark);
-        }
-
-        .amount {
-            font-size: 42px;
-            font-weight: 800;
-            margin-bottom: 24px;
-            letter-spacing: -0.5px;
-            background: linear-gradient(90deg, #ffffff, #cbd5e1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 12px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 14px 20px;
-            border-radius: 12px;
-            border: none;
-            font-weight: 600;
-            font-size: 15px;
-            cursor: pointer;
-            transition: var(--transition);
+        .sidebar-item {
+            padding: 15px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            gap: 15px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: 0.2s;
+            color: var(--text-gray);
+            text-decoration: none;
         }
 
-        .btn-outline {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .sidebar-item:hover { background: rgba(255,255,255,0.05); color: white; }
+        .sidebar-item i { width: 20px; }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1500;
         }
 
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+        .overlay.active { display: block; }
+
+        /* --- MAIN CONTENT --- */
+        .phone-wrapper {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+            padding-bottom: 100px;
         }
 
-        .btn-green {
-            background: var(--accent-green);
-            color: var(--text-dark);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .nav-trigger { display: flex; align-items: center; gap: 15px; cursor: pointer; }
 
-        .btn-green:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        }
+        .header-icons { display: flex; align-items: center; gap: 20px; }
+        .avatar-sm { background: var(--accent-red); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; cursor: pointer; }
 
-        /* --- Wallet Cards --- */
-        .section-title {
-            font-size: 14px;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-            font-weight: 600;
-        }
+        /* --- CARDS & GRIDS --- */
+        .card { border-radius: 28px; padding: 20px; margin-bottom: 15px; cursor: pointer; transition: transform 0.2s; }
+        .card:active { transform: scale(0.98); }
+        
+        .profile-card { background: white; color: black; display: flex; align-items: center; gap: 15px; }
+        .avatar-lg { background: var(--accent-red); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem; }
+        
+        .revenue-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .white-card { background: white; color: black; }
+        .dark-card { background: var(--card-dark); border: 1px solid #1e293b; }
 
-        .wallet-grid {
-            display: grid;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
+        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
+        .action-item { background: white; border-radius: 18px; padding: 15px 5px; text-align: center; color: #1e3a8a; cursor: pointer; text-decoration: none; display: block; }
+        .action-item i { font-size: 1.2rem; display: block; margin-bottom: 8px; }
+        .action-item span { font-size: 0.65rem; font-weight: 700; color: #1e293b; }
 
-        .wallet-card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 24px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            border: 1px solid #f1f5f9;
-        }
+        .stats-row { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 12px; }
+        .earnings-card { background: #ef4444; position: relative; }
+        .roa-card { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
 
-        .wallet-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
+        .ad-section { background: linear-gradient(to bottom, #064e3b, var(--bg-dark)); border: 1px solid #065f46; border-radius: 28px; padding: 20px; }
+        .btn-engage { background: var(--accent-green); color: black; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 15px; cursor: pointer; }
 
-        .wallet-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .wallet-title {
-            font-size: 15px;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-
-        .wallet-amount {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--text-dark);
-            margin-bottom: 8px;
-        }
-
-        .wallet-trend {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--accent-green);
-        }
-
-        .wallet-indicator {
-            display: flex;
-            gap: 3px;
-            height: 40px;
-            align-items: flex-end;
-        }
-
-        .indicator-bar {
-            width: 6px;
-            border-radius: 3px;
-            background: var(--accent-purple);
-            transition: var(--transition);
-        }
-
-        .indicator-bar:nth-child(2) {
-            height: 70%;
-            background: var(--accent-blue);
-        }
-
-        .indicator-bar:nth-child(3) {
-            height: 40%;
-            background: var(--accent-green);
-        }
-
-        .carousel-dots {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin: 20px 0;
-        }
-
-        .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #cbd5e1;
-            transition: var(--transition);
-        }
-
-        .dot.active {
-            width: 24px;
-            background: var(--accent-blue);
-            border-radius: 3px;
-        }
-
-        /* --- Referral Section --- */
+        /* Referral Section */
         .referral-section {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 24px;
-            margin-top: 28px;
-            box-shadow: var(--shadow);
-            border-left: 4px solid var(--accent-purple);
+            background: var(--card-dark);
+            border-radius: 28px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid #1e293b;
         }
-
-        .referral-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .referral-icon {
-            width: 24px;
-            height: 24px;
-            color: var(--accent-purple);
-        }
-
-        .referral-box {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
+        
         .referral-link {
-            flex: 1;
-            background: #f8fafc;
-            padding: 14px 20px;
+            background: rgba(255,255,255,0.1);
             border-radius: 12px;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 13px;
-            color: var(--text-dark);
-            border: 1px solid #e2e8f0;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            padding: 12px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-
+        
+        .referral-link code {
+            font-size: 0.8rem;
+            color: var(--accent-green);
+            word-break: break-all;
+            padding-right: 10px;
+        }
+        
         .copy-btn {
-            padding: 14px 24px;
-            background: var(--accent-blue);
-            color: white;
+            background: var(--accent-green);
+            color: black;
             border: none;
-            border-radius: 12px;
-            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: bold;
             cursor: pointer;
-            transition: var(--transition);
             white-space: nowrap;
         }
 
-        .copy-btn:hover {
-            background: #2563eb;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
-        }
+        /* --- BOTTOM NAV --- */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 450px; background: var(--card-dark); display: flex; justify-content: space-around; align-items: center; padding: 15px 10px; border-top: 1px solid #1e293b; z-index: 1000; }
+        .nav-btn { text-align: center; color: var(--text-gray); font-size: 0.6rem; cursor: pointer; flex: 1; border: none; background: none; }
+        .nav-btn i { font-size: 1.2rem; display: block; margin-bottom: 5px; }
+        .nav-btn.active { color: var(--accent-green); }
 
-        .copy-btn.copied {
+        .special-actions { display: flex; align-items: center; gap: 15px; padding-left: 10px; }
+        .circle-arrow { background: #d9f99d; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: black; cursor: pointer; }
+
+        .label { font-size: 0.65rem; font-weight: 600; margin-bottom: 8px; opacity: 0.8; }
+        .amt { font-size: 1.3rem; font-weight: 700; }
+        
+        .plus-tag {
             background: var(--accent-green);
-        }
-
-        /* --- Promo Banner --- */
-        .promo-banner {
-            margin-top: 28px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            border-radius: var(--border-radius);
-            padding: 32px 28px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .promo-banner::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transform: translate(50%, -50%);
-        }
-
-        .promo-content h3 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .promo-content p {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 20px;
-        }
-
-        .promo-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 28px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-        }
-
-        .promo-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        /* --- Bottom Navigation --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            max-width: 480px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: space-around;
-            padding: 16px 20px;
-            border-top: 1px solid rgba(226, 232, 240, 0.8);
-            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.08);
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: var(--text-light);
-            transition: var(--transition);
-            position: relative;
-            padding: 8px;
-        }
-
-        .nav-icon {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 4px;
-            transition: var(--transition);
-            color: inherit;
-            font-size: 20px;
-        }
-
-        .nav-label {
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-item.active {
-            color: var(--accent-blue);
-        }
-
-        .nav-item.active .nav-icon {
-            transform: translateY(-4px);
-        }
-
-        .nav-item::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 3px;
-            background: var(--accent-blue);
-            border-radius: 2px;
-            transition: var(--transition);
-        }
-
-        .nav-item.active::after {
-            width: 24px;
-        }
-
-        /* Icon-specific styles */
-        .icon-notification {
-            position: relative;
-        }
-
-        .icon-with-badge {
-            position: relative;
-        }
-
-        .icon-with-badge .notification-badge {
-            top: -3px;
-            right: -3px;
-        }
-
-        .profit-icon {
-            color: var(--accent-green);
-        }
-
-        .trend-up {
-            color: var(--accent-green);
-        }
-
-        .trend-down {
-            color: #ef4444;
+            color: black;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="user-profile">
-            <div class="avatar">CP</div>
-            <div class="welcome-text">
-                <p>Welcome back!</p>
-                <h2>COACH PYTHOX</h2>
-            </div>
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3>Menu</h3>
+        <i class="fas fa-times" onclick="toggleMenu()" style="cursor:pointer"></i>
+    </div>
+    <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
+    <a href="withdraw.html" class="sidebar-item"><i class="fas fa-share-nodes"></i> Withdraw</a>
+    <a href="monetization.html" class="sidebar-item"><i class="fas fa-sack-dollar"></i> Social Monetization</a>
+    <a href="welfare.html" class="sidebar-item"><i class="fas fa-heart"></i> Welfare</a>
+    <a href="ads.html" class="sidebar-item"><i class="fas fa-broadcast-tower"></i> ADs</a>
+    <a href="coupon.html" class="sidebar-item"><i class="fas fa-lock"></i> coupon</a>
+    <a href="logout.html" class="sidebar-item" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+</div>
+
+<div class="phone-wrapper">
+    <header class="header">
+        <div class="nav-trigger" onclick="toggleMenu()">
+            <i class="fas fa-bars fa-lg"></i>
+            <span style="font-size: 1.2rem; font-weight: 700;">Dashboard</span>
         </div>
-        <div class="header-actions">
-            <button class="icon-btn icon-with-badge">
-                <i class="fas fa-bell nav-icon"></i>
-                <span class="notification-badge">3</span>
-            </button>
-            <button class="icon-btn">
-                <i class="fas fa-moon nav-icon"></i>
-            </button>
-            
-            <!-- Hamburger Menu -->
-            <div class="hamburger-dropdown">
-                <button class="icon-btn" id="hamburgerBtn">
-                    <i class="fas fa-bars nav-icon"></i>
-                </button>
-                <div class="dropdown-content" id="dropdownContent">
-                    <a href="articles.html" class="dropdown-item">
-                        <i class="fas fa-newspaper dropdown-icon"></i>
-                        <span>Articles</span>
-                    </a>
-                    <a href="monetization.html" class="dropdown-item">
-                        <i class="fas fa-crown dropdown-icon"></i>
-                        <span>Monetization</span>
-                    </a>
-                    <a href="withdraw.html" class="dropdown-item">
-                        <i class="fas fa-wallet dropdown-icon"></i>
-                        <span>withdraw</span>
-                    </a>
-                    <a href="loans.html" class="dropdown-item">
-                        <i class="fas fa-money-bill-wave dropdown-icon"></i>
-                        <span>cashx loans</span>
-                    </a>
-                    <a href="scholarships.html" class="dropdown-item">
-                        <i class="fas fa-graduation-cap dropdown-icon"></i>
-                        <span>Scholarships</span>
-                    </a>
-                    <a href="streaks.html" class="dropdown-item">
-                        <i class="fas fa-fire dropdown-icon"></i>
-                        <span>Snapstreaks</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="index.html" class="dropdown-item logout-item">
-                        <i class="fas fa-sign-out-alt dropdown-icon"></i>
-                        <span>Logout</span>
-                    </a>
-                </div>
-            </div>
+        <div class="header-icons">
+            <i class="far fa-bell fa-lg"></i></a>
+            <i class="far fa-sun fa-lg"></i></a>
+            <a href="profile.html" class="avatar-sm">BI</a>
         </div>
     </header>
 
-    <div class="container">
-        <div class="balance-card">
-            <div class="card-header">
-                <span style="color: #cbd5e1; font-weight: 500;">Total Balance</span>
-                <div class="currency-toggle">
-                    <span class="currency-tab active">NGN</span>
-                    <span class="currency-tab">USD</span>
-                </div>
+    <div id="main-content">
+        <div class="card profile-card">
+            <div class="avatar-lg">BI</div>
+            <div class="profile-info">
+                <h2>Hello Bigkevins</h2>
+                <p>Current Plan: <span class="plus-tag">PLUS</span> Upline: Doings</p>
             </div>
-            <div class="amount">₦13,000.00</div>
-            <div class="btn-group">
-                <button class="btn btn-outline">
-                    <i class="fas fa-arrow-up"></i>
-                    Withdraw
-                </button>
-            </div>
-        </div>
-
-        <p class="section-title">Other Wallets</p>
-        <div class="wallet-grid">
-            <div class="wallet-card">
-                <div class="wallet-header">
-                    <div>
-                        <div class="wallet-title">Overall Earnings</div>
-                        <div class="wallet-amount">₦26,000.00</div>
-                        <div class="wallet-trend">
-                            <i class="fas fa-chart-line trend-up"></i>
-                            ↑ 12.5% this month
-                        </div>
-                    </div>
-                    <div class="wallet-indicator">
-                        <div class="indicator-bar" style="height: 100%;"></div>
-                        <div class="indicator-bar"></div>
-                        <div class="indicator-bar"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="wallet-card">
-                <div class="wallet-header">
-                    <div>
-                        <div class="wallet-title">Daily Rewards</div>
-                        <div class="wallet-amount">₦850.00</div>
-                        <div class="wallet-trend">
-                            <i class="fas fa-gift profit-icon"></i>
-                            Daily bonus available
-                        </div>
-                    </div>
-                    <div>
-                        <i class="fas fa-coins" style="color: var(--accent-orange); font-size: 32px;"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="carousel-dots">
-            <span class="dot active"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
         </div>
 
         <div class="referral-section">
-            <div class="referral-header">
-                <i class="fas fa-link referral-icon"></i>
-                <p class="section-title" style="margin: 0;">Referral Link</p>
+            <p class="label">Your Referral Link</p>
+            <div class="referral-link">
+                <code id="referralCode">https://example.com/ref/BIGKEVINS123</code>
+                <button class="copy-btn" onclick="copyReferralLink()">Copy</button>
             </div>
-            <div class="referral-box">
-                <input type="text" readonly value="https://cashx.name.ng" class="referral-link" id="referralLink">
-                <button class="copy-btn" id="copyBtn">
-                    <i class="fas fa-copy"></i>
-                    Copy
-                </button>
-            </div>
+            <p style="font-size: 0.7rem; color: var(--text-gray); margin-top: 10px;">
+                Earn 10% commission on every referral's earnings!
+            </p>
         </div>
 
-        <div class="promo-banner">
-            <div class="promo-content">
-                <h3><i class="fas fa-walking"></i> Walk and Earn</h3>
-                <p>Your daily dose of fitness meets rewards! Track steps, earn tokens, stay healthy.</p>
-                <a href="#" class="promo-btn">
-                    <i class="fas fa-play-circle"></i>
-                    Start Walking
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
+        <div class="revenue-row">
+            <a  class="card white-card">
+                <p class="label">Personal Revenue</p>
+                <p class="amt">$100.00</p>
+            </a>
+            <a class="card dark-card">
+                <p class="label">Total Revenue</p>
+                <p class="amt">₦129,600</p>
+            </a>
+        </div>
+
+        <div class="action-grid">
+            <a href="withdraw.html" class="action-item">
+                <i class="fas fa-university"></i>
+                <span>Payments</span>
+            </a>
+            <a href="articles.html" class="action-item">
+                <i class="fas fa-file-alt"></i>
+                <span>Articles</span>
+            </a>
+            <a href="monetization.html" class="action-item">
+                <i class="fas fa-snapchat"></i>
+                <span>Streaks</span>
+            </a>
+            <a href="games.html" class="action-item">
+                <img src="data:image/webp;base64,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" width="20" style="margin: 0 auto 5px; display:block;">
+                <span>Play Candy</span>
+            </a>
+        </div>
+
+        <div class="stats-row">
+            <a  class="card earnings-card">
+                <p class="label" style="color:white">Total Earnings</p>
+                <p class="amt">$1,853.00</p>
+            </a>
+            <a class="card roa-card">
+                <p class="label" style="color:white">Total ROA</p>
+                <p class="amt">$74.00</p>
+            </a>
+        </div>
+
+        <div class="ad-section">
+            <p class="label">Assigned Ad: <strong>Tiktok</strong></p>
+            <button class="btn-engage" onclick="engageAd()">Engage Task</button>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <a href="dashboard.html" class="nav-item active">
-            <i class="fas fa-home nav-icon"></i>
-            <span class="nav-label">Home</span>
+        <a href="dashboard.html" class="nav-btn active">
+            <i class="fas fa-house"></i>
+            Home
         </a>
-        <a href="history.html" class="nav-item">
-            <i class="fas fa-history nav-icon"></i>
-            <span class="nav-label">History</span>
+        <a href="withdraw.html" class="nav-btn">
+            <i class="fas fa-history"></i>
+            History
         </a>
-        <a href="games.html" class="nav-item">
-            <i class="fas fa-gamepad nav-icon"></i>
-            <span class="nav-label">Games</span>
+        <a href="profile.html" class="nav-btn">
+            <i class="fas fa-user"></i>
+            Profile
         </a>
-        <a href="profile.html" class="nav-item">
-            <i class="fas fa-user nav-icon"></i>
-            <span class="nav-label">Profile</span>
+        <a href="articles.html" class="nav-btn">
+            <i class="fas fa-newspaper"></i>
+            Article
         </a>
     </nav>
+</div>
 
-    <script>
-        // Hamburger dropdown functionality
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
-        const dropdownContent = document.getElementById('dropdownContent');
-        
-        hamburgerBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            dropdownContent.classList.toggle('show');
-        });
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!dropdownContent.contains(e.target) && !hamburgerBtn.contains(e.target)) {
-                dropdownContent.classList.remove('show');
-            }
-        });
-        
-        // Copy referral link functionality
-        const copyBtn = document.getElementById('copyBtn');
-        const referralLink = document.getElementById('referralLink');
-        
-        copyBtn.addEventListener('click', () => {
-            referralLink.select();
-            referralLink.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(referralLink.value);
-            
-            const originalText = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied';
-            copyBtn.classList.add('copied');
-            
-            setTimeout(() => {
-                copyBtn.innerHTML = originalText;
-                copyBtn.classList.remove('copied');
-            }, 2000);
-        });
-        
-        // Currency toggle functionality
-        const currencyTabs = document.querySelectorAll('.currency-tab');
-        currencyTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                currencyTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                
-                // Update balance amount based on currency
-                const amountElement = document.querySelector('.amount');
-                if (tab.textContent === 'USD') {
-                    amountElement.textContent = '$26.50';
-                } else {
-                    amountElement.textContent = '₦13,000.00';
-                }
+<script>
+    function toggleMenu() {
+        document.getElementById('sidebar').classList.toggle('active');
+        document.getElementById('overlay').classList.toggle('active');
+    }
+
+    function copyReferralLink() {
+        const referralCode = document.getElementById('referralCode').textContent;
+        navigator.clipboard.writeText(referralCode)
+            .then(() => {
+                alert('Referral link copied to clipboard!');
+            })
+            .catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy link. Please copy manually.');
             });
-        });
-        
-        // Animate indicator bars
-        const bars = document.querySelectorAll('.indicator-bar');
-        bars.forEach((bar, index) => {
-            setTimeout(() => {
-                bar.style.height = bar.style.height || '0%';
-            }, index * 200);
-        });
-        
-        // Bottom nav interaction
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                navItems.forEach(nav => nav.classList.remove('active'));
-                item.classList.add('active');
-            });
-        });
-        
-        // Theme toggle functionality
-        const themeBtn = document.querySelector('.fa-moon').closest('.icon-btn');
-        themeBtn.addEventListener('click', () => {
-            const icon = themeBtn.querySelector('i');
-            if (icon.classList.contains('fa-moon')) {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-                document.body.style.filter = 'invert(1) hue-rotate(180deg)';
-            } else {
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
-                document.body.style.filter = 'none';
-            }
-        });
-    </script>
+    }
+
+    function engageAd() {
+        alert("Redirecting to Tiktok task... Please complete and return to claim your reward.");
+        window.open("https://t.me/+EQRII_xxYE05MJAO", "_blank");
+    }
+</script>
 
 </body>
 </html>
