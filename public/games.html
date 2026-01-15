@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>60s Candy Crush Simulation</title>
+    <style>
+        :root {
+            --bg-color: #282c34;
+            --grid-bg: #20232a;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        #start-btn {
+            padding: 10px 25px;
+            font-size: 1rem;
+            background-color: #61dafb;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        #start-btn:disabled {
+            background-color: #4b5263;
+            cursor: not-allowed;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(8, 50px);
+            grid-template-rows: repeat(8, 50px);
+            gap: 5px;
+            background-color: var(--grid-bg);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .candy {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Ensures the image fits nicely */
+            transition: transform 0.3s ease;
+        }
+
+        .candy img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Makes sure the image fills the space */
+        }
+
+        .empty {
+            background-color: transparent !important;
+            transform: scale(0);
+        }
+        
+        .empty img {
+            display: none;
+        }
+        
+        .matched {
+            animation: pop 0.4s ease-out;
+        }
+        
+        @keyframes pop {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>PLAY AND EARN</h1>
+        <div class="stats">
+            <div id="timer">Time: 60s</div>
+            <div id="score">Score: 0</div>
+        </div>
+        <button id="start-btn">Start Game</button>
+    </div>
+
+    <div id="grid" class="grid"></div>
+
+    <script>
+        const gridDisplay = document.querySelector('#grid');
+        const startBtn = document.querySelector('#start-btn');
+        const timerDisplay = document.querySelector('#timer');
+        const scoreDisplay = document.querySelector('#score');
+        
+        const width = 8;
+        // Array of your image URLs
+        const candyImages = [
+            'https://i.ibb.co/v6txG3jn/candy-4.jpg',
+            'https://i.ibb.co/8g2YZnLd/candy-5.jpg',
+            'https://i.ibb.co/tw3CXRhn/candy-3.jpg',
+            'https://i.ibb.co/QFj4CZTF/candy-2.jpg',
+            'https://i.ibb.co/q3NDdHL0/candy-1.jpg'
+        ];
+        let squares = [];
+        let score = 0;
+        let timeLeft = 60;
+        let gameActive = false;
+        let timerInterval = null;
+        let isProcessing = false;
+
+        // Create the board
+        function createBoard() {
+            console.log('Creating board...');
+            gridDisplay.innerHTML = '';
+            squares = [];
+            
+            for (let i = 0; i < width * width; i++) {
+                const square = document.createElement('div');
+                square.setAttribute('id', i.toString());
+                square.className = 'candy';
+                
+                // Create an image element
+                const img = document.createElement('img');
+                let randomImageIndex = Math.floor(Math.random() * candyImages.length);
+                img.src = candyImages[randomImageIndex];
+                img.alt = `Candy ${randomImageIndex + 1}`;
+                
+                // Store the image index as a data attribute for easy comparison
+                square.setAttribute('data-candy-type', randomImageIndex.toString());
+                
+                square.appendChild(img);
+                gridDisplay.appendChild(square);
+                squares.push(square);
+            }
+            
+            console.log('Board created with', squares.length, 'squares');
+        }
+
+        // Find all matches
+        function findMatches() {
+            const matchedIndices = new Set();
+            
+            // Check rows for 3 in a row
+            for (let row = 0; row < width; row++) {
+                for (let col = 0; col < width - 2; col++) {
+                    const index = row * width + col;
+                    const candyType1 = squares[index].getAttribute('data-candy-type');
+                    
+                    if (!candyType1 || squares[index].classList.contains('empty')) continue;
+                    
+                    const candyType2 = squares[index + 1].getAttribute('data-candy-type');
+                    const candyType3 = squares[index + 2].getAttribute('data-candy-type');
+                    
+                    if (candyType1 === candyType2 && candyType2 === candyType3) {
+                        matchedIndices.add(index);
+                        matchedIndices.add(index + 1);
+                        matchedIndices.add(index + 2);
+                    }
+                }
+            }
+            
+            // Check columns for 3 in a column
+            for (let col = 0; col < width; col++) {
+                for (let row = 0; row < width - 2; row++) {
+                    const index = row * width + col;
+                    const candyType1 = squares[index].getAttribute('data-candy-type');
+                    
+                    if (!candyType1 || squares[index].classList.contains('empty')) continue;
+                    
+                    const candyType2 = squares[index + width].getAttribute('data-candy-type');
+                    const candyType3 = squares[index + width * 2].getAttribute('data-candy-type');
+                    
+                    if (candyType1 === candyType2 && candyType2 === candyType3) {
+                        matchedIndices.add(index);
+                        matchedIndices.add(index + width);
+                        matchedIndices.add(index + width * 2);
+                    }
+                }
+            }
+            
+            return matchedIndices;
+        }
+
+        // Clear matched candies with animation
+        function clearMatches() {
+            const matchedIndices = findMatches();
+            
+            if (matchedIndices.size > 0) {
+                // Add animation class
+                matchedIndices.forEach(index => {
+                    squares[index].classList.add('matched');
+                });
+                
+                // Update score
+                score += matchedIndices.size * 10;
+                scoreDisplay.textContent = `Score: ${score}`;
+                
+                // Clear after animation
+                setTimeout(() => {
+                    matchedIndices.forEach(index => {
+                        squares[index].className = 'candy empty';
+                        squares[index].setAttribute('data-candy-type', '');
+                        squares[index].classList.remove('matched');
+                    });
+                }, 400);
+                
+                return true;
+            }
+            return false;
+        }
+
+        // Apply gravity
+        function applyGravity() {
+            let moved = false;
+            
+            // Start from bottom, move up
+            for (let i = squares.length - 1; i >= width; i--) {
+                // If current is empty and above has candy, move it down
+                const currentIsEmpty = squares[i].classList.contains('empty');
+                const aboveHasCandy = !squares[i - width].classList.contains('empty');
+                
+                if (currentIsEmpty && aboveHasCandy) {
+                    // Move the candy down
+                    squares[i].className = 'candy';
+                    squares[i].setAttribute('data-candy-type', squares[i - width].getAttribute('data-candy-type'));
+                    
+                    // Copy the image
+                    const newImg = squares[i - width].querySelector('img').cloneNode(true);
+                    squares[i].innerHTML = '';
+                    squares[i].appendChild(newImg);
+                    
+                    // Clear the above cell
+                    squares[i - width].className = 'candy empty';
+                    squares[i - width].setAttribute('data-candy-type', '');
+                    squares[i - width].innerHTML = '';
+                    
+                    moved = true;
+                }
+            }
+            
+            return moved;
+        }
+
+        // Fill top row
+        function fillTopRow() {
+            for (let i = 0; i < width; i++) {
+                if (squares[i].classList.contains('empty')) {
+                    let randomImageIndex = Math.floor(Math.random() * candyImages.length);
+                    
+                    squares[i].className = 'candy';
+                    squares[i].setAttribute('data-candy-type', randomImageIndex.toString());
+                    
+                    const img = document.createElement('img');
+                    img.src = candyImages[randomImageIndex];
+                    img.alt = `Candy ${randomImageIndex + 1}`;
+                    
+                    squares[i].innerHTML = '';
+                    squares[i].appendChild(img);
+                }
+            }
+        }
+
+        // Make a random move
+        function makeRandomMove() {
+            // Try a few random positions
+            for (let attempt = 0; attempt < 10; attempt++) {
+                const randomIndex = Math.floor(Math.random() * squares.length);
+                const row = Math.floor(randomIndex / width);
+                const col = randomIndex % width;
+                
+                // Try swapping with right neighbor
+                if (col < width - 1) {
+                    const swapIndex = randomIndex + 1;
+                    
+                    // Get current data
+                    const type1 = squares[randomIndex].getAttribute('data-candy-type');
+                    const type2 = squares[swapIndex].getAttribute('data-candy-type');
+                    const html1 = squares[randomIndex].innerHTML;
+                    const html2 = squares[swapIndex].innerHTML;
+                    
+                    // Swap temporarily
+                    squares[randomIndex].setAttribute('data-candy-type', type2);
+                    squares[randomIndex].innerHTML = html2;
+                    
+                    squares[swapIndex].setAttribute('data-candy-type', type1);
+                    squares[swapIndex].innerHTML = html1;
+                    
+                    // Check if it creates a match
+                    if (findMatches().size > 0) {
+                        console.log('Made a move at', randomIndex, 'swapping with', swapIndex);
+                        return true; // Keep the swap
+                    }
+                    
+                    // Swap back if no match
+                    squares[randomIndex].setAttribute('data-candy-type', type1);
+                    squares[randomIndex].innerHTML = html1;
+                    
+                    squares[swapIndex].setAttribute('data-candy-type', type2);
+                    squares[swapIndex].innerHTML = html2;
+                }
+                
+                // Try swapping with bottom neighbor
+                if (row < width - 1) {
+                    const swapIndex = randomIndex + width;
+                    
+                    // Get current data
+                    const type1 = squares[randomIndex].getAttribute('data-candy-type');
+                    const type2 = squares[swapIndex].getAttribute('data-candy-type');
+                    const html1 = squares[randomIndex].innerHTML;
+                    const html2 = squares[swapIndex].innerHTML;
+                    
+                    // Swap temporarily
+                    squares[randomIndex].setAttribute('data-candy-type', type2);
+                    squares[randomIndex].innerHTML = html2;
+                    
+                    squares[swapIndex].setAttribute('data-candy-type', type1);
+                    squares[swapIndex].innerHTML = html1;
+                    
+                    // Check if it creates a match
+                    if (findMatches().size > 0) {
+                        console.log('Made a move at', randomIndex, 'swapping with', swapIndex);
+                        return true; // Keep the swap
+                    }
+                    
+                    // Swap back if no match
+                    squares[randomIndex].setAttribute('data-candy-type', type1);
+                    squares[randomIndex].innerHTML = html1;
+                    
+                    squares[swapIndex].setAttribute('data-candy-type', type2);
+                    squares[swapIndex].innerHTML = html2;
+                }
+            }
+            
+            return false;
+        }
+
+        // One simulation step
+        async function simulationStep() {
+            if (!gameActive || isProcessing) return;
+            
+            isProcessing = true;
+            
+            try {
+                // Check for existing matches
+                let hadMatches = clearMatches();
+                
+                if (hadMatches) {
+                    // Wait for animation
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    // Apply gravity and fill
+                    let gravityMoved = false;
+                    do {
+                        gravityMoved = applyGravity();
+                        if (gravityMoved) {
+                            await new Promise(resolve => setTimeout(resolve, 100));
+                        }
+                    } while (gravityMoved);
+                    
+                    fillTopRow();
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                    
+                    // Check again for cascading matches
+                    setTimeout(simulationStep, 100);
+                } else {
+                    // No matches, try to make a move
+                    const moveMade = makeRandomMove();
+                    
+                    if (moveMade) {
+                        await new Promise(resolve => setTimeout(resolve, 300));
+                        setTimeout(simulationStep, 100);
+                    } else {
+                        // Couldn't find a valid move, wait and try again
+                        setTimeout(simulationStep, 500);
+                    }
+                }
+            } catch (error) {
+                console.error('Error in simulation step:', error);
+            } finally {
+                isProcessing = false;
+            }
+        }
+
+        // Start the game
+        function startGame() {
+            console.log('Starting game...');
+            if (gameActive) return;
+            
+            startBtn.disabled = true;
+            gameActive = true;
+            score = 0;
+            timeLeft = 60;
+            scoreDisplay.textContent = `Score: 0`;
+            timerDisplay.textContent = `Time: 60s`;
+            
+            createBoard();
+            
+            // Start timer
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `Time: ${timeLeft}s`;
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+            
+            // Start simulation after a short delay
+            setTimeout(() => {
+                simulationStep();
+            }, 500);
+            
+            console.log('Game started!');
+        }
+
+        // End the game
+        function endGame() {
+            console.log('Ending game...');
+            gameActive = false;
+            clearInterval(timerInterval);
+            startBtn.disabled = false;
+            setTimeout(() => {
+                alert(`Simulation Over! Final Score: ${score}`);
+            }, 500);
+        }
+
+        // Event listener
+        startBtn.addEventListener('click', startGame);
+
+        // Initialize board on load
+        window.addEventListener('load', () => {
+            console.log('Page loaded, creating initial board...');
+            createBoard();
+        });
+    </script>
+</body>
+</html>
