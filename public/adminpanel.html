@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #1e293b;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 260px;
+            background-color: var(--secondary-color);
+            color: #fff;
+            position: fixed;
+            height: 100%;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .logo-container {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .logo-placeholder {
+            width: 100%;
+            height: 60px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            border: 1px dashed rgba(255,255,255,0.3);
+        }
+
+        .nav-links li {
+            list-style: none;
+            margin-bottom: 10px;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .nav-links i {
+            margin-right: 12px;
+            width: 20px;
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header h2 {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        /* Grid Layout for Dashboard Widgets */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Card System */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Forms & Inputs */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary { background: var(--primary-color); color: white; }
+        .btn-success { background: var(--accent-green); color: white; }
+        .btn-danger { background: var(--accent-red); color: white; }
+        .btn-sm { padding: 5px 10px; font-size: 0.8rem; }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        th {
+            color: var(--text-light);
+            font-weight: 500;
+            background-color: #f8fafc;
+        }
+
+        td {
+            color: var(--text-dark);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* Specific Component Styling */
+        
+        /* Badges */
+        .badge {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .badge-pending { background: #fff7ed; color: #c2410c; }
+        .badge-gold { background: #fefce8; color: #854d0e; border: 1px solid #fde047; }
+        .badge-silver { background: #f8fafc; color: #475569; border: 1px solid #cbd5e1; }
+
+        /* Merchant Action Area */
+        .action-area {
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .hidden { display: none; }
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo-container">
+            <div class="logo-placeholder">
+                <img src="https://i.ibb.co/ZzNFQbRx/918-CFC59-9989-4-D61-8605-1-BFDAADADD57.jpg" alt="Logo">
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="#users"><i class="fas fa-users"></i> All Users</a></li>
+            <li><a href="#withdrawals"><i class="fas fa-wallet"></i> Withdrawals</a></li>
+            <li><a href="#coupons"><i class="fas fa-ticket-alt"></i> Coupons</a></li>
+            <li><a href="#ads"><i class="fas fa-ad"></i> Ads Manager</a></li>
+            <li><a href="#loans"><i class="fas fa-university"></i> Loans & Schol.</a></li>
+            <li><a href="#merchants"><i class="fas fa-store"></i> Merchants</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h2>Admin Dashboard</h2>
+            <div class="user-profile">
+                <span style="color: var(--text-light);">Welcome, </span> <strong>Super Admin</strong>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+
+            <div class="card" id="coupons">
+                <div class="card-header">
+                    <span class="card-title">Generate Coupons</span>
+                </div>
+                <div class="form-group">
+                    <label>Select Package</label>
+                    <select>
+                        <option value="3000">Standard Package (3,000)</option>
+                        <option value="6000">Premium Package (6,000)</option>
+                        <option value="9000">Gold Package (9,000)</option>
+                        <option value="12000">Diamond Package (12,000)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" value="1" min="1">
+                </div>
+                <button class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-magic"></i> Generate Code
+                </button>
+            </div>
+
+            <div class="card" id="ads">
+                <div class="card-header">
+                    <span class="card-title">Ads Manager</span>
+                    <button class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Post Ad</button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ad Title</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Summer Promo Banner</td>
+                                <td><span class="badge badge-pending" style="color:green; bg-color: #dcfce7;">Active</span></td>
+                                <td><button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>Black Friday Deal</td>
+                                <td><span class="badge badge-pending">Expired</span></td>
+                                <td><button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card full-width" id="withdrawals">
+                <div class="card-header">
+                    <span class="card-title">Withdrawal Requests</span>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>John Doe</td>
+                                <td>$450.00</td>
+                                <td>Bank Transfer</td>
+                                <td>Oct 24, 2023</td>
+                                <td>
+                                    <button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Approve</button>
+                                    <button class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Decline</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Sarah Smith</td>
+                                <td>$120.00</td>
+                                <td>PayPal</td>
+                                <td>Oct 23, 2023</td>
+                                <td>
+                                    <button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Approve</button>
+                                    <button class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Decline</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card full-width" id="loans">
+                <div class="card-header">
+                    <span class="card-title">Loans & Scholarship Applications</span>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Applicant</th>
+                                <th>Type</th>
+                                <th>Amount Needed</th>
+                                <th>Reason</th>
+                                <th>Decision</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Michael Brown</td>
+                                <td>Loan</td>
+                                <td>$5,000</td>
+                                <td>Business Startup</td>
+                                <td>
+                                    <div style="display: flex; gap: 5px;">
+                                        <button class="btn btn-success btn-sm">Approve</button>
+                                        <button class="btn btn-danger btn-sm">Decline</button>
+                                    </div>
+                                    <input type="text" placeholder="Reason for decline..." style="margin-top:5px; font-size: 0.8rem;" class="hidden">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Emily Davis</td>
+                                <td>Scholarship</td>
+                                <td>$2,000</td>
+                                <td>Tuition Fees</td>
+                                <td>
+                                    <div style="display: flex; gap: 5px;">
+                                        <button class="btn btn-success btn-sm">Approve</button>
+                                        <button class="btn btn-danger btn-sm">Decline</button>
+                                    </div>
+                                    <input type="text" placeholder="Reason: Low GPA..." style="margin-top:5px; font-size: 0.8rem; display:block;">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card full-width" id="users">
+                <div class="card-header">
+                    <span class="card-title">All Users & Balances</span>
+                    <input type="text" placeholder="Search user..." style="width: 200px;">
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User Info</th>
+                                <th>Email</th>
+                                <th>Affiliate Balance</th>
+                                <th>Task Balance</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="avatar">JD</div>
+                                        <span>John Doe</span>
+                                    </div>
+                                </td>
+                                <td>john@example.com</td>
+                                <td style="color: var(--accent-green); font-weight: 600;">$1,200.00</td>
+                                <td>$45.00</td>
+                                <td><span class="badge badge-pending" style="background:#dcfce7; color:green;">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="avatar">AS</div>
+                                        <span>Alice Stone</span>
+                                    </div>
+                                </td>
+                                <td>alice@example.com</td>
+                                <td style="color: var(--accent-green); font-weight: 600;">$300.00</td>
+                                <td>$150.00</td>
+                                <td><span class="badge badge-pending" style="background:#fee2e2; color:red;">Banned</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card full-width" id="merchants">
+                <div class="card-header">
+                    <span class="card-title">Merchant Coupon Requests</span>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Merchant Name</th>
+                                <th>Package Requested</th>
+                                <th>Request Date</th>
+                                <th>Admin Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>TechWorld Inc.</strong></td>
+                                <td>10x Gold (9000)</td>
+                                <td>2 mins ago</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Approve</button>
+                                        <button class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Decline</button>
+                                    </div>
+                                    <div class="action-area">
+                                        <label style="font-size: 0.75rem;">Request Approved. Paste Code:</label>
+                                        <div style="display:flex; gap:5px;">
+                                            <input type="text" placeholder="Paste generated code here...">
+                                            <button class="btn btn-primary btn-sm">Send</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>FashionNova</strong></td>
+                                <td>5x Standard (3000)</td>
+                                <td>1 hour ago</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Approve</button>
+                                        <button class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Decline</button>
+                                    </div>
+                                    <div class="action-area">
+                                        <label style="font-size: 0.75rem;">Request Declined. Reason:</label>
+                                        <div style="display:flex; gap:5px;">
+                                            <input type="text" placeholder="e.g. Insufficient funds...">
+                                            <button class="btn btn-danger btn-sm">Send</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card full-width">
+                <div class="card-header">
+                    <span class="card-title">Merchant Management & Rankings</span>
+                    <button class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add Merchant</button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Merchant Name</th>
+                                <th>Total Sales</th>
+                                <th>Manage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge badge-gold"><i class="fas fa-trophy"></i> 1st</span></td>
+                                <td>TechWorld Inc.</td>
+                                <td>$45,000</td>
+                                <td><button class="btn btn-danger btn-sm">Remove</button></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-silver">2nd</span></td>
+                                <td>Gadget Store</td>
+                                <td>$32,000</td>
+                                <td><button class="btn btn-danger btn-sm">Remove</button></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-silver">3rd</span></td>
+                                <td>FashionNova</td>
+                                <td>$12,000</td>
+                                <td><button class="btn btn-danger btn-sm">Remove</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div> </div>
+
+</body>
+</html>
