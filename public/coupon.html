@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupon Code Purchase</title>
+    <style>
+        /* CSS STYLING */
+        :root {
+            --primary-color: #0ba4db; /* Paystack-like blue */
+            --secondary-color: #2c3e50;
+            --success-color: #27ae60;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Navigation Arrow */
+        .nav-arrow {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        
+        .nav-arrow:hover {
+            color: var(--primary-color);
+        }
+
+        /* Main Container */
+        .container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        /* Logo */
+        .logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+
+        /* Elements */
+        h2 { color: var(--secondary-color); margin-bottom: 20px; }
+        p { color: #666; margin-bottom: 20px; }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        select, input[type="number"], input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box; /* Fix padding issue */
+            font-size: 16px;
+        }
+
+        .total-display {
+            background-color: #eef2f5;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-weight: bold;
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            width: 100%;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 600;
+        }
+
+        button:hover {
+            background-color: #0989b8;
+        }
+
+        /* Bank Details Box */
+        .bank-details {
+            background-color: #fff8e1;
+            border: 1px solid #ffe0b2;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        /* Coupon Result Bar */
+        .coupon-container {
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px dashed var(--secondary-color);
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .code-display {
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            letter-spacing: 2px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 10px;
+            display: none; /* Hidden until approved */
+        }
+
+        /* Utility to toggle sections */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="dashboard.html" class="nav-arrow">
+        &#8592; Back to Dashboard
+    </a>
+
+    <div class="container">
+        
+        <div id="section-landing">
+            <img src="https://i.ibb.co/ZzNFQbRx/918-CFC59-9989-4-D61-8605-1-BFDAADADD57.jpg" alt="Website Logo" class="logo">
+            <h1>purchase your CASHX coupon code</h1>
+            <p>Select a package </p>
+            <button onclick="showSection('section-form')">Purchase Coupon Code</button>
+        </div>
+
+        <div id="section-form" class="hidden">
+            <h2>Select Package</h2>
+            
+            <div class="form-group">
+                <label for="package-select">Choose Package</label>
+                <select id="package-select" onchange="calculateTotal()">
+                    <option value="0">-- Select --</option>
+                    <option value="2750">Pkg 1 (2,750)</option>
+                    <option value="5750">Pkg 2 (5,750)</option>
+                    <option value="8750">Pkg 3 (8,750)</option>
+                    <option value="11750">Pkg 4 (11,750)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Number of Coupons</label>
+                <input type="number" id="quantity" value="1" min="1" oninput="calculateTotal()">
+            </div>
+
+            <div class="total-display">
+                Total to Pay: <span id="total-amount">0.00</span>
+            </div>
+
+            <button onclick="goToPayment()">Proceed to Payment</button>
+            <p style="margin-top:15px; font-size: 12px; cursor:pointer;" onclick="showSection('section-landing')">Cancel</p>
+        </div>
+
+        <div id="section-payment" class="hidden">
+            <h2>Payment Details</h2>
+            <p>Please make a transfer of <strong><span id="pay-amount">0.00</span></strong> to the account below.</p>
+
+            <div class="bank-details">
+                <strong>Bank:</strong> Paystack Simulation Bank<br>
+                <strong>Account No:</strong> 1234 567 890<br>
+                <strong>Account Name:</strong> Coupon Ventures Ltd
+            </div>
+
+            <div class="form-group">
+                <label>Upload Payment Receipt</label>
+                <input type="file" id="receipt-file" accept="image/*">
+            </div>
+
+            <button onclick="submitReceipt()">Drop Receipt (Submit)</button>
+        </div>
+
+        <div id="section-result" class="hidden">
+            <h2>Order Status</h2>
+            
+            <div class="coupon-container">
+                <div id="status-indicator" class="status-badge status-pending">
+                    Pending Validation...
+                </div>
+                
+                <div id="loading-text">
+                    <p>We are verifying your receipt. Please wait...</p>
+                    <img src="https://i.gifer.com/ZKZg.gif" alt="loading" style="width:30px;">
+                </div>
+
+                <div id="final-coupon" class="code-display">
+                    </div>
+            </div>
+            
+            <br>
+            <button onclick="location.reload()">Buy Another</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Variables to hold state
+        let currentTotal = 0;
+
+        // Function to switch between visible sections
+        function showSection(sectionId) {
+            // Hide all main divs inside container
+            const sections = ['section-landing', 'section-form', 'section-payment', 'section-result'];
+            sections.forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            // Show the requested one
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        // Function to calculate price
+        function calculateTotal() {
+            const price = parseFloat(document.getElementById('package-select').value);
+            const qty = parseInt(document.getElementById('quantity').value);
+            
+            if (price > 0 && qty > 0) {
+                currentTotal = price * qty;
+                // Format with commas
+                document.getElementById('total-amount').innerText = currentTotal.toLocaleString();
+            } else {
+                currentTotal = 0;
+                document.getElementById('total-amount').innerText = "0.00";
+            }
+        }
+
+        // Proceed to Payment
+        function goToPayment() {
+            if (currentTotal === 0) {
+                alert("Please select a package and quantity first.");
+                return;
+            }
+            // Update the payment screen amount
+            document.getElementById('pay-amount').innerText = currentTotal.toLocaleString();
+            showSection('section-payment');
+        }
+
+        
+        function submitReceipt() {
+            const fileInput = document.getElementById('receipt-file');
+            
+            if (fileInput.files.length === 0) {
+                alert("Please upload your receipt photo first.");
+                return;
+            }
+
+            // Move to Result section
+            showSection('section-result');
+
+            setTimeout(() => {
+                // Change Status
+                const statusBadge = document.getElementById('status-indicator');
+                statusBadge.innerText = "Approved";
+                statusBadge.classList.remove('status-pending');
+                statusBadge.classList.add('status-approved');
+
+                // Hide loading text
+                document.getElementById('loading-text').style.display = 'none';
+
+                // Generate and show coupon code
+                const randomCode = 'CPN-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+                const codeDiv = document.getElementById('final-coupon');
+                codeDiv.innerText = randomCode;
+                codeDiv.style.display = 'block';
+
+                alert("Payment Approved! Your Coupon Code is ready.");
+
+            }, 4000); // 4 seconds delay
+        }
+    </script>
+</body>
+</html>
