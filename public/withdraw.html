@@ -463,12 +463,44 @@
 
 <script>
     let currentMethod = "Direct Bank";
+    let exchangeRate = 0;
+    let userBalances = {
+        main: 0,
+        task: 0
+    };
     
-    document.addEventListener('DOMContentLoaded', function() {
-        addToHistory(5000, "Direct Bank", true);
-        addToHistory(12000, "USDT", true);
-        addToHistory(8000, "PayPal", false);
-        
+    document.addEventListener('DOMContentLoaded', async function() {
+        // Fetch User Data
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) window.location.href = 'login.html';
+
+            const userRes = await fetch('/api/auth/withdraw-info', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            
+            if (userRes.ok) {
+                const user = await userRes.json();
+                userBalances.main = user.balance || 0;
+                userBalances.task = user.taskBalance || 0;
+                updateBalanceDisplay();
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+
+        // Fetch Exchange Rate
+        try {
+            const rateRes = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+            const rateData = await rateRes.json();
+            exchangeRate = rateData.rates.NGN;
+            console.log('Current Exchange Rate (USD -> NGN):', exchangeRate);
+        } catch (error) {
+            console.error('Error fetching exchange rate:', error);
+            exchangeRate = 1500; // Fallback
+        }
+
+        // Initialize Date
         document.getElementById('transDate').textContent = new Date().toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
@@ -480,11 +512,51 @@
         document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
         el.classList.add('active');
         currentMethod = val;
+        updateBalanceDisplay();
+    }
+
+    function updateBalanceDisplay() {
+        const isNaira = currentMethod === 'Direct Bank';
+        const symbol = isNaira ? '₦' : '$';
+        
+        // Update Input Symbol
+        document.getElementById('currencySymbol').textContent = symbol;
+        
+        // Update Balances
+        const commissionEl = document.getElementById('commissionBalance');
+        const tasksEl = document.getElementById('tasksBalance');
+        
+        if (isNaira) {
+            commissionEl.textContent = formatCurrency(userBalances.main, 'NGN');
+            tasksEl.textContent = formatCurrency(userBalances.task, 'NGN');
+            document.getElementById('minWithdrawalDisplay').textContent = 'Minimum withdrawal: ₦1,000.00';
+        } else {
+            // Convert NGN to USD: Amount / Rate
+            // Example: 1400 NGN / 1400 = 1 USD
+            const mainUSD = userBalances.main / exchangeRate;
+            const taskUSD = userBalances.task / exchangeRate;
+            
+            commissionEl.textContent = formatCurrency(mainUSD, 'USD');
+            tasksEl.textContent = formatCurrency(taskUSD, 'USD');
+            
+            // Update Min Withdrawal (approx $1 for 1000 NGN)
+            const minUSD = 1000 / exchangeRate;
+            document.getElementById('minWithdrawalDisplay').textContent = `Minimum withdrawal: ${formatCurrency(minUSD, 'USD')}`;
+        }
+    }
+
+    function formatCurrency(amount, currency) {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: currency,
+            minimumFractionDigits: 2
+        }).format(amount);
     }
 
     function openConfirm() {
-        const amt = document.getElementById('amtInput').value;
+        const amt = parseFloat(document.getElementById('amtInput').value);
         const wallet = document.querySelector('input[name="wallet"]:checked').value;
+        const isNaira = currentMethod === 'Direct Bank';
         
         if(!amt || amt <= 0) {
             alert("Please enter a valid amount");
@@ -492,19 +564,24 @@
             return;
         }
         
-        if(amt < 1000) {
-            alert("Minimum withdrawal amount is ₦1,000.00");
+        // Min withdrawal check
+        const minAmt = isNaira ? 1000 : (1000 / exchangeRate);
+        if(amt < minAmt) {
+            alert(`Minimum withdrawal amount is ${isNaira ? '₦1,000.00' : '$' + minAmt.toFixed(2)}`);
             return;
         }
 
         document.getElementById('dispMethod').innerText = currentMethod;
         document.getElementById('dispWallet').innerText = wallet;
-        document.getElementById('dispAmt').innerText = '₦' + parseFloat(amt).toLocaleString('en-US', {minimumFractionDigits: 2});
         
-        const fee = amt * 0.02;
+        const symbol = isNaira ? '₦' : '$';
+        document.getElementById('dispAmt').innerText = symbol + amt.toLocaleString('en-US', {minimumFractionDigits: 2});
+        
+        const fee = amt * 0.02; // 2% fee
         const total = amt - fee;
-        document.getElementById('dispFee').innerText = '₦' + fee.toLocaleString('en-US', {minimumFractionDigits: 2});
-        document.getElementById('dispTotal').innerText = '₦' + total.toLocaleString('en-US', {minimumFractionDigits: 2});
+        
+        document.getElementById('dispFee').innerText = symbol + fee.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('dispTotal').innerText = symbol + total.toLocaleString('en-US', {minimumFractionDigits: 2});
         
         document.getElementById('confirmModal').style.display = 'flex';
     }
@@ -514,48 +591,17 @@
     }
 
     function showReceipt() {
-        const amt = document.getElementById('amtInput').value;
+        const amt = parseFloat(document.getElementById('amtInput').value);
+        const isNaira = currentMethod === 'Direct Bank';
+        const symbol = isNaira ? '₦' : '$';
+
         document.getElementById('confirmModal').style.display = 'none';
-        document.getElementById('recAmt').innerText = '₦' + parseFloat(amt).toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('recAmt').innerText = symbol + amt.toLocaleString('en-US', {minimumFractionDigits: 2});
         document.getElementById('receiptModal').style.display = 'flex';
         
         document.getElementById('transId').textContent = 'TX-' + Math.floor(100000 + Math.random() * 900000);
         
-        addToHistory(amt, currentMethod, false);
-    }
-
-    function addToHistory(amt, method, isApproved) {
-        const list = document.getElementById('historyList');
-        const item = document.createElement('div');
-        item.className = 'history-item';
-        
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
-        const dateStr = now.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
-        
-        item.innerHTML = `
-            <div>
-                <div style="font-weight:bold; color: #333;">₦${parseFloat(amt).toLocaleString('en-US', {minimumFractionDigits: 2})}</div>
-                <div style="font-size:11px; color:#888">${method} • ${dateStr}, ${timeStr}</div>
-            </div>
-            <div class="${isApproved ? 'status-approved' : 'status-pending'}" onclick="${isApproved ? '' : 'approve(this)'}">
-                ${isApproved ? 'Approved' : 'Pending'}
-            </div>
-        `;
-        list.prepend(item);
-    }
-
-    function approve(el) {
-        el.innerText = "Approved";
-        el.className = "status-approved";
-        el.onclick = null;
-        
-        // Show a brief confirmation
-        const originalText = el.innerHTML;
-        el.innerHTML = '<i class="fas fa-check"></i> Approved';
-        setTimeout(() => {
-            el.innerHTML = originalText;
-        }, 1000);
+        // In real app, send API request here
     }
 
     function toggleHistory() {
@@ -564,7 +610,6 @@
             sec.style.display = 'none';
         } else {
             sec.style.display = 'block';
-            // Scroll to history section
             sec.scrollIntoView({behavior: 'smooth', block: 'start'});
         }
     }
@@ -573,7 +618,6 @@
         closeModals();
         document.getElementById('amtInput').value = ""; // Clear input
         
-        // Show success message
         const originalText = document.querySelector('.btn-withdraw').innerHTML;
         document.querySelector('.btn-withdraw').innerHTML = '<i class="fas fa-check"></i> Withdrawal Requested!';
         document.querySelector('.btn-withdraw').style.background = '#34c759';

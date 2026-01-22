@@ -58,12 +58,13 @@
         const userTitleElements = document.querySelectorAll('.user-title');
         userTitleElements.forEach(el => el.textContent = user.packageType + ' Account Holder');
 
-        // 3. Withdraw Page Elements
+        // 3. Withdraw Page Elements (Handled by withdraw.html dedicated logic)
+        /*
         const commissionBalance = document.getElementById('commissionBalance');
         if (commissionBalance) commissionBalance.textContent = formatter.format(user.balance || 0);
 
         const tasksBalance = document.getElementById('tasksBalance');
-        if (tasksBalance) tasksBalance.textContent = formatter.format(user.balance || 0);
+        if (tasksBalance) tasksBalance.textContent = formatter.format(user.taskBalance || 0);
 
         const currencySymbol = document.getElementById('currencySymbol');
         if (currencySymbol) {
@@ -76,6 +77,7 @@
             const minAmount = isNigeria ? 1000 : 5;
             minWithdrawalDisplay.textContent = `Minimum withdrawal: ${formatter.format(minAmount)}`;
         }
+        */
 
     })
     .catch(error => {

@@ -120,6 +120,7 @@ router.post('/login', async (req, res) => {
                 packageType: user.packageType,
                 referrer: user.referrer,
                 balance: user.balance || 0,
+                taskBalance: user.taskBalance || 0,
                 availableTasks: user.availableTasks || 0,
                 country: user.country
             }
@@ -151,6 +152,7 @@ router.get('/me', verifyToken, (req, res) => {
             packageType: user.packageType,
             referrer: user.referrer,
             balance: user.balance || 0,
+            taskBalance: user.taskBalance || 0,
             availableTasks: user.availableTasks || 0,
             country: user.country,
             role: user.role || 'user'
@@ -177,8 +179,30 @@ router.get('/dashboard', verifyToken, (req, res) => {
             packageType: user.packageType,
             country: user.country,
             balance: user.balance || 0,
+            taskBalance: user.taskBalance || 0,
             availableTasks: user.availableTasks || 0,
             referrer: user.referrer
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get Withdraw Data (Protected)
+router.get('/withdraw-info', verifyToken, (req, res) => {
+    try {
+        const users = getUsers();
+        const user = users.find(u => u.id === req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({
+            balance: user.balance || 0,
+            taskBalance: user.taskBalance || 0,
+            country: user.country
         });
     } catch (error) {
         console.error(error);
