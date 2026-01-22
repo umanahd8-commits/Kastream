@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History - CASHX</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-light: #f8fafc;
+            --text-gray: #94a3b8;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-light);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background-color: var(--card-bg);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .page-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .container {
+            padding: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .history-item {
+            background-color: var(--card-bg);
+            padding: 1rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .history-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+        }
+
+        .icon-credit {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: var(--accent-green);
+        }
+
+        .icon-debit {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--accent-red);
+        }
+
+        .history-details {
+            flex: 1;
+        }
+
+        .history-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .history-date {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+        }
+
+        .history-amount {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .amount-credit {
+            color: var(--accent-green);
+        }
+
+        .amount-debit {
+            color: var(--accent-red);
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 10px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            color: var(--text-gray);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.75rem;
+            gap: 5px;
+        }
+
+        .nav-btn.active {
+            color: var(--accent-blue);
+        }
+
+        .nav-btn i {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="dashboard.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="page-title">Transaction History</div>
+    </div>
+
+    <div class="container">
+        <div class="history-list" id="historyList">
+            <!-- Items will be populated by JS -->
+            <div style="text-align: center; color: var(--text-gray); margin-top: 2rem;">
+                <i class="fas fa-spinner fa-spin"></i> Loading records...
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-btn">
+            <i class="fas fa-house"></i>
+            Home
+        </a>
+        <a href="history.html" class="nav-btn active">
+            <i class="fas fa-history"></i>
+            History
+        </a>
+        <a href="profile.html" class="nav-btn">
+            <i class="fas fa-user"></i>
+            Profile
+        </a>
+        <a href="articles.html" class="nav-btn">
+            <i class="fas fa-newspaper"></i>
+            Article
+        </a>
+    </nav>
+
+    <script src="js/auth-guard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const historyList = document.getElementById('historyList');
+            const userStr = localStorage.getItem('user');
+            
+            if (!userStr) return;
+            
+            const user = JSON.parse(userStr);
+            const isNigeria = user.country === 'NG';
+            const locale = isNigeria ? 'en-NG' : 'en-US';
+            const currency = isNigeria ? 'NGN' : 'USD';
+            const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency: currency });
+
+            // Mock Data Generator based on user balance
+            // In a real app, fetch('/api/auth/history')
+            
+            const generateMockHistory = () => {
+                const types = [
+                    { title: 'Referral Bonus', type: 'credit', icon: 'fa-users' },
+                    { title: 'Task Earnings', type: 'credit', icon: 'fa-check-circle' },
+                    { title: 'Daily Login', type: 'credit', icon: 'fa-calendar-check' },
+                    { title: 'Withdrawal', type: 'debit', icon: 'fa-wallet' }
+                ];
+                
+                const history = [];
+                const now = new Date();
+                
+                for (let i = 0; i < 10; i++) {
+                    const item = types[Math.floor(Math.random() * types.length)];
+                    // If balance is 0, mostly show small earnings or old withdrawals
+                    const amount = (Math.random() * (isNigeria ? 5000 : 50)).toFixed(2);
+                    
+                    const date = new Date(now);
+                    date.setDate(date.getDate() - i * 2); // Spread out dates
+                    
+                    history.push({
+                        ...item,
+                        amount: parseFloat(amount),
+                        date: date
+                    });
+                }
+                return history;
+            };
+
+            const records = generateMockHistory();
+            
+            historyList.innerHTML = records.map(record => `
+                <div class="history-item">
+                    <div style="display: flex; align-items: center;">
+                        <div class="history-icon ${record.type === 'credit' ? 'icon-credit' : 'icon-debit'}">
+                            <i class="fas ${record.icon}"></i>
+                        </div>
+                        <div class="history-details">
+                            <div class="history-title">${record.title}</div>
+                            <div class="history-date">${record.date.toLocaleDateString()} ${record.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                        </div>
+                    </div>
+                    <div class="history-amount ${record.type === 'credit' ? 'amount-credit' : 'amount-debit'}">
+                        ${record.type === 'credit' ? '+' : '-'}${formatter.format(record.amount)}
+                    </div>
+                </div>
+            `).join('');
+        });
+    </script>
+</body>
+</html>

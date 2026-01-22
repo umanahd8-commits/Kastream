@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
@@ -31,6 +32,8 @@ app.use('/api/auth', authRoutes);
 // Protected Routes
 app.use('/api/notifications', verifyToken, notificationRoutes);
 
+const DOMAIN = process.env.DOMAIN || "cashx.name.ng";
+
 // HTTPS certs paths
 const SSL_KEY = "/etc/letsencrypt/live/cashx.name.ng/privkey.pem";
 const SSL_CERT = "/etc/letsencrypt/live/cashx.name.ng/fullchain.pem";
@@ -48,7 +51,7 @@ if (process.platform === 'win32') {
     // Always start HTTP server (needed for certbot renew)
     http.createServer((req, res) => {
         if (req.url.startsWith("/.well-known/acme-challenge/")) return app(req, res);
-        const host = req.headers.host || "cashx.name.ng";
+        const host = req.headers.host || DOMAIN;
         res.writeHead(301, { Location: `https://${host}${req.url}` });
         res.end();
     }).listen(80, "0.0.0.0", () => console.log("HTTP Server running on port 80"));

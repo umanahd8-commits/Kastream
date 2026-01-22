@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles - CASHX</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-light: #f8fafc;
+            --text-gray: #94a3b8;
+            --accent-blue: #3b82f6;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-light);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background-color: var(--card-bg);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .page-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .container {
+            padding: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .article-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .article-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .article-image {
+            width: 100%;
+            height: 180px;
+            background-color: #334155;
+            object-fit: cover;
+        }
+
+        .article-content {
+            padding: 1.2rem;
+        }
+
+        .article-tag {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--accent-blue);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .article-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .article-excerpt {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .read-more {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .read-more i {
+            margin-left: 5px;
+            font-size: 0.8rem;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 10px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            color: var(--text-gray);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.75rem;
+            gap: 5px;
+        }
+
+        .nav-btn.active {
+            color: var(--accent-blue);
+        }
+
+        .nav-btn i {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="dashboard.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="page-title">News & Articles</div>
+    </div>
+
+    <div class="container">
+        
+        <div class="article-card">
+            <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Finance" class="article-image">
+            <div class="article-content">
+                <span class="article-tag">Finance</span>
+                <h3 class="article-title">How to Maximize Your Earnings on CASHX</h3>
+                <p class="article-excerpt">Discover the top strategies used by our highest earners to multiply their daily income through strategic task management.</p>
+                <a href="#" class="read-more">Read Article <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <div class="article-card">
+            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Crypto" class="article-image">
+            <div class="article-content">
+                <span class="article-tag">Updates</span>
+                <h3 class="article-title">New Payment Methods Added for International Users</h3>
+                <p class="article-excerpt">We have expanded our withdrawal options to include USDT and other major cryptocurrencies for seamless global transactions.</p>
+                <a href="#" class="read-more">Read Article <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <div class="article-card">
+            <img src="https://images.unsplash.com/photo-1565514020176-db8b7a676146?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Referral" class="article-image">
+            <div class="article-content">
+                <span class="article-tag">Community</span>
+                <h3 class="article-title">Referral Contest: Win Big This Month!</h3>
+                <p class="article-excerpt">Join our monthly referral leaderboard challenge. The top 10 referrers will share a prize pool of $5,000.</p>
+                <a href="#" class="read-more">Read Article <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-btn">
+            <i class="fas fa-house"></i>
+            Home
+        </a>
+        <a href="history.html" class="nav-btn">
+            <i class="fas fa-history"></i>
+            History
+        </a>
+        <a href="profile.html" class="nav-btn">
+            <i class="fas fa-user"></i>
+            Profile
+        </a>
+        <a href="articles.html" class="nav-btn active">
+            <i class="fas fa-newspaper"></i>
+            Article
+        </a>
+    </nav>
+
+    <script src="js/auth-guard.js"></script>
+</body>
+</html>

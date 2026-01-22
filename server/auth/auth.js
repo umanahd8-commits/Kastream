@@ -7,6 +7,7 @@ const path = require('path');
 
 const USERS_FILE = path.join(__dirname, '../users/users.json');
 const SECRET_KEY = 'your-secret-key'; // In production, use environment variable
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '2m';
 
 // Helper to read users
 const getUsers = () => {
@@ -64,7 +65,7 @@ router.post('/register', async (req, res) => {
         saveUsers(users);
 
         // Generate Token
-        const token = jwt.sign({ id: newUser.id, username: newUser.username }, SECRET_KEY, { expiresIn: '30m' });
+        const token = jwt.sign({ id: newUser.id, username: newUser.username }, SECRET_KEY, { expiresIn: JWT_EXPIRES_IN });
 
         res.status(201).json({ 
             message: 'User registered successfully', 
@@ -106,10 +107,10 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, { expiresIn: '2m' });
+        const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, { expiresIn: JWT_EXPIRES_IN });
 
         res.json({ 
-            message: 'Login successful', 
+            message: 'Login successful',  
             token,
              user: {
                 id: user.id,

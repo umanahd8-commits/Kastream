@@ -1,5 +1,6 @@
 "use strict";
 
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -44,12 +45,14 @@ app.use("/api/notifications", verifyToken, notificationRoutes);
 const SSL_KEY = process.env.SSL_KEY || "/etc/letsencrypt/live/cashx.name.ng/privkey.pem";
 const SSL_CERT = process.env.SSL_CERT || "/etc/letsencrypt/live/cashx.name.ng/fullchain.pem";
 
+const DOMAIN = process.env.DOMAIN || "cashx.name.ng";
+
 function startHttpRedirect() {
   http
     .createServer((req, res) => {
       if (req.url.startsWith("/.well-known/acme-challenge/")) return app(req, res);
 
-      const host = req.headers.host || "cashx.name.ng";
+      const host = req.headers.host || DOMAIN;
       res.writeHead(301, { Location: `https://${host}${req.url}` });
       res.end();
     })

@@ -71,6 +71,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const referrerDisplay = document.getElementById('referrerDisplay');
     if (referrerDisplay) referrerDisplay.textContent = user.referrer || 'None';
 
+    // Generate Dynamic Referral Link
+    const referralCodeElement = document.getElementById('referralCode');
+    if (referralCodeElement) {
+        // Construct link using current origin (handles both localhost and production domain)
+        const referralLink = `${window.location.origin}/register.html?ref=${user.username}`;
+        referralCodeElement.textContent = referralLink;
+    }
+
     // UI Interactions
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const sidebar = document.getElementById('sidebar');
@@ -100,7 +108,38 @@ document.addEventListener('DOMContentLoaded', async () => {
     const notificationBtn = document.getElementById('notificationBtn');
     const notificationModal = document.getElementById('notificationModal');
     const closeNotificationModal = document.getElementById('closeNotificationModal');
-    const notificationBadge = document.getElementById('notificationBadge');
+    const notificationBadge = document.createElement('span'); // Create badge dynamically if missing
+    notificationBadge.className = 'notification-badge';
+    notificationBadge.style.display = 'none';
+    notificationBadge.style.position = 'absolute';
+    notificationBadge.style.top = '-5px';
+    notificationBadge.style.right = '-8px';
+    notificationBadge.style.background = 'red';
+    notificationBadge.style.color = 'white';
+    notificationBadge.style.borderRadius = '50%';
+    notificationBadge.style.padding = '2px 6px';
+    notificationBadge.style.fontSize = '0.7rem';
+
+    if (notificationBtn && notificationBtn.parentElement) {
+        notificationBtn.parentElement.style.position = 'relative';
+        // Ensure badge is appended to the parent container of the bell icon, not the icon itself (which might be an <i> tag)
+        // If the structure is <div class="icon-container"><i id="notificationBtn"></i></div>, we want badge in div.
+        // If structure is just <i id="notificationBtn"></i> in header, we need a wrapper or absolute positioning relative to icon.
+        // Current HTML structure: <div class="header-icons"><i id="notificationBtn"></i> ... </div>
+        // To position correctly relative to the bell, we can wrap the bell in a span or position relative to header-icons but that might be messy.
+        // Best approach: Append badge to the parent of notificationBtn (header-icons) but position it relative to the btn.
+        // OR: simpler, make the notificationBtn itself relative (if it's a container) or wrap it.
+        
+        // Let's create a wrapper for the bell icon dynamically to hold both icon and badge
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'relative';
+        wrapper.style.display = 'inline-block';
+        
+        notificationBtn.parentNode.insertBefore(wrapper, notificationBtn);
+        wrapper.appendChild(notificationBtn);
+        wrapper.appendChild(notificationBadge);
+    }
+
     const notificationList = document.getElementById('notificationList');
 
     // Fetch Notifications
@@ -118,48 +157,61 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         } catch (error) {
             console.error('Error fetching notifications:', error);
-            notificationList.innerHTML = '<div class="notification-item" style="text-align: center; color: var(--text-medium);">Failed to load</div>';
+            if (notificationList) {
+                notificationList.innerHTML = '<div class="notification-item" style="text-align: center; color: var(--text-medium);">Failed to load</div>';
+            }
         }
     }
 
     function renderNotifications(notifications) {
+        if (!notificationList) return;
+
         if (notifications.length === 0) {
             notificationList.innerHTML = '<div class="notification-item" style="text-align: center; color: var(--text-medium);">No new notifications</div>';
             notificationBadge.style.display = 'none';
             return;
         }
 
-        notificationBadge.textContent = notifications.length;
+        let count = notifications.length;
+        if (count > 99) count = '99+';
+
+        notificationBadge.textContent = count;
         notificationBadge.style.display = 'flex';
 
         notificationList.innerHTML = notifications.map(n => `
-            <div class="notification-item">
-                <div class="notification-title">
-                    ${n.type === 'personal' ? '<i class="fas fa-user-circle" style="color: var(--primary-blue); margin-right: 5px;"></i>' : '<i class="fas fa-bullhorn" style="color: var(--accent-yellow); margin-right: 5px;"></i>'}
+            <div class="notification-item" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px 0;">
+                <div class="notification-title" style="display: flex; align-items: center; margin-bottom: 5px; font-weight: 600;">
+                    ${n.type === 'personal' ? '<i class="fas fa-user-circle" style="color: var(--primary-blue); margin-right: 8px;"></i>' : '<i class="fas fa-bullhorn" style="color: var(--accent-yellow); margin-right: 8px;"></i>'}
                     ${n.type === 'personal' ? 'Personal Message' : 'Announcement'}
                 </div>
-                <div class="notification-message">${n.message}</div>
-                <div class="notification-time">${new Date(n.date).toLocaleDateString()} ${new Date(n.date).toLocaleTimeString()}</div>
+                <div class="notification-message" style="font-size: 0.9rem; margin-bottom: 5px; color: #ddd;">${n.message}</div>
+                <div class="notification-time" style="font-size: 0.7rem; color: var(--text-gray);">${new Date(n.date).toLocaleDateString()} ${new Date(n.date).toLocaleTimeString()}</div>
             </div>
         `).join('');
     }
 
-    notificationBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        notificationModal.classList.add('active');
-        dropdownMenu.classList.remove('active'); // Close profile if open
-    });
+    if (notificationBtn && notificationModal) {
+        notificationBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            notificationModal.style.display = 'flex'; // Ensure flex display
+            if (dropdownMenu) dropdownMenu.classList.remove('active'); // Close profile if open
+        });
+    }
 
-    closeNotificationModal.addEventListener('click', () => {
-        notificationModal.classList.remove('active');
-    });
+    if (closeNotificationModal && notificationModal) {
+        closeNotificationModal.addEventListener('click', () => {
+            notificationModal.style.display = 'none';
+        });
+    }
 
     // Close modal when clicking outside content
-    notificationModal.addEventListener('click', (e) => {
-        if (e.target === notificationModal) {
-            notificationModal.classList.remove('active');
-        }
-    });
+    if (notificationModal) {
+        notificationModal.addEventListener('click', (e) => {
+            if (e.target === notificationModal) {
+                notificationModal.style.display = 'none';
+            }
+        });
+    }
 
     // Close dropdowns when clicking outside
     document.addEventListener('click', () => {
