@@ -16,8 +16,19 @@ const verifyToken = require("./middleware/auth");
 const app = express();
 
 // ACME challenges for certbot (webroot mode)
-const ACME_ROOT = process.env.ACME_ROOT || "/var/www/letsencrypt";
-app.use("/.well-known/acme-challenge", express.static(ACME_ROOT));
+const ACME_CHALLENGE_DIR =
+  process.env.ACME_CHALLENGE_DIR || "/var/www/letsencrypt/.well-known/acme-challenge";
+
+// 1) ACME challenge MUST come first
+app.use("/.well-known/acme-challenge", express.static(ACME_CHALLENGE_DIR));
+
+// Debug endpoint
+app.get("/__acme_test", (req, res) => {
+  res.json({
+    acmeDir: ACME_CHALLENGE_DIR,
+    exists: fs.existsSync(ACME_CHALLENGE_DIR),
+  });
+});
 
 // Middleware
 app.use(morgan("dev"));
