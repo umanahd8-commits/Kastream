@@ -86,4 +86,31 @@
         localStorage.removeItem('user');
         window.location.href = 'login.html';
     });
+
+    // Global Logout Logic
+    document.addEventListener('DOMContentLoaded', () => {
+        function handleLogout(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'login.html';
+            }
+        }
+
+        const logoutIds = ['logoutBtn', 'sidebarLogoutBtn'];
+        logoutIds.forEach(id => {
+            const btn = document.getElementById(id);
+            if (btn) btn.addEventListener('click', handleLogout);
+        });
+
+        // Also handle class-based buttons if any
+        const logoutClasses = document.querySelectorAll('.logout-btn');
+        logoutClasses.forEach(btn => {
+            // Avoid double binding if it has an ID we already handled
+            if (!logoutIds.includes(btn.id)) {
+                btn.addEventListener('click', handleLogout);
+            }
+        });
+    });
 })();

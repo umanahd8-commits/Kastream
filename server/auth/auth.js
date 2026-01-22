@@ -30,16 +30,22 @@ router.post('/register', async (req, res) => {
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Generate custom userId
+        const randomDigits = Math.floor(100000 + Math.random() * 900000);
+        const userId = `CASHX${randomDigits}`;
+
         const newUser = new User({
             fullName,
             email,
             username,
+            userId,
             referrer,
             country,
             password: hashedPassword,
             phone,
             couponCode,
-            packageType
+            packageType,
+            referralCode: username // Use username as referral code to ensure uniqueness
         });
 
         await newUser.save();
@@ -51,7 +57,7 @@ router.post('/register', async (req, res) => {
             message: 'User registered successfully', 
             token,
             user: {
-                id: newUser.id,
+                id: newUser.userId || newUser.id,
                 referralCode: newUser.referralCode,
                 username: newUser.username,
                 email: newUser.email,
@@ -93,7 +99,7 @@ router.post('/login', async (req, res) => {
             message: 'Login successful',  
             token,
              user: {
-                id: user.id,
+                id: user.userId || user.id,
                 username: user.username,
                 email: user.email,
                 fullName: user.fullName,
@@ -123,7 +129,7 @@ router.get('/me', verifyToken, async (req, res) => {
         }
 
         res.json({
-            id: user.id,
+            id: user.userId || user.id,
             username: user.username,
             email: user.email,
             fullName: user.fullName,

@@ -12,21 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hamburgerBtn) hamburgerBtn.addEventListener('click', toggleSidebar);
     if (overlay) overlay.addEventListener('click', toggleSidebar);
 
-    // --- LOGOUT LOGIC ---
-    const logoutBtn = document.getElementById('logoutBtn');
-    
-    function performLogout() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = 'login.html';
-    }
-
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            performLogout();
-        });
-    }
+    // Logout Logic handled globally in auth-guard.js
 
     // --- NOTIFICATION LOGIC ---
     const notificationBtn = document.getElementById('notificationBtn');

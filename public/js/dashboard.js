@@ -233,25 +233,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initial fetch
     fetchNotifications();
 
-    // Logout Logic
-    function performLogout() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = 'login.html';
-    }
-
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            performLogout();
-        });
-    }
-
-    const sidebarLogoutBtn = document.getElementById('sidebarLogoutBtn');
-    if (sidebarLogoutBtn) {
-        sidebarLogoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            performLogout();
-        });
-    }
+    // Logout Logic handled globally in auth-guard.js
 });
