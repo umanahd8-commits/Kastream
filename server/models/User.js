@@ -63,9 +63,26 @@ const UserSchema = new mongoose.Schema({
         default: 'user'
     },
     bankAccounts: [{
+        type: {
+            type: String,
+            enum: ['bank', 'usdt', 'paypal'],
+            default: 'bank'
+        },
+        // Bank Details
         bankName: String,
         accountName: String,
-        accountNumber: String
+        accountNumber: String,
+        
+        // USDT Details
+        network: {
+            type: String,
+            enum: ['TRC20', 'TRC-20', 'ERC20', 'BEP20']
+        },
+        walletAddress: String,
+        
+        // PayPal Details
+        paypalName: String,
+        paypalEmail: String
     }],
     createdAt: {
         type: Date,

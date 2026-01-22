@@ -67,6 +67,29 @@
             transform: scale(0.98);
         }
 
+        /* Method Selector */
+        .method-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .method-btn {
+            flex: 1;
+            padding: 12px 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .method-btn.active {
+            background: var(--accent-green);
+            color: black;
+            border-color: rgba(163,230,53,0.6);
+        }
+
         .bank-item {
             background: var(--card-dark);
             border-radius: 15px;
@@ -90,6 +113,24 @@
             color: #ef4444;
             cursor: pointer;
             padding: 5px;
+        }
+
+        /* Custom Select Styling */
+        select.form-input {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+            padding-right: 2.5rem;
+            cursor: pointer;
+        }
+        select.form-input option {
+            background-color: var(--card-dark);
+            color: white;
+            padding: 10px;
         }
     </style>
 </head>
@@ -131,23 +172,72 @@
 
             <!-- Add New Account -->
             <h4 class="section-title">Add New Account</h4>
-            <div class="info-card">
-                <form id="addBankForm" onsubmit="event.preventDefault(); addBankAccount();">
-                    <div class="form-group">
-                        <label class="form-label">Bank Name</label>
-                        <input type="text" id="bankName" class="form-input" placeholder="e.g. First Bank" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Account Name</label>
-                        <input type="text" id="accountName" class="form-input" placeholder="Account Name" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Account Number</label>
-                        <input type="number" id="accountNumber" class="form-input" placeholder="0123456789" required>
-                    </div>
-                    <button type="submit" class="save-btn" id="saveBtn">Add Account</button>
-                </form>
-            </div>
+            <div class="info-card"> 
+               <form id="addBankForm" onsubmit="event.preventDefault(); addBankAccount();"> 
+                 
+                 <!-- hidden type --> 
+                 <input type="hidden" id="accountType" value="bank"> 
+             
+                 <!-- METHOD SELECTOR --> 
+                 <div class="method-row"> 
+                   <button type="button" class="method-btn active" onclick="selectMethod('bank', this)"> 
+                     <i class="fas fa-university"></i> Bank 
+                   </button> 
+                   <button type="button" class="method-btn" onclick="selectMethod('usdt', this)"> 
+                     <i class="fas fa-coins"></i> USDT 
+                   </button> 
+                   <button type="button" class="method-btn" onclick="selectMethod('paypal', this)"> 
+                     <i class="fab fa-paypal"></i> PayPal 
+                   </button> 
+                 </div> 
+             
+                 <!-- BANK FIELDS --> 
+                 <div id="bankFields"> 
+                   <div class="form-group"> 
+                     <label class="form-label">Bank Name</label> 
+                     <input type="text" id="bankName" class="form-input" placeholder="e.g. First Bank" required> 
+                   </div> 
+                   <div class="form-group"> 
+                     <label class="form-label">Account Name</label> 
+                     <input type="text" id="accountName" class="form-input" placeholder="Account Name" required> 
+                   </div> 
+                   <div class="form-group"> 
+                     <label class="form-label">Account Number</label> 
+                     <input type="number" id="accountNumber" class="form-input" placeholder="0123456789" required> 
+                   </div> 
+                 </div> 
+             
+                 <!-- USDT FIELDS --> 
+                 <div id="usdtFields" style="display:none;"> 
+                   <div class="form-group"> 
+                     <label class="form-label">Network</label> 
+                     <select id="usdtNetwork" class="form-input"> 
+                       <option value="TRC20">TRC20</option> 
+                       <option value="ERC20">ERC20</option> 
+                       <option value="BEP20">BEP20</option> 
+                     </select> 
+                   </div> 
+                   <div class="form-group"> 
+                     <label class="form-label">Wallet Address</label> 
+                     <input type="text" id="walletAddress" class="form-input" placeholder="Your USDT address"> 
+                   </div> 
+                 </div> 
+             
+                 <!-- PAYPAL FIELDS --> 
+                 <div id="paypalFields" style="display:none;"> 
+                   <div class="form-group"> 
+                     <label class="form-label">PayPal Name</label> 
+                     <input type="text" id="paypalName" class="form-input" placeholder="Full name"> 
+                   </div> 
+                   <div class="form-group"> 
+                     <label class="form-label">PayPal Email</label> 
+                     <input type="email" id="paypalEmail" class="form-input" placeholder="name@example.com"> 
+                   </div> 
+                 </div> 
+             
+                 <button type="submit" class="save-btn" id="saveBtn">Add Account</button> 
+               </form> 
+             </div>
 
         </div>
     </div>
@@ -191,6 +281,51 @@
             overlay.classList.remove('active');
         });
 
+        // Method Selection Logic
+        function selectMethod(type, btnEl) {
+            document.getElementById('accountType').value = type;
+            
+            // Update buttons
+            document.querySelectorAll('.method-btn').forEach(btn => btn.classList.remove('active'));
+            if (btnEl) {
+                btnEl.classList.add('active');
+            } else {
+                const buttons = document.querySelectorAll('.method-btn');
+                if (type === 'bank' && buttons[0]) buttons[0].classList.add('active');
+                if (type === 'usdt' && buttons[1]) buttons[1].classList.add('active');
+                if (type === 'paypal' && buttons[2]) buttons[2].classList.add('active');
+            }
+
+            // Hide all fields
+            document.getElementById('bankFields').style.display = 'none';
+            document.getElementById('usdtFields').style.display = 'none';
+            document.getElementById('paypalFields').style.display = 'none';
+
+            // Show selected fields
+            if (type === 'bank') document.getElementById('bankFields').style.display = 'block';
+            if (type === 'usdt') document.getElementById('usdtFields').style.display = 'block';
+            if (type === 'paypal') document.getElementById('paypalFields').style.display = 'block';
+
+            // Toggle required attributes to prevent browser blocking submission
+            const isBank = (type === 'bank');
+            const isUsdt = (type === 'usdt');
+            const isPaypal = (type === 'paypal');
+
+            setRequired('bankName', isBank);
+            setRequired('accountName', isBank);
+            setRequired('accountNumber', isBank);
+
+            setRequired('walletAddress', isUsdt);
+            
+            setRequired('paypalName', isPaypal);
+            setRequired('paypalEmail', isPaypal);
+        }
+
+        function setRequired(id, isRequired) {
+            const el = document.getElementById(id);
+            if (el) el.required = isRequired;
+        }
+
         // Bank Logic
         document.addEventListener('DOMContentLoaded', loadBankAccounts);
 
@@ -215,28 +350,77 @@
         function renderBankList(accounts) {
             const listEl = document.getElementById('bankList');
             if (accounts.length === 0) {
-                listEl.innerHTML = '<p style="text-align:center; color:var(--text-gray)">No bank accounts added yet.</p>';
+                listEl.innerHTML = '<div class="info-card"><p style="text-align:center; color:var(--text-gray)">No accounts added yet.</p></div>';
                 return;
             }
 
-            listEl.innerHTML = accounts.map(acc => `
+            listEl.innerHTML = accounts.map(acc => {
+                let icon = 'fa-university';
+                let title = acc.bankName;
+                let subtitle = `${acc.accountNumber} - ${acc.accountName}`;
+
+                if (acc.type === 'usdt') {
+                    icon = 'fa-coins';
+                    title = `USDT (${acc.network})`;
+                    subtitle = acc.walletAddress;
+                } else if (acc.type === 'paypal') {
+                    icon = 'fa-paypal';
+                    title = 'PayPal';
+                    subtitle = acc.paypalEmail;
+                }
+
+                // Fallback for old data
+                if (!acc.type) {
+                     // Assume bank
+                }
+
+                return `
                 <div class="bank-item">
-                    <div class="bank-info">
-                        <h4>${acc.bankName}</h4>
-                        <p>${acc.accountNumber} - ${acc.accountName}</p>
+                    <div class="bank-info" style="display:flex; align-items:center; gap:15px;">
+                        <div style="background:rgba(255,255,255,0.1); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                            <i class="fas ${icon}" style="color:var(--accent-green)"></i>
+                        </div>
+                        <div>
+                            <h4>${title}</h4>
+                            <p>${subtitle}</p>
+                        </div>
                     </div>
                     <i class="fas fa-trash delete-btn" onclick="deleteAccount('${acc._id}')"></i>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         async function addBankAccount() {
             const btn = document.getElementById('saveBtn');
             const originalText = btn.textContent;
+            const type = document.getElementById('accountType').value;
             
-            const bankName = document.getElementById('bankName').value;
-            const accountName = document.getElementById('accountName').value;
-            const accountNumber = document.getElementById('accountNumber').value;
+            let payload = { type };
+
+            if (type === 'bank') {
+                payload.bankName = document.getElementById('bankName').value;
+                payload.accountName = document.getElementById('accountName').value;
+                payload.accountNumber = document.getElementById('accountNumber').value;
+                if (!payload.bankName || !payload.accountName || !payload.accountNumber) {
+                    alert('Please fill all bank fields');
+                    return;
+                }
+            } else if (type === 'usdt') {
+                payload.network = document.getElementById('usdtNetwork').value;
+                payload.walletAddress = document.getElementById('walletAddress').value;
+                if (!payload.network || !payload.walletAddress) {
+                    alert('Please fill all USDT fields');
+                    return;
+                }
+            } else if (type === 'paypal') {
+                payload.paypalName = document.getElementById('paypalName').value;
+                payload.paypalEmail = document.getElementById('paypalEmail').value;
+                if (!payload.paypalName || !payload.paypalEmail) {
+                    alert('Please fill all PayPal fields');
+                    return;
+                }
+            }
 
             btn.textContent = 'Adding...';
             btn.disabled = true;
@@ -249,14 +433,19 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({ bankName, accountName, accountNumber })
+                    body: JSON.stringify(payload)
                 });
 
                 if (res.ok) {
                     const data = await res.json();
                     renderBankList(data.bankAccounts);
                     document.getElementById('addBankForm').reset();
-                    alert('Bank account added successfully');
+                    // Reset to default view
+                    selectMethod('bank');
+                    document.getElementById('bankName').value = ''; 
+                    // ensure hidden fields are cleared or just rely on reset()
+                    
+                    alert('Account added successfully');
                 } else {
                     const err = await res.json();
                     alert(err.message || 'Failed to add account');

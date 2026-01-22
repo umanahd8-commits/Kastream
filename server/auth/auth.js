@@ -189,21 +189,49 @@ router.get('/withdraw-info', verifyToken, async (req, res) => {
     }
 });
 
-// Add Bank Account
+// Add Bank/Payment Account
 router.post('/bank-accounts', verifyToken, async (req, res) => {
     try {
-        const { bankName, accountName, accountNumber } = req.body;
-        if (!bankName || !accountName || !accountNumber) {
-            return res.status(400).json({ message: 'All fields are required' });
+        const { type, bankName, accountName, accountNumber, network, walletAddress, paypalName, paypalEmail } = req.body;
+        
+        // Basic validation
+        if (!type) {
+             return res.status(400).json({ message: 'Account type is required' });
+        }
+
+        const newAccount = { type };
+
+        // Type-specific validation
+        if (type === 'bank') {
+            if (!bankName || !accountName || !accountNumber) {
+                return res.status(400).json({ message: 'All bank fields are required' });
+            }
+            newAccount.bankName = bankName;
+            newAccount.accountName = accountName;
+            newAccount.accountNumber = accountNumber;
+        } else if (type === 'usdt') {
+            if (!network || !walletAddress) {
+                return res.status(400).json({ message: 'Network and wallet address are required' });
+            }
+            newAccount.network = network;
+            newAccount.walletAddress = walletAddress;
+        } else if (type === 'paypal') {
+            if (!paypalName || !paypalEmail) {
+                return res.status(400).json({ message: 'PayPal name and email are required' });
+            }
+            newAccount.paypalName = paypalName;
+            newAccount.paypalEmail = paypalEmail;
+        } else {
+             return res.status(400).json({ message: 'Invalid account type' });
         }
         
         const user = await User.findById(req.user.id);
         if (!user) return res.status(404).json({ message: 'User not found' });
 
-        user.bankAccounts.push({ bankName, accountName, accountNumber });
+        user.bankAccounts.push(newAccount);
         await user.save();
 
-        res.json({ message: 'Bank account added', bankAccounts: user.bankAccounts });
+        res.json({ message: 'Account added successfully', bankAccounts: user.bankAccounts });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
