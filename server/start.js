@@ -1,20 +1,26 @@
 "use strict";
 
-require("dotenv").config();
-const express = require("express");
 const path = require("path");
+// Explicitly load .env from the server directory
+require("dotenv").config({ path: path.join(__dirname, '.env') });
+
+const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const fs = require("fs");
 const http = require("http");
 const https = require("https");
+const connectDB = require('./config/db');
 
 const authRoutes = require("./auth/auth");
 const notificationRoutes = require("./routes/notifications");
 const verifyToken = require("./middleware/auth");
 
 const app = express();
+
+// Connect to Database
+connectDB();
 
 // ACME challenges for certbot (webroot mode)
 const ACME_CHALLENGE_DIR =

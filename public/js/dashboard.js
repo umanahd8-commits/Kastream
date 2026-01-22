@@ -61,6 +61,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     const balanceDisplay = document.getElementById('balanceDisplay');
     if (balanceDisplay) balanceDisplay.textContent = formatter.format(user.balance || 0);
+
+    const taskBalanceDisplay = document.getElementById('taskBalanceDisplay');
+    if (taskBalanceDisplay) taskBalanceDisplay.textContent = formatter.format(user.taskBalance || 0);
+
+    const totalEarningsDisplay = document.getElementById('totalEarningsDisplay');
+    if (totalEarningsDisplay) {
+        const total = (user.balance || 0) + (user.taskBalance || 0);
+        totalEarningsDisplay.textContent = formatter.format(total);
+    }
+
+    const dailyEarningsDisplay = document.getElementById('dailyEarningsDisplay');
+    if (dailyEarningsDisplay) dailyEarningsDisplay.textContent = formatter.format(user.dailyEarnings || 0);
     
     const tasksDisplay = document.getElementById('tasksDisplay');
     if (tasksDisplay) tasksDisplay.textContent = user.availableTasks || 0;

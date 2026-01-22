@@ -2,26 +2,10 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const path = require('path');
+const User = require('../models/User');
 
-const USERS_FILE = path.join(__dirname, '../users/users.json');
 const SECRET_KEY = 'your-secret-key'; // In production, use environment variable
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '2m';
-
-// Helper to read users
-const getUsers = () => {
-    if (!fs.existsSync(USERS_FILE)) {
-        return [];
-    }
-    const data = fs.readFileSync(USERS_FILE);
-    return JSON.parse(data);
-};
-
-// Helper to save users
-const saveUsers = (users) => {
-    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
-};
 
 // Register Route
 router.post('/register', async (req, res) => {
@@ -37,18 +21,16 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ message: 'You must accept the Terms & Conditions' });
         }
 
-        const users = getUsers();
-
         // Check if user exists
-        if (users.find(u => u.email === email || u.username === username)) {
+        const userExists = await User.findOne({ $or: [{ email }, { username }] });
+        if (userExists) {
             return res.status(400).json({ message: 'User already exists' });
         }
 
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = {
-            id: Date.now().toString(),
+        const newUser = new User({
             fullName,
             email,
             username,
@@ -57,12 +39,10 @@ router.post('/register', async (req, res) => {
             password: hashedPassword,
             phone,
             couponCode,
-            packageType,
-            createdAt: new Date().toISOString()
-        };
+            packageType
+        });
 
-        users.push(newUser);
-        saveUsers(users);
+        await newUser.save();
 
         // Generate Token
         const token = jwt.sign({ id: newUser.id, username: newUser.username }, SECRET_KEY, { expiresIn: JWT_EXPIRES_IN });
@@ -93,9 +73,8 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Please provide ID and password' });
         }
 
-        const users = getUsers();
         // Allow login with email or username
-        const user = users.find(u => u.email === loginId || u.username === loginId);
+        const user = await User.findOne({ $or: [{ email: loginId }, { username: loginId }] });
 
         if (!user) {
             return res.status(400).json({ message: 'Invalid credentials' });
@@ -134,10 +113,9 @@ router.post('/login', async (req, res) => {
 const verifyToken = require('../middleware/auth');
 
 // Get Current User (Protected)
-router.get('/me', verifyToken, (req, res) => {
+router.get('/me', verifyToken, async (req, res) => {
     try {
-        const users = getUsers();
-        const user = users.find(u => u.id === req.user.id);
+        const user = await User.findById(req.user.id);
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -164,10 +142,9 @@ router.get('/me', verifyToken, (req, res) => {
 });
 
 // Get Dashboard Data (Protected)
-router.get('/dashboard', verifyToken, (req, res) => {
+router.get('/dashboard', verifyToken, async (req, res) => {
     try {
-        const users = getUsers();
-        const user = users.find(u => u.id === req.user.id);
+        const user = await User.findById(req.user.id);
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -181,6 +158,7 @@ router.get('/dashboard', verifyToken, (req, res) => {
             balance: user.balance || 0,
             taskBalance: user.taskBalance || 0,
             availableTasks: user.availableTasks || 0,
+            dailyEarnings: user.dailyEarnings || 0,
             referrer: user.referrer
         });
     } catch (error) {
@@ -190,10 +168,9 @@ router.get('/dashboard', verifyToken, (req, res) => {
 });
 
 // Get Withdraw Data (Protected)
-router.get('/withdraw-info', verifyToken, (req, res) => {
+router.get('/withdraw-info', verifyToken, async (req, res) => {
     try {
-        const users = getUsers();
-        const user = users.find(u => u.id === req.user.id);
+        const user = await User.findById(req.user.id);
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
