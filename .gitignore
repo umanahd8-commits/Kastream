@@ -8,6 +8,10 @@ bin-release/
 .settings/
 /.vscode/
 /node_modules
+.env
+server/.env
+
+
 
 # Executables
 *.swf
