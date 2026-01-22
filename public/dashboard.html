@@ -174,10 +174,26 @@
 </head>
 <body>
 
-<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="overlay" id="overlay"></div>
 
-<div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
+    <!-- Notification Modal -->
+    <div class="overlay" id="notificationModal" style="display: none; z-index: 2100; align-items: center; justify-content: center;">
+        <div style="background: var(--card-dark); padding: 20px; border-radius: 20px; width: 90%; max-width: 400px; max-height: 80vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>Notifications</h3>
+                <i class="fas fa-times" id="closeNotificationModal" style="cursor: pointer;"></i>
+            </div>
+            <div id="notificationList">
+                <div class="notification-item" style="text-align: center; color: var(--text-medium);">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Dropdown (Hidden but kept for script compatibility if needed, or we can update script) -->
+    <div id="dropdownMenu" style="display: none;"></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
         <h3>Menu</h3>
         <i class="fas fa-times" onclick="toggleMenu()" style="cursor:pointer"></i>
     </div>
@@ -187,35 +203,35 @@
     <a href="welfare.html" class="sidebar-item"><i class="fas fa-heart"></i> Welfare</a>
     <a href="ads.html" class="sidebar-item"><i class="fas fa-broadcast-tower"></i> ADs</a>
     <a href="coupon.html" class="sidebar-item"><i class="fas fa-lock"></i> coupon</a>
-    <a href="logout.html" class="sidebar-item" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    <a href="#" id="logoutBtn" class="sidebar-item" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i> Logout</a>
 </div>
 
 <div class="phone-wrapper">
     <header class="header">
-        <div class="nav-trigger" onclick="toggleMenu()">
+        <div class="nav-trigger" id="hamburgerBtn">
             <i class="fas fa-bars fa-lg"></i>
             <span style="font-size: 1.2rem; font-weight: 700;">Dashboard</span>
         </div>
         <div class="header-icons">
-            <i class="far fa-bell fa-lg"></i></a>
-            <i class="far fa-sun fa-lg"></i></a>
-            <a href="profile.html" class="avatar-sm">BI</a>
+            <i class="far fa-bell fa-lg" id="notificationBtn"></i>
+            <i class="far fa-sun fa-lg"></i>
+            <a href="profile.html" class="avatar-sm" id="navProfileLink">BI</a>
         </div>
     </header>
 
     <div id="main-content">
         <div class="card profile-card">
-            <div class="avatar-lg">BI</div>
+            <div class="avatar-lg" id="profileImg">BI</div>
             <div class="profile-info">
-                <h2>Hello Bigkevins</h2>
-                <p>Current Plan: <span class="plus-tag">PLUS</span> Upline: Doings</p>
+                <h2 id="welcomeMsg">Hello User</h2>
+                <p>Current Plan: <span class="plus-tag" id="packageDisplay">...</span> Upline: <span id="referrerDisplay">...</span></p>
             </div>
         </div>
 
         <div class="referral-section">
             <p class="label">Your Referral Link</p>
             <div class="referral-link">
-                <code id="referralCode">https://example.com/ref/BIGKEVINS123</code>
+                <code id="referralCode">Loading...</code>
                 <button class="copy-btn" onclick="copyReferralLink()">Copy</button>
             </div>
             <p style="font-size: 0.7rem; color: var(--text-gray); margin-top: 10px;">
@@ -226,7 +242,7 @@
         <div class="revenue-row">
             <a  class="card white-card">
                 <p class="label">Personal Revenue</p>
-                <p class="amt">$100.00</p>
+                <p class="amt" id="balanceDisplay">...</p>
             </a>
             <a class="card dark-card">
                 <p class="label">Total Revenue</p>
@@ -291,11 +307,6 @@
 </div>
 
 <script>
-    function toggleMenu() {
-        document.getElementById('sidebar').classList.toggle('active');
-        document.getElementById('overlay').classList.toggle('active');
-    }
-
     function copyReferralLink() {
         const referralCode = document.getElementById('referralCode').textContent;
         navigator.clipboard.writeText(referralCode)
@@ -313,6 +324,6 @@
         window.open("https://t.me/+EQRII_xxYE05MJAO", "_blank");
     }
 </script>
-
+<script src="js/dashboard.js"></script>
 </body>
 </html>

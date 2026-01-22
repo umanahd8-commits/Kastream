@@ -339,9 +339,21 @@
             font-weight: 500;
         }
     </style>
+    <script src="js/auth-guard.js"></script>
 </head>
 <body>
-
+<script>
+    document.body.style.visibility = 'hidden';
+    window.addEventListener('load', () => {
+        // Just in case auth guard takes time, we can reveal it or let auth guard reveal it.
+        // For now, let's just use CSS to hide initially if possible, but JS is fine.
+        // Better yet, let auth-guard handle visibility.
+        // But since auth-guard is async, we might see a flash.
+        // Let's keep it simple: The user wants "protected". The redirection handles protection.
+        // The visibility hide is a UX enhancement.
+        document.body.style.visibility = 'visible';
+    });
+</script>
 <div class="profile-card">
     <div class="profile-header">
         <div class="photo-frame">
@@ -372,7 +384,7 @@
                     Full Name
                 </span>
                 <span class="info-value">
-                    Alex Johnson
+                    <span id="fullNameDisplay">Loading...</span>
                     <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
                 </span>
             </div>
@@ -381,21 +393,21 @@
                     <i class="fas fa-envelope"></i>
                     Email Address
                 </span>
-                <span class="info-value">alex.j@example.com</span>
+                <span class="info-value" id="emailDisplay">Loading...</span>
             </div>
             <div class="info-row">
                 <span class="info-label">
                     <i class="fas fa-phone"></i>
                     Phone Number
                 </span>
-                <span class="info-value">+234 801 234 5678</span>
+                <span class="info-value" id="phoneDisplay">Loading...</span>
             </div>
             <div class="info-row">
                 <span class="info-label">
                     <i class="fas fa-id-card"></i>
                     Customer ID
                 </span>
-                <span class="info-value">FIN-789432</span>
+                <span class="info-value" id="idDisplay">Loading...</span>
             </div>
         </div>
 

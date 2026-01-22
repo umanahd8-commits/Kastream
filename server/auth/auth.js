@@ -106,7 +106,7 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, { expiresIn: '30m' });
+        const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, { expiresIn: '2m' });
 
         res.json({ 
             message: 'Login successful', 
@@ -146,12 +146,38 @@ router.get('/me', verifyToken, (req, res) => {
             username: user.username,
             email: user.email,
             fullName: user.fullName,
+            phone: user.phone,
             packageType: user.packageType,
             referrer: user.referrer,
             balance: user.balance || 0,
             availableTasks: user.availableTasks || 0,
             country: user.country,
             role: user.role || 'user'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get Dashboard Data (Protected)
+router.get('/dashboard', verifyToken, (req, res) => {
+    try {
+        const users = getUsers();
+        const user = users.find(u => u.id === req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({
+            username: user.username,
+            fullName: user.fullName,
+            packageType: user.packageType,
+            country: user.country,
+            balance: user.balance || 0,
+            availableTasks: user.availableTasks || 0,
+            referrer: user.referrer
         });
     } catch (error) {
         console.error(error);

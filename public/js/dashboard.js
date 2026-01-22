@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     let user = null;
     
     try {
-        // Fetch fresh user data
-        const response = await fetch('/api/auth/me', {
+        // Fetch dashboard-specific data
+        const response = await fetch('/api/auth/dashboard', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (response.ok) {
             user = await response.json();
-            // Update local storage with fresh data
+            // Update local storage with fresh data (Note: This might be a subset of user data)
             localStorage.setItem('user', JSON.stringify(user));
         } else {
             // Token might be expired or invalid
@@ -41,9 +41,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Populate UI
-    document.getElementById('navUsername').textContent = user.username;
-    document.getElementById('profileImg').textContent = user.username.charAt(0).toUpperCase();
-    document.getElementById('welcomeMsg').textContent = `Welcome back, ${user.fullName}!`;
+    const navUsername = document.getElementById('navUsername');
+    if (navUsername) navUsername.textContent = user.username;
+
+    const profileImg = document.getElementById('profileImg');
+    if (profileImg) profileImg.textContent = user.username.charAt(0).toUpperCase();
+
+    const welcomeMsg = document.getElementById('welcomeMsg');
+    if (welcomeMsg) welcomeMsg.textContent = `Welcome back, ${user.fullName}!`;
     
     // Format balance
     const isNigeria = user.country === 'NG';
@@ -54,34 +59,42 @@ document.addEventListener('DOMContentLoaded', async () => {
         style: 'currency',
         currency: currency,
     });
-    document.getElementById('balanceDisplay').textContent = formatter.format(user.balance || 0);
+    const balanceDisplay = document.getElementById('balanceDisplay');
+    if (balanceDisplay) balanceDisplay.textContent = formatter.format(user.balance || 0);
     
-    document.getElementById('tasksDisplay').textContent = user.availableTasks || 0;
-    document.getElementById('packageDisplay').textContent = user.packageType || 'Standard';
-    document.getElementById('referrerDisplay').textContent = user.referrer || 'None';
+    const tasksDisplay = document.getElementById('tasksDisplay');
+    if (tasksDisplay) tasksDisplay.textContent = user.availableTasks || 0;
+
+    const packageDisplay = document.getElementById('packageDisplay');
+    if (packageDisplay) packageDisplay.textContent = user.packageType || 'Standard';
+
+    const referrerDisplay = document.getElementById('referrerDisplay');
+    if (referrerDisplay) referrerDisplay.textContent = user.referrer || 'None';
 
     // UI Interactions
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
-    const profileBtn = document.getElementById('profileBtn');
+    const profileBtn = document.getElementById('profileBtn') || document.getElementById('navProfileLink');
     const dropdownMenu = document.getElementById('dropdownMenu');
     const logoutBtn = document.getElementById('logoutBtn');
 
     // Toggle Sidebar
     function toggleSidebar() {
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
+        if (sidebar) sidebar.classList.toggle('active');
+        if (overlay) overlay.classList.toggle('active');
     }
 
-    hamburgerBtn.addEventListener('click', toggleSidebar);
-    overlay.addEventListener('click', toggleSidebar);
+    if (hamburgerBtn) hamburgerBtn.addEventListener('click', toggleSidebar);
+    if (overlay) overlay.addEventListener('click', toggleSidebar);
 
-    // Toggle Profile Dropdown
-    profileBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dropdownMenu.classList.toggle('active');
-    });
+    // Toggle Profile Dropdown (Only if dropdown exists and profileBtn is not a direct link)
+    if (profileBtn && dropdownMenu && !profileBtn.getAttribute('href')) {
+        profileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('active');
+        });
+    }
 
     // Notification Logic
     const notificationBtn = document.getElementById('notificationBtn');
@@ -157,9 +170,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     fetchNotifications();
 
     // Logout Logic
-    logoutBtn.addEventListener('click', () => {
+    function performLogout() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = 'login.html';
-    });
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            performLogout();
+        });
+    }
+
+    const sidebarLogoutBtn = document.getElementById('sidebarLogoutBtn');
+    if (sidebarLogoutBtn) {
+        sidebarLogoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            performLogout();
+        });
+    }
 });

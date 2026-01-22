@@ -344,6 +344,7 @@
             padding-left: 30px;
         }
     </style>
+    <script src="js/auth-guard.js"></script>
 </head>
 <body>
 
@@ -382,7 +383,7 @@
                 <i class="fas fa-wallet wallet-icon commission-icon"></i>
                 <div>
                     <span class="wallet-label">Commission</span>
-                    <span class="wallet-amt">₦13,000.00</span>
+                    <span class="wallet-amt" id="commissionBalance">...</span>
                 </div>
             </div>
         </label>
@@ -393,7 +394,7 @@
                 <i class="fas fa-fire wallet-icon sweat-icon"></i>
                 <div>
                     <span class="wallet-label">Tasks earnings</span>
-                    <span class="wallet-amt">₦13,000.00</span>
+                    <span class="wallet-amt" id="tasksBalance">...</span>
                 </div>
             </div>
         </label>
@@ -401,9 +402,10 @@
 
     <div class="amount-box">
         <div class="amount-input-container">
+            <span id="currencySymbol" class="currency-symbol">₦</span>
             <input type="number" id="amtInput" placeholder="0.00" min="0" step="0.01">
         </div>
-        <div class="min-txt">Minimum withdrawal: ₦1,000.00</div>
+        <div class="min-txt" id="minWithdrawalDisplay">Minimum withdrawal: ₦1,000.00</div>
     </div>
 
     <button class="btn btn-withdraw" onclick="openConfirm()">
