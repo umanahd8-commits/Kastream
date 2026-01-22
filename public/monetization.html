@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Boost | Monetization Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4e54c8;
+            --secondary: #8f94fb;
+            --bg-dark: #1a1a2e;
+            --card-bg: #16213e;
+            --text-light: #eaeaea;
+            --success: #0f3460;
+            --accent: #e94560;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: #1f1f35;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            margin-top: 40px;
+        }
+
+        /* Back Arrow Button */
+        .back-arrow {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .back-arrow:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        .back-arrow i {
+            color: white;
+            font-size: 20px;
+        }
+
+        /* Header Section */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            background: -webkit-linear-gradient(var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* Input Form Section */
+        .link-section {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .link-section h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            z-index: 2;
+        }
+
+
+        .image-placeholder:hover {
+            background: rgba(78, 84, 200, 0.4);
+            color: white;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 120px 12px 45px;
+            background: #0f3460;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .input-group input:focus {
+            border-color: var(--secondary);
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 10px;
+        }
+
+        .save-btn:hover {
+            transform: scale(1.02);
+        }
+
+        /* Earnings Display */
+        .earnings-panel {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+
+        .balance-label {
+            font-size: 14px;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .balance-amount {
+            font-size: 42px;
+            font-weight: bold;
+            color: #4cd137;
+            margin-top: 10px;
+        }
+
+        .tasks-title {
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+        }
+
+        .ads-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .ad-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ad-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        .ad-card:active {
+            transform: scale(0.95);
+        }
+
+        .ad-icon {
+            font-size: 24px;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .ad-desc {
+            font-size: 12px;
+            color: #ccc;
+            margin-bottom: 8px;
+        }
+
+        .ad-reward {
+            font-weight: bold;
+            color: var(--accent);
+            background: rgba(233, 69, 96, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .clicked {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="back-arrow" onclick="goToDashboard()">
+        <i class="fas fa-arrow-left"></i>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Social Monetize</h1>
+            <p>Link your accounts & Watch ads to earn</p>
+        </header>
+
+        <div class="link-section">
+            <h3><i class="fas fa-link"></i> Link Accounts</h3>
+            <br>
+            <div class="input-group">
+                <i class="fab fa-tiktok"></i>
+                <input type="text" id="tiktok" placeholder="Paste TikTok Profile Link...">
+            </div>
+            <div class="input-group">
+                <i class="fab fa-snapchat-ghost"></i>
+                <input type="text" id="snapchat" placeholder="Paste Snapchat Profile Link...">
+            </div>
+            <div class="input-group">
+                <i class="fab fa-whatsapp"></i>
+                <input type="text" id="whatsapp" placeholder="Paste WhatsApp Number/Link...">
+            </div>
+            <div class="input-group">
+                <i class="fab fa-facebook-f"></i>
+                <input type="text" id="facebook" placeholder="Paste Facebook Profile Link...">
+            </div>
+            <button class="save-btn" onclick="saveAccounts()">Save Accounts</button>
+        </div>
+
+        <div class="earnings-panel">
+            <div class="balance-label">Total Earnings</div>
+            <div class="balance-amount" id="balance">$0.00</div>
+        </div>
+
+        <h3 class="tasks-title">Available Ads</h3>
+        <div class="ads-grid">
+            <div class="ad-card" onclick="earnMoney(this, 1.50)">
+                <div class="ad-icon"><i class="fas fa-play-circle"></i></div>
+                <div class="ad-desc">Watch 15s Video Ad</div>
+                <div class="ad-reward">+$1.50</div>
+            </div>
+            <div class="ad-card" onclick="earnMoney(this, 0.80)">
+                <div class="ad-icon"><i class="fas fa-bullhorn"></i></div>
+                <div class="ad-desc">Click Sponsor Link</div>
+                <div class="ad-reward">+$0.80</div>
+            </div>
+            <div class="ad-card" onclick="earnMoney(this, 2.00)">
+                <div class="ad-icon"><i class="fas fa-star"></i></div>
+                <div class="ad-desc">Premium Survey</div>
+                <div class="ad-reward">+$2.00</div>
+            </div>
+            <div class="ad-card" onclick="earnMoney(this, 0.45)">
+                <div class="ad-icon"><i class="fas fa-image"></i></div>
+                <div class="ad-desc">View Banner Ad</div>
+                <div class="ad-reward">+$0.45</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentBalance = 0.00;
+        let accountsSaved = false;
+
+        function goToDashboard() {
+            window.location.href = "dashboard.html";
+        }
+
+        
+        function saveAccounts() {
+            const inputs = document.querySelectorAll('input');
+            let filled = false;
+            
+            inputs.forEach(input => {
+                if(input.value.trim() !== "") filled = true;
+            });
+
+            if(filled) {
+                accountsSaved = true;
+                alert("Success! Your social media accounts have been linked.");
+                document.querySelector('.save-btn').innerText = "Accounts Linked ✓";
+                document.querySelector('.save-btn').style.background = "#4cd137";
+            } else {
+                alert("Please paste at least one profile link.");
+            }
+        }
+
+        function earnMoney(element, amount) {
+            if(!accountsSaved) {
+                alert("Please link and save your accounts first to start earning!");
+                return;
+            }
+
+            currentBalance += amount;
+            
+            document.getElementById('balance').innerText = '$' + currentBalance.toFixed(2);
+
+            element.classList.add('clicked');
+            element.style.cursor = 'default';
+            
+            element.onclick = null; 
+            
+            let desc = element.querySelector('.ad-desc');
+            desc.innerText = "Completed ✓";
+            desc.style.color = "#4cd137";
+        }
+    </script>
+
+</body>
+</html>
