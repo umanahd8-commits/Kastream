@@ -6,185 +6,21 @@
     <title>CASHX Dashboard | Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        :root {
-            --bg-dark: #0a1219;
-            --card-dark: #121d26;
-            --text-gray: #94a3b8;
-            --accent-green: #a3e635;
-            --accent-red: #8b0000;
-            --sidebar-width: 260px;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
-
-        body {
-            background-color: var(--bg-dark);
-            color: white;
-            overflow-x: hidden;
-            display: flex;
-            justify-content: center;
-        }
-
-        .sidebar {
-            position: fixed;
-            left: calc(-1 * var(--sidebar-width));
-            top: 0;
-            width: var(--sidebar-width);
-            height: 100%;
-            background: #1e293b;
-            z-index: 2000;
-            transition: 0.3s;
-            padding: 20px;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-        }
-
-        .sidebar.active { left: 0; }
-
-        .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
-        }
-
-        .sidebar-item {
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: 0.2s;
-            color: var(--text-gray);
-            text-decoration: none;
-        }
-
-        .sidebar-item:hover { background: rgba(255,255,255,0.05); color: white; }
-        .sidebar-item i { width: 20px; }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 1500;
-        }
-
-        .overlay.active { display: block; }
-
-        /* --- MAIN CONTENT --- */
-        .phone-wrapper {
-            width: 100%;
-            max-width: 450px;
-            padding: 20px;
-            padding-bottom: 100px;
-        }
-
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .nav-trigger { display: flex; align-items: center; gap: 15px; cursor: pointer; }
-
-        .header-icons { display: flex; align-items: center; gap: 20px; }
-        .avatar-sm { background: var(--accent-red); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; cursor: pointer; }
-
-        /* --- CARDS & GRIDS --- */
-        .card { border-radius: 28px; padding: 20px; margin-bottom: 15px; cursor: pointer; transition: transform 0.2s; }
-        .card:active { transform: scale(0.98); }
-        
-        .profile-card { background: white; color: black; display: flex; align-items: center; gap: 15px; }
-        .avatar-lg { background: var(--accent-red); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem; }
-        
-        .revenue-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .white-card { background: white; color: black; }
-        .dark-card { background: var(--card-dark); border: 1px solid #1e293b; }
-
-        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
-        .action-item { background: white; border-radius: 18px; padding: 15px 5px; text-align: center; color: #1e3a8a; cursor: pointer; text-decoration: none; display: block; }
-        .action-item i { font-size: 1.2rem; display: block; margin-bottom: 8px; }
-        .action-item span { font-size: 0.65rem; font-weight: 700; color: #1e293b; }
-
-        .stats-row { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 12px; }
-        .earnings-card { background: #ef4444; position: relative; }
-        .roa-card { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
-
-        .ad-section { background: linear-gradient(to bottom, #064e3b, var(--bg-dark)); border: 1px solid #065f46; border-radius: 28px; padding: 20px; }
-        .btn-engage { background: var(--accent-green); color: black; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 15px; cursor: pointer; }
-
-        /* Referral Section */
-        .referral-section {
-            background: var(--card-dark);
-            border-radius: 28px;
-            padding: 20px;
-            margin: 15px 0;
-            border: 1px solid #1e293b;
-        }
-        
-        .referral-link {
-            background: rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 12px;
-            margin-top: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .referral-link code {
-            font-size: 0.8rem;
-            color: var(--accent-green);
-            word-break: break-all;
-            padding-right: 10px;
-        }
-        
-        .copy-btn {
-            background: var(--accent-green);
-            color: black;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        /* --- BOTTOM NAV --- */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 450px; background: var(--card-dark); display: flex; justify-content: space-around; align-items: center; padding: 15px 10px; border-top: 1px solid #1e293b; z-index: 1000; }
-        .nav-btn { text-align: center; color: var(--text-gray); font-size: 0.6rem; cursor: pointer; flex: 1; border: none; background: none; }
-        .nav-btn i { font-size: 1.2rem; display: block; margin-bottom: 5px; }
-        .nav-btn.active { color: var(--accent-green); }
-
-        .special-actions { display: flex; align-items: center; gap: 15px; padding-left: 10px; }
-        .circle-arrow { background: #d9f99d; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: black; cursor: pointer; }
-
-        .label { font-size: 0.65rem; font-weight: 600; margin-bottom: 8px; opacity: 0.8; }
-        .amt { font-size: 1.3rem; font-weight: 700; }
-        
-        .plus-tag {
-            background: var(--accent-green);
-            color: black;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 0.7rem;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
 
     <div class="overlay" id="overlay"></div>
 
     <!-- Notification Modal -->
-    <div class="overlay" id="notificationModal" style="display: none; z-index: 2100; align-items: center; justify-content: center;">
-        <div style="background: var(--card-dark); padding: 20px; border-radius: 20px; width: 90%; max-width: 400px; max-height: 80vh; overflow-y: auto;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div class="overlay notification-modal" id="notificationModal">
+        <div class="notification-content">
+            <div class="notification-header">
                 <h3>Notifications</h3>
                 <i class="fas fa-times" id="closeNotificationModal" style="cursor: pointer;"></i>
             </div>
-            <div id="notificationList">
-                <div class="notification-item" style="text-align: center; color: var(--text-medium);">Loading...</div>
+            <div id="notificationList" class="notification-list">
+                <div class="notification-item" style="text-align: center; color: var(--text-gray);">Loading...</div>
             </div>
         </div>
     </div>
@@ -195,14 +31,12 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
         <h3>Menu</h3>
-        <i class="fas fa-times" onclick="toggleMenu()" style="cursor:pointer"></i>
+        <i class="fas fa-times" id="closeSidebarBtn" style="cursor:pointer"></i>
     </div>
     <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
     <a href="withdraw.html" class="sidebar-item"><i class="fas fa-share-nodes"></i> Withdraw</a>
-    <a href="monetization.html" class="sidebar-item"><i class="fas fa-sack-dollar"></i> Social Monetization</a>
-    <a href="welfare.html" class="sidebar-item"><i class="fas fa-heart"></i> Welfare</a>
     <a href="ads.html" class="sidebar-item"><i class="fas fa-broadcast-tower"></i> ADs</a>
-    <a href="coupon.html" class="sidebar-item"><i class="fas fa-lock"></i> coupon</a>
+    <a href="coupon.html" class="sidebar-item"><i class="fas fa-lock"></i> Coupon</a>
     <a href="#" id="logoutBtn" class="sidebar-item" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i> Logout</a>
 </div>
 

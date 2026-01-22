@@ -27,6 +27,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: 'admin'
     },
+    referralCode: {
+        type: String,
+        unique: true
+    },
     country: {
         type: String,
         default: 'NG'
@@ -58,6 +62,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: 'user'
     },
+    bankAccounts: [{
+        bankName: String,
+        accountName: String,
+        accountNumber: String
+    }],
     createdAt: {
         type: Date,
         default: Date.now

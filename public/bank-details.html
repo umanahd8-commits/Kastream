@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Details | CASHX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="js/auth-guard.js"></script>
+    <style>
+        .section-title {
+            color: var(--text-gray);
+            margin: 20px 0 10px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .info-card {
+            background: var(--card-dark);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-label {
+            display: block;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        .form-input {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 15px;
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .form-input:focus {
+            border-color: var(--accent-green);
+            background: rgba(163, 230, 53, 0.05);
+        }
+
+        .save-btn {
+            background: var(--accent-green);
+            color: black;
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+        .save-btn:active {
+            transform: scale(0.98);
+        }
+
+        .bank-item {
+            background: var(--card-dark);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .bank-info h4 {
+            color: white;
+            margin-bottom: 5px;
+        }
+        .bank-info p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        .delete-btn {
+            color: #ef4444;
+            cursor: pointer;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <i class="fas fa-times" id="closeSidebarBtn" style="cursor:pointer"></i>
+        </div>
+        <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-share-nodes"></i> Withdraw</a>
+        <a href="ads.html" class="sidebar-item"><i class="fas fa-broadcast-tower"></i> ADs</a>
+        <a href="coupon.html" class="sidebar-item"><i class="fas fa-lock"></i> Coupon</a>
+        <a href="#" id="logoutBtn" class="sidebar-item" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <div class="phone-wrapper">
+        <header class="header">
+            <div class="nav-trigger" id="hamburgerBtn">
+                <i class="fas fa-bars fa-lg"></i>
+                <span style="font-size: 1.2rem; font-weight: 700; margin-left: 10px;">Bank Details</span>
+            </div>
+            <div class="header-icons">
+                 <a href="profile.html" class="avatar-sm"><i class="fas fa-arrow-left"></i></a>
+            </div>
+        </header>
+
+        <div id="main-content">
+            
+            <!-- Existing Accounts -->
+            <h4 class="section-title">Your Accounts</h4>
+            <div class="info-card" id="bankList">
+                <p style="text-align:center; color:var(--text-gray)">Loading...</p>
+            </div>
+
+            <!-- Add New Account -->
+            <h4 class="section-title">Add New Account</h4>
+            <div class="info-card">
+                <form id="addBankForm" onsubmit="event.preventDefault(); addBankAccount();">
+                    <div class="form-group">
+                        <label class="form-label">Bank Name</label>
+                        <input type="text" id="bankName" class="form-input" placeholder="e.g. First Bank" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Account Name</label>
+                        <input type="text" id="accountName" class="form-input" placeholder="Account Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Account Number</label>
+                        <input type="number" id="accountNumber" class="form-input" placeholder="0123456789" required>
+                    </div>
+                    <button type="submit" class="save-btn" id="saveBtn">Add Account</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-btn">
+            <i class="fas fa-house"></i>
+            Home
+        </a>
+        <a href="history.html" class="nav-btn">
+            <i class="fas fa-history"></i>
+            History
+        </a>
+        <a href="profile.html" class="nav-btn active">
+            <i class="fas fa-user"></i>
+            Profile
+        </a>
+        <a href="articles.html" class="nav-btn">
+            <i class="fas fa-newspaper"></i>
+            Article
+        </a>
+    </nav>
+
+    <script>
+        // Sidebar Logic
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        if(hamburgerBtn) hamburgerBtn.addEventListener('click', toggleSidebar);
+        if(closeSidebarBtn) closeSidebarBtn.addEventListener('click', toggleSidebar);
+        if(overlay) overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // Bank Logic
+        document.addEventListener('DOMContentLoaded', loadBankAccounts);
+
+        async function loadBankAccounts() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const res = await fetch('/api/auth/withdraw-info', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    renderBankList(data.bankAccounts || []);
+                }
+            } catch (e) {
+                console.error("Error loading banks:", e);
+                document.getElementById('bankList').innerHTML = '<div class="info-card"><p style="text-align:center; color:var(--text-gray)">Error loading accounts</p></div>';
+            }
+        }
+
+        function renderBankList(accounts) {
+            const listEl = document.getElementById('bankList');
+            if (accounts.length === 0) {
+                listEl.innerHTML = '<p style="text-align:center; color:var(--text-gray)">No bank accounts added yet.</p>';
+                return;
+            }
+
+            listEl.innerHTML = accounts.map(acc => `
+                <div class="bank-item">
+                    <div class="bank-info">
+                        <h4>${acc.bankName}</h4>
+                        <p>${acc.accountNumber} - ${acc.accountName}</p>
+                    </div>
+                    <i class="fas fa-trash delete-btn" onclick="deleteAccount('${acc._id}')"></i>
+                </div>
+            `).join('');
+        }
+
+        async function addBankAccount() {
+            const btn = document.getElementById('saveBtn');
+            const originalText = btn.textContent;
+            
+            const bankName = document.getElementById('bankName').value;
+            const accountName = document.getElementById('accountName').value;
+            const accountNumber = document.getElementById('accountNumber').value;
+
+            btn.textContent = 'Adding...';
+            btn.disabled = true;
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch('/api/auth/bank-accounts', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ bankName, accountName, accountNumber })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    renderBankList(data.bankAccounts);
+                    document.getElementById('addBankForm').reset();
+                    alert('Bank account added successfully');
+                } else {
+                    const err = await res.json();
+                    alert(err.message || 'Failed to add account');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Error adding account');
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        async function deleteAccount(id) {
+            if(!confirm('Are you sure you want to delete this account?')) return;
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`/api/auth/bank-accounts/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    renderBankList(data.bankAccounts);
+                } else {
+                    alert('Failed to delete account');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Error deleting account');
+            }
+        }
+    </script>
+</body>
+</html>

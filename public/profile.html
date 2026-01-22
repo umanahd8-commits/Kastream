@@ -3,579 +3,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fintech User Profile</title>
+    <title>Profile | CASHX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="js/auth-guard.js"></script>
     <style>
-        /* --- General Reset and Typography --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #0e1725 0%, #15283f 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            color: #2c3e50;
-        }
-
-        /* --- Main Card Container --- */
-        .profile-card {
-            background-color: #ffffff;
-            width: 100%;
-            max-width: 420px;
-            border-radius: 24px;
-            box-shadow: 0 15px 35px rgba(0, 82, 204, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            padding-bottom: 25px;
-            border: 1px solid rgba(0, 123, 255, 0.08);
-        }
-
-        /* --- Profile Photo Section --- */
-        .profile-header {
-            background: linear-gradient(135deg, #0052D4 0%, #007bff 100%);
-            padding: 45px 20px 35px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: white;
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
-            margin-bottom: 10px;
-            position: relative;
-            text-align: center;
-        }
-
-        .back-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: white;
-            font-size: 1.2rem;
-            text-decoration: none;
-            background: rgba(255,255,255,0.1);
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
+        /* Profile Specific Styles */
+        .section-title {
+            color: var(--text-gray);
+            margin: 20px 0 10px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
-        .back-btn:hover {
-            background: rgba(255,255,255,0.2);
+        .info-card {
+            background: var(--card-dark);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 20px;
         }
 
-        .photo-frame {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            margin-bottom: 15px;
-            background-color: white;
-            position: relative;
+        /* Clickable row card (used on profile Bank Details) */ 
+        .info-card-link { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            gap: 12px; 
+            
+            width: 100%; 
+            text-decoration: none; 
+            
+            background: var(--card-dark); 
+            border: 1px solid rgba(255,255,255,0.05); 
+            border-radius: 15px; 
+            padding: 18px 20px; 
+            margin-bottom: 20px; 
+            transition: transform 0.2s;
+        } 
+        
+        /* remove default link coloring */ 
+        .info-card-link:link, 
+        .info-card-link:visited { 
+            color: inherit; 
+        } 
+        
+        /* align left content */ 
+        .info-card-link .info-label { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            margin: 0; 
+            color: white; 
+        } 
+        
+        /* keep chevron on the far right */ 
+        .info-card-link .fa-chevron-right { 
+            flex: 0 0 auto; 
+            color: var(--text-gray); 
+        } 
+        
+        /* touch feedback */ 
+        .info-card-link:active { 
+            transform: scale(0.99); 
         }
 
-        .photo-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .photo-frame::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.2);
-        }
-
-        .user-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .user-title {
-            font-size: 0.9rem;
-            font-weight: 400;
-            opacity: 0.9;
-        }
-
-        /* --- Status Indicator --- */
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 10px;
-            font-size: 0.85rem;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #4cd964;
-            margin-right: 8px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        /* --- Accordion (The Bars) Styling --- */
-        .accordion-container {
-            padding: 0 25px;
-        }
-
-        .accordion {
-            background-color: #ffffff;
-            color: #2c3e50;
-            cursor: pointer;
-            padding: 20px 20px;
-            width: 100%;
-            text-align: left;
-            border: 1px solid #e8edf5;
-            border-radius: 14px;
-            margin-bottom: 12px;
-            outline: none;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
-        }
-
-        .accordion:hover {
-            background-color: #f8fafd;
-            border-color: #007bff;
-            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.08);
-            transform: translateY(-2px);
-        }
-
-        .active, .accordion:active {
-            background-color: #f0f7ff;
-            color: #007bff;
-            border-color: #007bff;
-        }
-
-        /* Icon and title alignment */
-        .accordion-title {
-            display: flex;
-            align-items: center;
-        }
-
-        .accordion-icon {
-            margin-right: 12px;
-            font-size: 1.1rem;
-            width: 24px;
-            text-align: center;
-        }
-
-        /* The arrow icon */
-        .accordion-arrow {
-            color: #a0aec0;
-            font-weight: bold;
-            transition: transform 0.3s ease;
-        }
-
-        .active .accordion-arrow {
-            color: #007bff;
-            transform: rotate(180deg);
-        }
-
-        /* --- The Hidden Content --- */
-        .panel {
-            padding: 0 20px;
-            background-color: white;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            margin-bottom: 12px;
-            border-radius: 0 0 14px 14px;
-        }
-
-        /* --- Content Styling (Text & Form) --- */
         .info-row {
             display: flex;
             justify-content: space-between;
-            padding: 16px 0;
-            border-bottom: 1px solid #f0f4f8;
-            font-size: 15px;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-
         .info-row:last-child {
             border-bottom: none;
         }
-
         .info-label {
-            color: #718096;
+            color: var(--text-gray);
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
+            gap: 10px;
         }
-
-        .info-label i {
-            margin-right: 10px;
-            color: #007bff;
-            font-size: 0.9rem;
-        }
-
         .info-value {
+            color: white;
             font-weight: 600;
-            color: #2c3e50;
-            text-align: right;
-        }
-
-        /* --- Form Styling --- */
-        .bank-form {
-            padding-top: 20px;
-            padding-bottom: 10px;
+            font-size: 0.95rem;
         }
 
         .form-group {
-            margin-bottom: 18px;
-            position: relative;
+            margin-bottom: 15px;
         }
-
-        .form-group label {
+        .form-label {
             display: block;
+            color: var(--text-gray);
             margin-bottom: 8px;
-            font-size: 14px;
-            color: #5a6c7d;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-        }
-
-        .form-group label i {
-            margin-right: 10px;
-            color: #007bff;
             font-size: 0.9rem;
         }
-
-        .form-group input {
+        .form-input {
             width: 100%;
-            padding: 14px 14px 14px 42px;
-            border: 1.5px solid #e2e8f0;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 15px;
             border-radius: 10px;
-            font-size: 15px;
-            transition: all 0.3s;
-            color: #2c3e50;
-        }
-
-        .form-group input:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 15px;
-            top: 42px;
-            color: #a0aec0;
+            color: white;
             font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .form-input:focus {
+            border-color: var(--accent-green);
+            background: rgba(163, 230, 53, 0.05);
         }
 
         .save-btn {
+            background: var(--accent-green);
+            color: black;
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(to right, #007bff, #0052D4);
-            color: white;
-            border: none;
+            padding: 15px;
             border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
+            border: none;
+            font-weight: bold;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: 0.2s;
             margin-top: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
         }
-
-        .save-btn i {
-            margin-right: 10px;
-            font-size: 1.1rem;
-        }
-
-        .save-btn:hover {
-            background: linear-gradient(to right, #0069d9, #0041b2);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.25);
-        }
-
         .save-btn:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
 
-        /* --- Verification Badge --- */
         .verified-badge {
-            display: inline-flex;
-            align-items: center;
-            background-color: #e8f7ed;
-            color: #2ecc71;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        .verified-badge i {
-            margin-right: 5px;
+            background: rgba(163, 230, 53, 0.15);
+            color: var(--accent-green);
+            padding: 2px 8px;
+            border-radius: 10px;
             font-size: 0.7rem;
+            margin-left: 5px;
         }
-
-        /* --- Footer --- */
-        .profile-footer {
-            text-align: center;
-            padding: 20px 25px 0;
-            color: #a0aec0;
-            font-size: 0.85rem;
-            border-top: 1px solid #f0f4f8;
-            margin-top: 10px;
-        }
-
-        .profile-footer a {
-            color: #007bff;
-            text-decoration: none;
-            font-weight: 500;
+        
+        .status-dot {
+            height: 8px;
+            width: 8px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
         }
     </style>
-    <script src="js/auth-guard.js"></script>
 </head>
 <body>
-<script>
-    document.body.style.visibility = 'hidden';
-    window.addEventListener('load', () => {
-        // Just in case auth guard takes time, we can reveal it or let auth guard reveal it.
-        // For now, let's just use CSS to hide initially if possible, but JS is fine.
-        // Better yet, let auth-guard handle visibility.
-        // But since auth-guard is async, we might see a flash.
-        // Let's keep it simple: The user wants "protected". The redirection handles protection.
-        // The visibility hide is a UX enhancement.
-        document.body.style.visibility = 'visible';
-    });
-</script>
-<div class="profile-card">
-    <div class="profile-header">
-        <a href="dashboard.html" class="back-btn">
-            <i class="fas fa-arrow-left"></i>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <i class="fas fa-times" id="closeSidebarBtn" style="cursor:pointer"></i>
+        </div>
+        <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-share-nodes"></i> Withdraw</a>
+        <a href="ads.html" class="sidebar-item"><i class="fas fa-broadcast-tower"></i> ADs</a>
+        <a href="coupon.html" class="sidebar-item"><i class="fas fa-lock"></i> coupon</a>
+        <a href="#" id="logoutBtn" class="sidebar-item" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <div class="phone-wrapper">
+        <header class="header">
+            <div class="nav-trigger" id="hamburgerBtn">
+                <i class="fas fa-bars fa-lg"></i>
+                <span style="font-size: 1.2rem; font-weight: 700; margin-left: 10px;">Profile</span>
+            </div>
+            <div class="header-icons">
+                 <a href="dashboard.html" class="avatar-sm"><i class="fas fa-arrow-left"></i></a>
+            </div>
+        </header>
+
+        <div id="main-content">
+            <!-- Profile Header Card -->
+            <div class="card profile-card" style="text-align: center; display: block; padding: 30px 20px;">
+                <div class="avatar-lg" style="margin: 0 auto 15px; width: 80px; height: 80px; font-size: 2rem; line-height: 80px;">BI</div>
+                <h2 style="margin-bottom: 5px; font-size: 1.5rem;" id="userNameDisplay">Loading...</h2>
+                <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px;">Premium Member</p>
+                <div style="display: inline-flex; align-items: center; background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem;">
+                    <span class="status-dot"></span> Active
+                </div>
+            </div>
+
+            <!-- Personal Info -->
+            <h4 class="section-title">Personal Information</h4>
+            <div class="info-card">
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-user"></i> Full Name</span>
+                    <span class="info-value">
+                        <span id="fullNameDisplay">...</span>
+                        <span class="verified-badge"><i class="fas fa-check"></i></span>
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-envelope"></i> Email</span>
+                    <span class="info-value" id="emailDisplay">...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-phone"></i> Phone</span>
+                    <span class="info-value" id="phoneDisplay">...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-id-card"></i> ID</span>
+                    <span class="info-value" id="idDisplay">...</span>
+                </div>
+            </div>
+
+            <!-- Bank Settings -->
+            <h4 class="section-title">Bank Details</h4>
+            <a href="bank-details.html" class="info-card info-card-link">
+                <span class="info-label" style="color: white;"><i class="fas fa-university"></i> Manage Bank Accounts</span>
+                <i class="fas fa-chevron-right" style="color: var(--text-gray);"></i>
+            </a>
+
+            <!-- Security -->
+            <h4 class="section-title">Security</h4>
+            <div class="info-card">
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-shield-alt"></i> 2FA Authentication</span>
+                    <span class="info-value" style="color: var(--accent-green)">Enabled</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-bell"></i> Notifications</span>
+                    <span class="info-value">Push & Email</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-btn">
+            <i class="fas fa-house"></i>
+            Home
         </a>
-        <div class="photo-frame">
-            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="User Profile">
-        </div>
-        <div class="user-name">Alex Johnson</div>
-        <div class="user-title">Premium Account Holder</div>
-        
-        <div class="status-indicator">
-            <div class="status-dot"></div>
-            <span>Active • Last login: Today, 09:42</span>
-        </div>
-    </div>
+        <a href="history.html" class="nav-btn">
+            <i class="fas fa-history"></i>
+            History
+        </a>
+        <a href="profile.html" class="nav-btn active">
+            <i class="fas fa-user"></i>
+            Profile
+        </a>
+        <a href="articles.html" class="nav-btn">
+            <i class="fas fa-newspaper"></i>
+            Article
+        </a>
+    </nav>
 
-    <div class="accordion-container">
-        
-        <button class="accordion">
-            <div class="accordion-title">
-                <div class="accordion-icon"><i class="fas fa-user-circle"></i></div>
-                Personal Information
-            </div>
-            <div class="accordion-arrow"><i class="fas fa-chevron-down"></i></div>
-        </button>
-        <div class="panel">
-            <div class="info-row">
-                <span class="info-label">
-                    <i class="fas fa-user"></i>
-                    Full Name
-                </span>
-                <span class="info-value">
-                    <span id="fullNameDisplay">Loading...</span>
-                    <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
-                </span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">
-                    <i class="fas fa-envelope"></i>
-                    Email Address
-                </span>
-                <span class="info-value" id="emailDisplay">Loading...</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">
-                    <i class="fas fa-phone"></i>
-                    Phone Number
-                </span>
-                <span class="info-value" id="phoneDisplay">Loading...</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">
-                    <i class="fas fa-id-card"></i>
-                    Customer ID
-                </span>
-                <span class="info-value" id="idDisplay">Loading...</span>
-            </div>
-        </div>
+    <script>
+        // Sidebar Logic (copied from withdraw.html/dashboard.js logic)
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
 
-        <button class="accordion">
-            <div class="accordion-title">
-                <div class="accordion-icon"><i class="fas fa-credit-card"></i></div>
-                Payment & Banking
-            </div>
-            <div class="accordion-arrow"><i class="fas fa-chevron-down"></i></div>
-        </button>
-        <div class="panel">
-            <form class="bank-form" onsubmit="event.preventDefault(); saveBankDetails();">
-                <div class="form-group">
-                    <label for="bankName">
-                        <i class="fas fa-university"></i>
-                        Bank Name
-                    </label>
-                    <i class="fas fa-bank input-icon"></i>
-                    <input type="text" id="bankName" placeholder="e.g. First Bank Nigeria" required>
-                </div>
-                <div class="form-group">
-                    <label for="accountName">
-                        <i class="fas fa-user-tag"></i>
-                        Account Name
-                    </label>
-                    <i class="fas fa-user input-icon"></i>
-                    <input type="text" id="accountName" placeholder="e.g. Alex Johnson" required>
-                </div>
-                <div class="form-group">
-                    <label for="accountNumber">
-                        <i class="fas fa-hashtag"></i>
-                        Account Number
-                    </label>
-                    <i class="fas fa-wallet input-icon"></i>
-                    <input type="number" id="accountNumber" placeholder="0123456789" required>
-                </div>
-                <button type="submit" class="save-btn">
-                    <i class="fas fa-save"></i>
-                    Save Bank Details
-                </button>
-            </form>
-        </div>
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
 
-        <button class="accordion">
-            <div class="accordion-title">
-                <div class="accordion-icon"><i class="fas fa-shield-alt"></i></div>
-                Security & Preferences
-            </div>
-            <div class="accordion-arrow"><i class="fas fa-chevron-down"></i></div>
-        </button>
-        <div class="panel">
-            <div class="info-row">
-                <span class="info-label">
-                    <i class="fas fa-lock"></i>
-                    2FA Authentication
-                </span>
-                <span class="info-value">Enabled</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">
-                    <i class="fas fa-bell"></i>
-                    Notification Settings
-                </span>
-                <span class="info-value">Push & Email</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">
-                    <i class="fas fa-globe"></i>
-                    Language
-                </span>
-                <span class="info-value">English (US)</span>
-            </div>
-        </div>
-    </div>
-</div>
+        if(hamburgerBtn) hamburgerBtn.addEventListener('click', toggleSidebar);
+        if(closeSidebarBtn) closeSidebarBtn.addEventListener('click', toggleSidebar);
+        if(overlay) overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
 
-<script>
-    // Logic to handle the opening and closing of accordion items
-    var acc = document.getElementsByClassName("accordion");
-    var i;
+        // User Data Logic
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+            if (!token) return; // auth-guard handles redirect
 
-    for (i = 0; i < acc.length; i++) {
-        acc[i].addEventListener("click", function() {
-            // Toggle the "active" class on the button
-            this.classList.toggle("active");
-
-            // Select the panel immediately following the button
-            var panel = this.nextElementSibling;
-
-            // Toggle logic for max-height to create slide animation
-            if (panel.style.maxHeight) {
-                panel.style.maxHeight = null;
-            } else {
-                // Close any other open panels
-                closeAllPanels(this);
-                panel.style.maxHeight = panel.scrollHeight + "px";
+            try {
+                // Fetch User Info
+                const res = await fetch('/api/auth/me', { 
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    
+                    // Populate Fields
+                    document.getElementById('userNameDisplay').textContent = data.username || 'User';
+                    document.getElementById('fullNameDisplay').textContent = data.fullName || data.username || 'User'; 
+                    document.getElementById('emailDisplay').textContent = data.email || '...';
+                    document.getElementById('phoneDisplay').textContent = data.phone || '...';
+                    // Display Referral Code as ID if available, otherwise fallback
+                    const displayId = data.referralCode || data.id || '...';
+                    document.getElementById('idDisplay').textContent = displayId;
+                    
+                    // Update Package Display if exists
+                     if(document.getElementById('packageDisplay')) {
+                        document.getElementById('packageDisplay').textContent = data.packageType || 'Free';
+                     }
+                }
+            } catch (e) {
+                console.error("Error loading profile:", e);
             }
         });
-    }
 
-    // Function to close all panels except the one being opened
-    function closeAllPanels(currentAccordion) {
-        var allAccordions = document.getElementsByClassName("accordion");
-        for (var j = 0; j < allAccordions.length; j++) {
-            if (allAccordions[j] !== currentAccordion) {
-                allAccordions[j].classList.remove("active");
-                var otherPanel = allAccordions[j].nextElementSibling;
-                otherPanel.style.maxHeight = null;
-            }
-        }
-    }
-
-    // Save bank details function
-    function saveBankDetails() {
-        const bankName = document.getElementById('bankName').value;
-        const accountName = document.getElementById('accountName').value;
-        const accountNumber = document.getElementById('accountNumber').value;
-        
-        if (bankName && accountName && accountNumber) {
-            // Create a success message
-            const form = document.querySelector('.bank-form');
-            const originalButton = form.querySelector('.save-btn');
-            
-            // Change button to show success state
-            originalButton.innerHTML = '<i class="fas fa-check-circle"></i> Details Saved Successfully!';
-            originalButton.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
-            originalButton.style.boxShadow = '0 4px 12px rgba(46, 204, 113, 0.3)';
-            
-            // Reset after 3 seconds
-            setTimeout(() => {
-                originalButton.innerHTML = '<i class="fas fa-save"></i> Save Bank Details';
-                originalButton.style.background = 'linear-gradient(to right, #007bff, #0052D4)';
-                originalButton.style.boxShadow = '0 4px 12px rgba(0, 123, 255, 0.2)';
-            }, 3000);
-        }
-    }
-
-    // Open the first accordion by default
-    document.addEventListener("DOMContentLoaded", function() {
-        if (acc.length > 0) {
-            acc[0].click();
-        }
-    });
-</script>
-
+        // Removed saveBankDetails function as it is no longer used
+    </script>
 </body>
 </html>

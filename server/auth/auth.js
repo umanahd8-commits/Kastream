@@ -52,6 +52,7 @@ router.post('/register', async (req, res) => {
             token,
             user: {
                 id: newUser.id,
+                referralCode: newUser.referralCode,
                 username: newUser.username,
                 email: newUser.email,
                 fullName: newUser.fullName,
@@ -179,8 +180,46 @@ router.get('/withdraw-info', verifyToken, async (req, res) => {
         res.json({
             balance: user.balance || 0,
             taskBalance: user.taskBalance || 0,
-            country: user.country
+            country: user.country,
+            bankAccounts: user.bankAccounts || []
         });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Add Bank Account
+router.post('/bank-accounts', verifyToken, async (req, res) => {
+    try {
+        const { bankName, accountName, accountNumber } = req.body;
+        if (!bankName || !accountName || !accountNumber) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+        
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        user.bankAccounts.push({ bankName, accountName, accountNumber });
+        await user.save();
+
+        res.json({ message: 'Bank account added', bankAccounts: user.bankAccounts });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Delete Bank Account
+router.delete('/bank-accounts/:id', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        user.bankAccounts = user.bankAccounts.filter(acc => acc._id.toString() !== req.params.id);
+        await user.save();
+
+        res.json({ message: 'Bank account removed', bankAccounts: user.bankAccounts });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
