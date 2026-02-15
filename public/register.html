@@ -4,185 +4,298 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration - CASHX</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="css/register.css">
+    
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --text-white: #ffffff;
+            --input-bg: #151515;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- Vertical Navigation Menu --- */
+        .nav-container {
+            width: 90%;
+            max-width: 420px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .hamburger-menu {
+            cursor: pointer;
+            display: inline-block;
+            padding: 5px;
+        }
+
+        .hamburger-line {
+            background-color: var(--primary-gold);
+            height: 3px;
+            width: 28px;
+            margin: 5px 0;
+            border-radius: 2px;
+        }
+
+        .nav-dropdown {
+            background: #111;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 8px 0;
+            display: none;
+            position: absolute;
+            width: 200px;
+            left: 0;
+            top: 45px;
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+        }
+
+        .nav-dropdown a {
+            color: var(--text-white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #222;
+        }
+
+        .nav-dropdown a:last-child { border-bottom: none; }
+
+        .nav-dropdown a i {
+            margin-right: 12px;
+            color: var(--primary-gold);
+            width: 20px;
+            text-align: center;
+        }
+
+        /* --- Header Section --- */
+        .header-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 80px; 
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .header-section h2 {
+            color: var(--primary-gold);
+            font-size: 1.4rem;
+            margin-top: 15px;
+            font-weight: 700;
+        }
+
+        /* --- Card --- */
+        .card {
+            background-color: var(--card-bg);
+            width: 90%;
+            max-width: 420px;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9);
+            box-sizing: border-box;
+        }
+
+        .card-header h1 {
+            font-size: 1.3rem;
+            color: var(--primary-gold);
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .card-header p {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        /* --- Form --- */
+        .form-group { margin-bottom: 15px; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.8rem;
+            color: var(--primary-gold);
+        }
+
+        .input-with-icon { position: relative; }
+
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-gold);
+            font-size: 0.9rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px 11px 11px 40px;
+            background: var(--input-bg);
+            border: 1px solid #222;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--primary-gold); outline: none; }
+
+        .coupon-link-text {
+            display: block;
+            text-align: center;
+            font-size: 0.75rem;
+            margin-top: 8px;
+            color: #aaa;
+        }
+
+        .coupon-link-text a {
+            color: var(--primary-gold);
+            text-decoration: underline;
+        }
+
+        /* --- Register Button --- */
+        .btn-signup {
+            width: 100%;
+            padding: 13px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
+            background-size: 200% auto;
+            color: black;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .btn-signup:hover { box-shadow: 0 0 15px var(--gold-glow); }
+
+        .footer-text { text-align: center; font-size: 0.85rem; margin-top: 20px; color: #888; }
+        .footer-text a { color: var(--primary-gold); text-decoration: none; }
+
+        .terms-container { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; margin: 15px 0; }
+    </style>
 </head>
 <body>
 
-    <!-- Navigation Menu -->
     <div class="nav-container">
-        <div class="hamburger-menu" id="hamburgerMenu">
+        <div class="hamburger-menu" onclick="const d = document.getElementById('navDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'">
             <div class="hamburger-line"></div>
             <div class="hamburger-line"></div>
             <div class="hamburger-line"></div>
         </div>
         
         <div class="nav-dropdown" id="navDropdown">
-            <a href="index.html">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
-            </a>
-            <a href="login.html">
-                <i class="fas fa-sign-in-alt"></i>
-                <span>Login</span>
-            </a>
-            <a href="merchants.html">
-                <i class="fas fa-ticket-alt"></i>
-                <span>Buy Coupon Code</span>
-            </a>
-            <a href="reviews.html">
-                <i class="fas fa-star"></i>
-                <span>Check Reviews</span>
-            </a>
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="merchants.html"><i class="fas fa-ticket-alt"></i> Buy Coupon</a>
+            <a href="reviews.html"><i class="fas fa-star"></i> Reviews</a>
         </div>
     </div>
 
     <div class="header-section">
-        <div class="logo-container">
-            <img src="https://i.ibb.co/ZzNFQbRx/918-CFC59-9989-4-D61-8605-1-BFDAADADD57.jpg" alt="CASHX Logo" class="logo">
-            <div class="logo-badge">
-                <i class="fas fa-check"></i>
-            </div>
-        </div>
+        <img src="https://i.ibb.co/v4d7x9s6/1000032952-removebg-preview.png" alt="CASHX Logo" class="logo">
         <h2>Welcome to CASHX</h2>
     </div>
 
     <div class="card">
         <div class="card-header">
-            <h1>Complete Your Registration</h1>
-            <p>Fill in all details correctly to get started</p>
+            <h1>Create Account</h1>
+            <p>Join the CASHX community</p>
         </div>
 
         <form id="registerForm">
             <div class="form-group">
-                <label>
-                    <i class="fas fa-user"></i> Fullname
-                </label>
+                <label><i class="fas fa-user"></i> Fullname</label>
                 <div class="input-with-icon">
                     <i class="fas fa-user input-icon"></i>
-                    <input type="text" id="fullName" placeholder="Enter your full name" required>
+                    <input type="text" placeholder="Your Full Name" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>
-                    <i class="fas fa-envelope"></i> Email Address
-                </label>
+                <label><i class="fas fa-envelope"></i> Email</label>
                 <div class="input-with-icon">
                     <i class="fas fa-envelope input-icon"></i>
-                    <input type="email" id="email" placeholder="your.email@example.com" required>
+                    <input type="email" placeholder="Email Address" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>
-                    <i class="fas fa-at"></i> Username
-                </label>
+                <label><i class="fas fa-at"></i> Username</label>
                 <div class="input-with-icon">
                     <i class="fas fa-at input-icon"></i>
-                    <input type="text" id="username" placeholder="Choose a username" required>
+                    <input type="text" placeholder="Username" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>
-                    <i class="fas fa-user-friends"></i> Referrer (Optional)
-                </label>
+                <label><i class="fas fa-user-friends"></i> Referred By (Optional)</label>
                 <div class="input-with-icon">
                     <i class="fas fa-user-tie input-icon"></i>
-                    <input type="text" id="referrer" placeholder="Referrer username or ID">
+                    <input type="text" placeholder="Referrer Username">
                 </div>
             </div>
 
             <div class="form-group">
-                <label>
-                    <i class="fas fa-globe"></i> Country
-                </label>
+                <label><i class="fas fa-lock"></i> Password</label>
                 <div class="input-with-icon">
-                    <i class="fas fa-map-marker-alt input-icon"></i>
-                    <select id="country" required>
-                        <option value="">Select Country</option>
-                        <option value="NG">Nigeria</option>
-                        <option value="Other">Other countries</option>
-                    </select>
-                    <i class="fas fa-chevron-down select-icon"></i>
+                    <i class="fas fa-key input-icon"></i>
+                    <input type="password" placeholder="Password" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>
-                    <i class="fas fa-lock"></i> Password
-                </label>
-                <div class="password-container">
-                    <div class="input-with-icon">
-                        <i class="fas fa-key input-icon"></i>
-                        <input type="password" id="password" placeholder="Create a strong password" required>
-                    </div>
-                    <i class="fa-regular fa-eye-slash toggle-password" id="toggleEye"></i>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>
-                    <i class="fas fa-phone"></i> Phone Number
-                </label>
-                <div class="input-with-icon">
-                    <i class="fas fa-mobile-alt input-icon"></i>
-                    <input type="tel" id="phone" placeholder="Your phone number" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>
-                    <i class="fas fa-tag"></i> Coupon Code
-                </label>
+                <label><i class="fas fa-tag"></i> Coupon Code</label>
                 <div class="input-with-icon">
                     <i class="fas fa-ticket-alt input-icon"></i>
-                    <input type="text" id="couponCode" placeholder="Enter coupon code">
+                    <input type="text" placeholder="Enter Coupon Code">
                 </div>
-            </div>
-
-            <p class="coupon-code-text">
-                <i class="fas fa-gift"></i> Don't have a CASHX coupon code? 
-                <a href="merchants.html">Click here.</a>
-            </p>
-
-            <div class="form-group">
-                <label>
-                    <i class="fas fa-cube"></i> Package
-                </label>
-                <div class="input-with-icon">
-                    <i class="fas fa-box-open input-icon"></i>
-                    <select id="packageType" required>
-                        <option value="">Select Package</option>
-                        <option value="Basic">Basic </option>
-                        <option value="Premium">Premium </option>
-                        <option value="Enterprise">Enterprise </option>
-                    </select>
-                    <i class="fas fa-chevron-down select-icon"></i>
-                </div>
+                <span class="coupon-link-text">
+                    Don't have a coupon code? <a href="merchants.html">Get one here</a>
+                </span>
             </div>
 
             <div class="terms-container">
                 <input type="checkbox" id="terms" required>
-                <label for="terms">
-                    Terms & Conditions
-                </label>
+                <label for="terms">I agree to the Terms & Conditions</label>
             </div>
 
-            <button type="submit" class="btn-signup">
-                <i class="fas fa-user-plus"></i> Create Account
-            </button>
+            <button type="submit" class="btn-signup">Register Now</button>
         </form>
 
         <p class="footer-text">
-            Already have an account? <a href="login.html">Sign In Here</a>
+            Already registered? <a href="login.html">Sign In</a>
         </p>
-
     </div>
-
-    <script src="js/register.js"></script>
 
 </body>
 </html>
