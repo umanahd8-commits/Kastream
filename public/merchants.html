@@ -9,14 +9,14 @@
     
     <style>
         :root {
-            --primary-blue: #0066da;
-            --dark-blue: #003366;
-            --secondary-blue: #00bcd4;
-            --accent-yellow: #ffb100;
-            --light-blue: #e8f4ff;
-            --card-shadow: 0 10px 30px rgba(0, 102, 218, 0.08);
-            --gradient-primary: linear-gradient(135deg, #0066da 0%, #004a9e 100%);
-            --gradient-secondary: linear-gradient(135deg, #00bcd4 0%, #008ba3 100%);
+            --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --text-white: #ffffff;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
         }
 
         * {
@@ -27,76 +27,68 @@
         }
 
         body {
-            background: linear-gradient(180deg, #f5fbff 0%, #f0f7ff 100%);
-            color: #1a1a1a;
+            background-color: var(--bg-black);
+            color: var(--text-white);
             min-height: 100vh;
         }
 
         /* Navigation */
         .navbar {
-            background: white;
-            padding: 18px 25px;
+            background: var(--bg-black);
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 20px rgba(0, 102, 218, 0.05);
-            border-bottom: 1px solid rgba(0, 102, 218, 0.1);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
         }
 
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 12px;
             text-decoration: none;
         }
 
         .logo-img {
             width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            object-fit: cover;
-            border: 2px solid white;
-            box-shadow: 0 4px 12px rgba(0, 102, 218, 0.15);
+            height: auto;
+            /* No circle or border as requested */
         }
 
         .logo-text {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary-gold);
+            margin-left: 10px;
+            letter-spacing: 1px;
         }
 
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
         .nav-btn {
-            background: var(--light-blue);
-            border: none;
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             font-size: 18px;
-            color: var(--primary-blue);
-            transition: all 0.3s ease;
-            position: relative;
+            color: var(--primary-gold);
+            transition: 0.3s;
         }
 
         .nav-btn:hover {
-            background: var(--primary-blue);
-            color: white;
-            transform: translateY(-2px);
+            background: var(--primary-gold);
+            color: black;
         }
 
         .notification-badge {
@@ -105,527 +97,254 @@
             right: -5px;
             background: #ff4757;
             color: white;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            font-size: 12px;
+            font-size: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
         }
 
         /* Hero Section */
         .hero-section {
-            padding: 40px 25px 30px;
-            background: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 300px;
-            height: 100%;
-            background: var(--gradient-primary);
-            opacity: 0.03;
-            border-radius: 0 0 0 100px;
+            padding: 30px 20px;
+            text-align: center;
         }
 
         .breadcrumb {
             display: flex;
-            align-items: center;
+            justify-content: center;
             gap: 8px;
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 20px;
+            font-size: 13px;
+            margin-bottom: 15px;
         }
 
-        .breadcrumb a {
-            color: #666;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .breadcrumb a:hover {
-            color: var(--primary-blue);
-        }
-
-        .breadcrumb .separator {
-            color: #999;
-        }
-
-        .breadcrumb .active {
-            color: var(--primary-blue);
-            font-weight: 500;
-        }
+        .breadcrumb a { color: #888; text-decoration: none; }
+        .breadcrumb .active { color: var(--primary-gold); }
 
         .hero-title {
-            font-size: 36px;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 15px;
-            color: var(--dark-blue);
-            max-width: 600px;
+            font-size: 28px;
+            color: var(--primary-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
         }
 
         .hero-subtitle {
-            font-size: 16px;
-            color: #666;
-            line-height: 1.6;
+            font-size: 14px;
+            color: #aaa;
             max-width: 500px;
-            margin-bottom: 25px;
+            margin: 0 auto 25px;
         }
 
         .stats-container {
             display: flex;
-            gap: 25px;
-            margin-top: 30px;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid rgba(0, 102, 218, 0.1);
-            min-width: 180px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            min-width: 120px;
         }
 
         .stat-number {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--primary-blue);
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: #666;
-            font-weight: 500;
-        }
-
-        /* Distributors Section */
-        .distributors-section {
-            padding: 40px 25px;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .section-title {
             font-size: 24px;
             font-weight: 700;
-            color: var(--dark-blue);
+            color: var(--primary-gold);
         }
 
-        .section-subtitle {
-            color: #666;
-            margin-top: 5px;
-            font-size: 15px;
-        }
+        .stat-label { font-size: 12px; color: #888; }
 
-        .filter-buttons {
-            display: flex;
-            gap: 10px;
-        }
+        /* Distributors Grid */
+        .distributors-section { padding: 20px; }
 
-        .filter-btn {
-            padding: 10px 20px;
-            background: white;
-            border: 1px solid rgba(0, 102, 218, 0.2);
-            border-radius: 10px;
-            color: #666;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn.active {
-            background: var(--primary-blue);
-            color: white;
-            border-color: var(--primary-blue);
+        .section-title {
+            font-size: 20px;
+            color: var(--primary-gold);
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         .distributors-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
         .distributor-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid rgba(0, 102, 218, 0.1);
-            transition: all 0.3s ease;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
             position: relative;
-            overflow: hidden;
-        }
-
-        .distributor-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 102, 218, 0.12);
-        }
-
-        .distributor-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 5px;
-            height: 100%;
-            background: var(--gradient-secondary);
         }
 
         .verified-badge {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--accent-yellow);
-            color: white;
-            padding: 5px 12px;
+            top: 15px;
+            right: 15px;
+            background: var(--primary-gold);
+            color: black;
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .distributor-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
+            font-size: 11px;
+            font-weight: 700;
         }
 
         .distributor-avatar {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            background-color: #f0f7ff;
+            background: var(--bg-black);
+            border: 2px solid var(--primary-gold);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary-blue);
+            color: var(--primary-gold);
             font-weight: bold;
-            font-size: 24px;
+            font-size: 20px;
+            margin-bottom: 15px;
         }
 
-        .distributor-info h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--dark-blue);
-            margin-bottom: 5px;
-        }
-
-        .distributor-info p {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        .distributor-rating {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .distributor-rating i {
-            color: #ffb100;
-            font-size: 14px;
-        }
-
-        .distributor-details {
-            margin-bottom: 20px;
-        }
+        .distributor-info h3 { color: var(--primary-gold); margin-bottom: 5px; }
+        .distributor-info p { color: #888; font-size: 13px; }
 
         .detail-row {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 10px 0;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 13px;
         }
 
-        .detail-label {
-            color: #666;
-            font-size: 14px;
-        }
+        .detail-label { color: #888; }
+        .detail-value { color: white; font-weight: 500; }
 
-        .detail-value {
-            color: var(--dark-blue);
-            font-weight: 500;
-            font-size: 14px;
-        }
-
+        /* Buttons */
         .action-buttons {
             display: flex;
-            gap: 12px;
+            gap: 10px;
+            margin-top: 15px;
         }
 
         .btn-whatsapp {
-            flex: 1;
-            background: #25D366;
+            flex: 2;
+            background: #25D366; /* Kept WhatsApp green for recognition */
             color: white;
             border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-whatsapp:hover {
-            background: #128C7E;
-            transform: translateY(-2px);
-        }
-
-        .btn-profile {
-            background: var(--light-blue);
-            color: var(--primary-blue);
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 600;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            transition: all 0.3s ease;
         }
 
-        .btn-profile:hover {
-            background: var(--primary-blue);
-            color: white;
+        .btn-profile {
+            flex: 1;
+            background: var(--gradient-gold);
+            color: black;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
         }
 
-        /* Side Menu */
+        /* Vertical Side Menu */
         .side-menu {
             position: fixed;
             top: 0;
-            right: -400px;
-            width: 350px;
+            right: -100%;
+            width: 280px;
             height: 100%;
-            background: white;
-            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+            background: #0a0a0a;
+            border-left: 1px solid var(--primary-gold);
             z-index: 1000;
-            transition: right 0.4s cubic-bezier(0.77, 0.2, 0.05, 1);
-            padding: 25px;
-            overflow-y: auto;
+            transition: 0.4s;
+            padding: 20px;
         }
 
-        .side-menu.active {
-            right: 0;
-        }
+        .side-menu.active { right: 0; }
 
         .menu-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 30px;
         }
 
         .close-menu {
-            background: var(--light-blue);
+            background: none;
             border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            color: var(--primary-gold);
+            font-size: 24px;
             cursor: pointer;
-            color: var(--primary-blue);
-            font-size: 20px;
-            transition: all 0.3s ease;
         }
 
-        .close-menu:hover {
-            background: var(--primary-blue);
-            color: white;
-        }
+        .menu-list { list-style: none; }
 
-        .menu-list {
-            list-style: none;
-        }
-
-        .menu-item {
-            margin-bottom: 10px;
-        }
+        .menu-item { margin-bottom: 5px; }
 
         .menu-item a {
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 16px 20px;
-            color: #333;
+            padding: 15px;
+            color: white;
             text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            font-weight: 500;
+            border-radius: 8px;
+            border-bottom: 1px solid #1a1a1a;
         }
 
         .menu-item a:hover {
-            background: var(--light-blue);
-            color: var(--primary-blue);
-            padding-left: 25px;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary-gold);
         }
 
-        .menu-item a i {
-            width: 20px;
-            text-align: center;
-            color: var(--primary-blue);
-        }
+        .menu-item i { color: var(--primary-gold); width: 20px; }
 
-        .menu-footer {
-            position: absolute;
-            bottom: 30px;
-            left: 25px;
-            right: 25px;
-            padding-top: 20px;
-            border-top: 1px solid #f0f0f0;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            background-color: #e8f4ff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-blue);
-            font-weight: bold;
-        }
-
-        .user-info h4 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .user-info p {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .logout-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--light-blue);
-            color: var(--primary-blue);
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background: #ff4757;
-            color: white;
-        }
-
-        /* Scroll to Top Button */
         .scroll-top {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 55px;
-            height: 55px;
-            background: var(--gradient-primary);
-            color: white;
+            bottom: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-gold);
+            color: black;
             border: none;
             border-radius: 50%;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
             cursor: pointer;
-            box-shadow: 0 5px 20px rgba(0, 102, 218, 0.3);
-            transition: all 0.3s ease;
-            z-index: 99;
-            opacity: 0;
-            transform: translateY(20px);
         }
 
-        .scroll-top.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .scroll-top:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 28px;
-            }
-            
-            .distributors-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats-container {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .side-menu {
-                width: 100%;
-                right: -100%;
-            }
-            
-            .nav-btn {
-                width: 44px;
-                height: 44px;
-            }
+        @media (max-width: 600px) {
+            .hero-title { font-size: 22px; }
+            .distributors-grid { grid-template-columns: 1fr; width: 95%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation -->
     <nav class="navbar">
         <a href="index.html" class="logo-container">
-            <img src="https://i.ibb.co/ZzNFQbRx/918-CFC59-9989-4-D61-8605-1-BFDAADADD57.jpg" alt="CASHX Logo" class="logo-img">
-            <span class="logo-text">CASHX</span>
+            <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="CASHX Logo" class="logo-img">
+            <span class="logo-text">PROTEGE</span>
         </a>
         
         <div class="nav-actions">
-            <button class="nav-btn" id="notificationBtn">
+            <button class="nav-btn" id="notificationBtn" style="position: relative;">
                 <i class="fas fa-bell"></i>
                 <span class="notification-badge">3</span>
             </button>
@@ -635,70 +354,36 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero-section">
-        <div class="hero-bg"></div>
         <div class="breadcrumb">
             <a href="index.html">Home</a>
-            <span class="separator">/</span>
-            <span class="active">Verified Distributors</span>
+            <span style="color:#444">/</span>
+            <span class="active">Distributors</span>
         </div>
         
-        <h1 class="hero-title">Connect with Our Trusted Distributors</h1>
-        <p class="hero-subtitle">Message any of our verified distributors to get started with premium services and secure transactions.</p>
+        <h1 class="hero-title">Verified Distributors</h1>
+        <p class="hero-subtitle">Message any of our trusted partners to secure your transactions instantly.</p>
         
         <div class="stats-container">
             <div class="stat-card">
                 <div class="stat-number">24+</div>
-                <div class="stat-label">Active Distributors</div>
+                <div class="stat-label">Active</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">98.7%</div>
-                <div class="stat-label">Satisfaction Rate</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">30min</div>
-                <div class="stat-label">Average Response Time</div>
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Secured</div>
             </div>
         </div>
     </section>
 
-    <!-- Distributors Section -->
     <section class="distributors-section">
-        <div class="section-header">
-            <div>
-                <h2 class="section-title">Available Distributors</h2>
-                <p class="section-subtitle">Verified and trusted partners for your transactions</p>
-            </div>
-            <div class="filter-buttons">
-                <button class="filter-btn active">All</button>
-                <button class="filter-btn">Online Now</button>
-                <button class="filter-btn">Top Rated</button>
-            </div>
-        </div>
-
         <div class="distributors-grid">
-            <!-- Distributor 1 -->
             <div class="distributor-card">
-                <div class="verified-badge">
-                    <i class="fas fa-check-circle"></i> Verified
-                </div>
-                <div class="distributor-header">
-                    <div class="distributor-avatar" style="background-color: #e3f2fd;">
-                        WT
-                    </div>
-                    <div class="distributor-info">
-                        <h3>WEALTHTV</h3>
-                        <p>Premium Distributor</p>
-                        <div class="distributor-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span style="margin-left: 8px; color: #666; font-size: 14px;">4.7</span>
-                        </div>
-                    </div>
+                <div class="verified-badge"><i class="fas fa-check-circle"></i> Verified</div>
+                <div class="distributor-avatar">WT</div>
+                <div class="distributor-info">
+                    <h3>WEALTHTV</h3>
+                    <p>Premium Distributor</p>
                 </div>
                 
                 <div class="distributor-details">
@@ -707,46 +392,23 @@
                         <span class="detail-value">Fidelity Bank</span>
                     </div>
                     <div class="detail-row">
-                        <span class="detail-label">Response Time</span>
-                        <span class="detail-value">15-30 minutes</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Service Hours</span>
+                        <span class="detail-label">Hours</span>
                         <span class="detail-value">24/7</span>
                     </div>
                 </div>
                 
                 <div class="action-buttons">
-                    <button class="btn-whatsapp">
-                        <i class="fab fa-whatsapp"></i> Message on WhatsApp
-                    </button>
-                    <button class="btn-profile">
-                        <i class="fas fa-user-circle"></i> View Profile
-                    </button>
+                    <button class="btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                    <button class="btn-profile">Profile</button>
                 </div>
             </div>
 
-            <!-- Distributor 2 -->
             <div class="distributor-card">
-                <div class="verified-badge">
-                    <i class="fas fa-check-circle"></i> Verified
-                </div>
-                <div class="distributor-header">
-                    <div class="distributor-avatar" style="background-color: #e8f5e9;">
-                        A
-                    </div>
-                    <div class="distributor-info">
-                        <h3>Almusty</h3>
-                        <p>Elite Distributor</p>
-                        <div class="distributor-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span style="margin-left: 8px; color: #666; font-size: 14px;">5.0</span>
-                        </div>
-                    </div>
+                <div class="verified-badge"><i class="fas fa-check-circle"></i> Verified</div>
+                <div class="distributor-avatar">A</div>
+                <div class="distributor-info">
+                    <h3>Almusty</h3>
+                    <p>Elite Distributor</p>
                 </div>
                 
                 <div class="distributor-details">
@@ -755,219 +417,49 @@
                         <span class="detail-value">UBA</span>
                     </div>
                     <div class="detail-row">
-                        <span class="detail-label">Response Time</span>
-                        <span class="detail-value">5-15 minutes</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Service Hours</span>
+                        <span class="detail-label">Hours</span>
                         <span class="detail-value">24/7</span>
                     </div>
                 </div>
                 
                 <div class="action-buttons">
-                    <button class="btn-whatsapp">
-                        <i class="fab fa-whatsapp"></i> Message on WhatsApp
-                    </button>
-                    <button class="btn-profile">
-                        <i class="fas fa-user-circle"></i> View Profile
-                    </button>
-                </div>
-            </div>
-
-            <!-- Distributor 3 -->
-            <div class="distributor-card">
-                <div class="verified-badge">
-                    <i class="fas fa-check-circle"></i> Verified
-                </div>
-                <div class="distributor-header">
-                    <div class="distributor-avatar" style="background-color: #fff3e0;">
-                        J
-                    </div>
-                    <div class="distributor-info">
-                        <h3>JANECHERISH</h3>
-                        <p>Senior Distributor</p>
-                        <div class="distributor-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span style="margin-left: 8px; color: #666; font-size: 14px;">5.0</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="distributor-details">
-                    <div class="detail-row">
-                        <span class="detail-label">Bank</span>
-                        <span class="detail-value">First Bank</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Response Time</span>
-                        <span class="detail-value">10-20 minutes</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Service Hours</span>
-                        <span class="detail-value">24/7</span>
-                    </div>
-                </div>
-                
-                <div class="action-buttons">
-                    <button class="btn-whatsapp">
-                        <i class="fab fa-whatsapp"></i> Message on WhatsApp
-                    </button>
-                    <button class="btn-profile">
-                        <i class="fas fa-user-circle"></i> View Profile
-                    </button>
+                    <button class="btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                    <button class="btn-profile">Profile</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Side Menu -->
     <div class="side-menu" id="sideMenu">
         <div class="menu-header">
-            <div class="logo-container">
-                <img src="https://i.ibb.co/ZzNFQbRx/918-CFC59-9989-4-D61-8605-1-BFDAADADD57.jpg" alt="CASHX Logo" class="logo-img">
-                <span class="logo-text">CASHX</span>
-            </div>
-            <button class="close-menu" id="closeMenu">
-                <i class="fas fa-times"></i>
-            </button>
+            <span class="logo-text">MENU</span>
+            <button class="close-menu" id="closeMenu"><i class="fas fa-times"></i></button>
         </div>
 
         <ul class="menu-list">
-            <li class="menu-item">
-                <a href="index.html">
-                    <i class="fas fa-home"></i>
-                    <span>Home</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#">
-                    <i class="fas fa-info-circle"></i>
-                    <span>About Us</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="merchants.html">
-                    <i class="fas fa-users"></i>
-                    <span>Distributors</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#">
-                    <i class="fas fa-trophy"></i>
-                    <span>Top Earners</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#">
-                    <i class="fas fa-store"></i>
-                    <span>Marketplace</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#">
-                    <i class="fas fa-star"></i>
-                    <span>Check Reviews</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#">
-                    <i class="fas fa-headset"></i>
-                    <span>Support</span>
-                </a>
-            </li>
+            <li class="menu-item"><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li class="menu-item"><a href="merchants.html"><i class="fas fa-users"></i> Distributors</a></li>
+            <li class="menu-item"><a href="#"><i class="fas fa-star"></i> Reviews</a></li>
+            <li class="menu-item"><a href="#"><i class="fas fa-headset"></i> Support</a></li>
         </ul>
-
-        <div class="menu-footer">
-            <div class="user-profile">
-                <div class="user-avatar">
-                    G
-                </div>
-                <div class="user-info">
-                    <h4>Guest User</h4>
-                    <p>Viewer Account</p>
-                </div>
-            </div>
-            <button class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Login / Register</span>
-            </button>
-        </div>
     </div>
 
-    <!-- Scroll to Top Button -->
-    <button class="scroll-top" id="scrollTop">
-        <i class="fas fa-arrow-up"></i>
-    </button>
+    <button class="scroll-top" id="scrollTop"><i class="fas fa-arrow-up"></i></button>
 
     <script>
-        // Menu functionality
         const menuBtn = document.getElementById('menuBtn');
         const closeMenu = document.getElementById('closeMenu');
         const sideMenu = document.getElementById('sideMenu');
-        const scrollTopBtn = document.getElementById('scrollTop');
 
-        menuBtn.addEventListener('click', () => {
-            sideMenu.classList.add('active');
-        });
+        menuBtn.onclick = () => sideMenu.classList.add('active');
+        closeMenu.onclick = () => sideMenu.classList.remove('active');
 
-        closeMenu.addEventListener('click', () => {
-            sideMenu.classList.remove('active');
-        });
+        window.onscroll = function() {
+            const btn = document.getElementById('scrollTop');
+            btn.style.display = (window.pageYOffset > 300) ? 'flex' : 'none';
+        };
 
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!sideMenu.contains(e.target) && !menuBtn.contains(e.target)) {
-                sideMenu.classList.remove('active');
-            }
-        });
-
-        // Scroll to top functionality
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                scrollTopBtn.classList.add('visible');
-            } else {
-                scrollTopBtn.classList.remove('visible');
-            }
-        });
-
-        scrollTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // Filter buttons
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-
-        // WhatsApp button functionality
-        const whatsappBtns = document.querySelectorAll('.btn-whatsapp');
-        whatsappBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const distributor = btn.closest('.distributor-card').querySelector('h3').textContent;
-                alert(`Opening WhatsApp chat with ${distributor}`);
-                // In production, this would open actual WhatsApp
-                // window.open(`https://wa.me/1234567890?text=Hello%20${distributor}`, '_blank');
-            });
-        });
-
-        // Profile button functionality
-        const profileBtns = document.querySelectorAll('.btn-profile');
-        profileBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const distributor = btn.closest('.distributor-card').querySelector('h3').textContent;
-                alert(`Opening profile page for ${distributor}`);
-                // In production, this would navigate to profile page
-            });
-        });
+        document.getElementById('scrollTop').onclick = () => window.scrollTo({top: 0, behavior: 'smooth'});
     </script>
-
 </body>
 </html>
