@@ -3,365 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Boost | Monetization Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Monetization | CASHX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
-            --primary: #4e54c8;
-            --secondary: #8f94fb;
-            --bg-dark: #1a1a2e;
-            --card-bg: #16213e;
-            --text-light: #eaeaea;
-            --success: #0f3460;
-            --accent: #e94560;
+            --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --sidebar-bg: #111111;
+            --text-white: #ffffff;
+            --text-gray: #888888;
+            --accent-green: #00ff88;
+            --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
 
         body {
-            background: var(--bg-dark);
-            color: var(--text-light);
-            display: flex;
-            justify-content: center;
+            background-color: var(--bg-black);
+            color: var(--text-white);
             min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 600px;
-            background: #1f1f35;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative;
-            margin-top: 40px;
-        }
-
-        /* Back Arrow Button */
-        .back-arrow {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            border-radius: 50%;
             display: flex;
-            align-items: center;
             justify-content: center;
-            cursor: pointer;
-            z-index: 100;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
         }
 
-        .back-arrow:hover {
-            transform: translateX(-5px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        /* --- 90% Width Responsive Container --- */
+        .phone-wrapper {
+            width: 90%; 
+            max-width: 420px;
+            background: var(--bg-black);
+            min-height: 100vh;
+            padding-bottom: 100px;
+            position: relative;
         }
 
-        .back-arrow i {
-            color: white;
-            font-size: 20px;
+        /* --- Header --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 20px;
         }
 
-        /* Header Section */
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        .header-logo { width: 45px; border-radius: 8px; }
 
-        header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
-            background: -webkit-linear-gradient(var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        header p {
-            color: #888;
-            font-size: 14px;
-        }
-
-        /* Input Form Section */
-        .link-section {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-        }
-
-        .link-section h3 {
+        .nav-trigger {
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 15px;
-        }
-
-        .input-group i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-            z-index: 2;
-        }
-
-
-        .image-placeholder:hover {
-            background: rgba(78, 84, 200, 0.4);
-            color: white;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px 120px 12px 45px;
-            background: #0f3460;
-            border: 1px solid transparent;
-            border-radius: 8px;
-            color: white;
-            outline: none;
-            transition: 0.3s;
-            position: relative;
-            z-index: 1;
-        }
-
-        .input-group input:focus {
-            border-color: var(--secondary);
-        }
-
-        .save-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            border: none;
-            color: white;
-            font-weight: bold;
-            border-radius: 8px;
+            color: var(--primary-gold);
             cursor: pointer;
-            transition: transform 0.2s;
-            margin-top: 10px;
         }
 
-        .save-btn:hover {
-            transform: scale(1.02);
+        /* --- Sidebar --- */
+        .sidebar {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: var(--sidebar-bg);
+            z-index: 2000;
+            transition: 0.4s ease;
+            border-right: 2px solid var(--primary-gold);
+            padding: 25px;
         }
-
-        /* Earnings Display */
-        .earnings-panel {
-            text-align: center;
-            margin: 30px 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
-            border-radius: 15px;
-            border: 1px solid #333;
+        .sidebar.active { left: 0; }
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            color: #ffffff;
+            text-decoration: none;
+            border-bottom: 1px solid #1a1a1a;
+            font-weight: 600;
         }
+        .sidebar-item i { color: var(--primary-gold); margin-right: 15px; width: 25px; text-align: center; }
 
-        .balance-label {
-            font-size: 14px;
-            color: #aaa;
+        /* --- Monetization Cards --- */
+        .section-title {
+            color: var(--primary-gold);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: 800;
         }
 
-        .balance-amount {
-            font-size: 42px;
-            font-weight: bold;
-            color: #4cd137;
+        .monetize-card {
+            background: var(--card-bg);
+            border: 1px solid #1a1a1a;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .platform-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .platform-icon {
+            width: 50px;
+            height: 50px;
+            background: #111;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary-gold);
+            border: 1px solid #222;
+        }
+
+        .platform-meta h3 { font-size: 1rem; color: #fff; }
+        .platform-meta p { font-size: 0.7rem; color: var(--text-gray); }
+
+        /* --- Progress Bar --- */
+        .progress-container {
             margin-top: 10px;
         }
-
-        .tasks-title {
-            margin-bottom: 15px;
-            font-size: 18px;
-            border-left: 4px solid var(--accent);
-            padding-left: 10px;
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            margin-bottom: 5px;
+            color: var(--text-gray);
         }
-
-        .ads-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .ad-card {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid #333;
-            position: relative;
+        .progress-bar {
+            height: 6px;
+            background: #111;
+            border-radius: 10px;
             overflow: hidden;
         }
-
-        .ad-card:hover {
-            border-color: var(--secondary);
-            transform: translateY(-3px);
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-gold);
+            width: 0%;
+            transition: 1s ease-in-out;
         }
 
-        .ad-card:active {
-            transform: scale(0.95);
-        }
-
-        .ad-icon {
-            font-size: 24px;
-            color: var(--secondary);
-            margin-bottom: 10px;
-        }
-
-        .ad-desc {
-            font-size: 12px;
-            color: #ccc;
-            margin-bottom: 8px;
-        }
-
-        .ad-reward {
-            font-weight: bold;
-            color: var(--accent);
-            background: rgba(233, 69, 96, 0.1);
-            padding: 4px 8px;
-            border-radius: 4px;
+        .status-badge {
             display: inline-block;
+            margin-top: 15px;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary-gold);
+            text-transform: uppercase;
         }
 
-        @keyframes pop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        .btn-action {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--primary-gold);
+            color: var(--primary-gold);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        
-        .clicked {
-            opacity: 0.5;
-            pointer-events: none;
-        }
+        .btn-action:hover { background: var(--primary-gold); color: #000; }
+
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1500; }
 
     </style>
-    <script src="js/auth-guard.js"></script>
 </head>
 <body>
 
-    <div class="back-arrow" onclick="goToDashboard()">
-        <i class="fas fa-arrow-left"></i>
-    </div>
+    <div class="overlay" id="mainOverlay" onclick="toggleSidebar()"></div>
 
-    <div class="container">
-        <header>
-            <h1>Social Monetize</h1>
-            <p>Link your accounts & Watch ads to earn</p>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3 style="letter-spacing: 2px;">MENU</h3>
+            <i class="fas fa-times fa-lg" onclick="toggleSidebar()" style="cursor:pointer"></i>
+        </div> 
+        <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i>Dashboard</a>
+        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>   
+        <a href="loans.html" class="sidebar-item"><i class="fas fa-university"></i> Loans/scholarship</a> 
+        <a href="ads.html" class="sidebar-item"><i class="fas fa-tv"></i> ADs</a> 
+        <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a> 
+        <a href="coupon.html" class="sidebar-item"><i class="fas fa-key"></i>Coupon</a>
+        <a href="#" class="sidebar-item" style="color: var(--accent-red);"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+              <div class="phone-wrapper"> 
+                  <header  class="header"> 
+                    <div class="nav-trigger" onclick="toggleSidebar()">
+                       <i class="fas fa-bars fa-lg"></i>
+                <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo" class="header-logo">
+            </div>
+            <div style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary-gold); overflow: hidden;">
+                <img src="https://via.placeholder.com/150/111111/D4AF37?text=U" alt="User" style="width:100%; height:100%;">
+            </div>
         </header>
 
-        <div class="link-section">
-            <h3><i class="fas fa-link"></i> Link Accounts</h3>
-            <br>
-            <div class="input-group">
-                <i class="fab fa-tiktok"></i>
-                <input type="text" id="tiktok" placeholder="Paste TikTok Profile Link...">
+        <h2 class="section-title">Social Monetization</h2>
+
+        <div class="monetize-card">
+            <div class="platform-info">
+                <div class="platform-icon"><i class="fab fa-tiktok"></i></div>
+                <div class="platform-meta">
+                    <h3>TikTok Live Stream</h3>
+                    <p>Earn Diamonds from virtual gifts.</p>
+                </div>
             </div>
-            <div class="input-group">
-                <i class="fab fa-snapchat-ghost"></i>
-                <input type="text" id="snapchat" placeholder="Paste Snapchat Profile Link...">
+            <div class="progress-container">
+                <div class="progress-label"><span>Eligibility</span> <span>70%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 70%;"></div></div>
             </div>
-            <div class="input-group">
-                <i class="fab fa-whatsapp"></i>
-                <input type="text" id="whatsapp" placeholder="Paste WhatsApp Number/Link...">
-            </div>
-            <div class="input-group">
-                <i class="fab fa-facebook-f"></i>
-                <input type="text" id="facebook" placeholder="Paste Facebook Profile Link...">
-            </div>
-            <button class="save-btn" onclick="saveAccounts()">Save Accounts</button>
+            <button class="btn-action">Link TikTok Account</button>
         </div>
 
-        <div class="earnings-panel">
-            <div class="balance-label">Total Earnings</div>
-            <div class="balance-amount" id="balance">$0.00</div>
+        <div class="monetize-card">
+            <div class="platform-info">
+                <div class="platform-icon"><i class="fab fa-telegram"></i></div>
+                <div class="platform-meta">
+                    <h3>Telegram Ads</h3>
+                    <p>Monetize your Status & Channel views.</p>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-label"><span>Eligibility</span> <span>45%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 45%;"></div></div>
+            </div>
+            <button class="btn-action">Setup Bot Integration</button>
         </div>
 
-        <h3 class="tasks-title">Available Ads</h3>
-        <div class="ads-grid">
-            <div class="ad-card" onclick="earnMoney(this, 1.50)">
-                <div class="ad-icon"><i class="fas fa-play-circle"></i></div>
-                <div class="ad-desc">Watch 15s Video Ad</div>
-                <div class="ad-reward">+$1.50</div>
+        <div class="monetize-card">
+            <div class="platform-info">
+                <div class="platform-icon"><i class="fab fa-whatsapp"></i></div>
+                <div class="platform-meta">
+                    <h3>WhatsApp Status</h3>
+                    <p>Paid per 1,000 status views.</p>
+                </div>
             </div>
-            <div class="ad-card" onclick="earnMoney(this, 0.80)">
-                <div class="ad-icon"><i class="fas fa-bullhorn"></i></div>
-                <div class="ad-desc">Click Sponsor Link</div>
-                <div class="ad-reward">+$0.80</div>
-            </div>
-            <div class="ad-card" onclick="earnMoney(this, 2.00)">
-                <div class="ad-icon"><i class="fas fa-star"></i></div>
-                <div class="ad-desc">Premium Survey</div>
-                <div class="ad-reward">+$2.00</div>
-            </div>
-            <div class="ad-card" onclick="earnMoney(this, 0.45)">
-                <div class="ad-icon"><i class="fas fa-image"></i></div>
-                <div class="ad-desc">View Banner Ad</div>
-                <div class="ad-reward">+$0.45</div>
-            </div>
+            <div class="status-badge">Requires 200+ Constant Views</div>
+            <button class="btn-action">Submit View Screenshot</button>
         </div>
+
+        <div class="monetize-card">
+            <div class="platform-info">
+                <div class="platform-icon"><i class="fab fa-facebook"></i></div>
+                <div class="platform-meta">
+                    <h3>Facebook Meta</h3>
+                    <p>In-stream ads & Star rewards.</p>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-label"><span>Followers</span> <span>10%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 10%;"></div></div>
+            </div>
+            <button class="btn-action">Check Page Eligibility</button>
+        </div>
+
+        <div class="monetize-card" style="border-style: dashed; border-color: #333;">
+            <div class="platform-info">
+                <div class="platform-icon"><i class="fas fa-share-nodes"></i></div>
+                <div class="platform-meta">
+                    <h3>Influencer Connect</h3>
+                    <p>Get paid for direct brand posts.</p>
+                </div>
+            </div>
+            <button class="btn-action" style="background: var(--gradient-gold); color: #000; border: none;">Connect All Profiles</button>
+        </div>
+
     </div>
 
     <script>
-        let currentBalance = 0.00;
-        let accountsSaved = false;
-
-        function goToDashboard() {
-            window.location.href = "dashboard.html";
-        }
-
-        
-        function saveAccounts() {
-            const inputs = document.querySelectorAll('input');
-            let filled = false;
-            
-            inputs.forEach(input => {
-                if(input.value.trim() !== "") filled = true;
-            });
-
-            if(filled) {
-                accountsSaved = true;
-                alert("Success! Your social media accounts have been linked.");
-                document.querySelector('.save-btn').innerText = "Accounts Linked ✓";
-                document.querySelector('.save-btn').style.background = "#4cd137";
-            } else {
-                alert("Please paste at least one profile link.");
-            }
-        }
-
-        function earnMoney(element, amount) {
-            if(!accountsSaved) {
-                alert("Please link and save your accounts first to start earning!");
-                return;
-            }
-
-            currentBalance += amount;
-            
-            document.getElementById('balance').innerText = '$' + currentBalance.toFixed(2);
-
-            element.classList.add('clicked');
-            element.style.cursor = 'default';
-            
-            element.onclick = null; 
-            
-            let desc = element.querySelector('.ad-desc');
-            desc.innerText = "Completed ✓";
-            desc.style.color = "#4cd137";
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            const ov = document.getElementById('mainOverlay');
+            sb.classList.toggle('active');
+            ov.style.display = sb.classList.contains('active') ? 'block' : 'none';
         }
     </script>
-
 </body>
 </html>
