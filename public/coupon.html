@@ -3,329 +3,389 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coupon Code Purchase</title>
+    <title>Purchase Coupon | CASHX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        /* CSS STYLING */
         :root {
-            --primary-color: #0ba4db; /* Paystack-like blue */
-            --secondary-color: #2c3e50;
-            --success-color: #27ae60;
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
+            --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --text-white: #ffffff;
+            --text-gray: #888888;
+            --accent-green: #00ff88;
+            --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 0;
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
         }
 
-        /* Navigation Arrow */
-        .nav-arrow {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            text-decoration: none;
-            color: var(--secondary-color);
-            font-size: 24px;
-            font-weight: bold;
+        /* --- 90% Width Responsive Container --- */
+        .phone-wrapper {
+            width: 90%; 
+            max-width: 420px;
+            background: var(--bg-black);
+            min-height: 100vh;
+            padding-bottom: 100px;
+            position: relative;
+        }
+
+        /* --- Header --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .header-logo {
+            width: 45px;
+            height: auto;
+            margin-left: 10px;
+        }
+
+        .nav-trigger {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 10px;
+            color: var(--primary-gold);
             cursor: pointer;
         }
-        
-        .nav-arrow:hover {
-            color: var(--primary-color);
+
+        /* --- Sidebar (Solid #111 Background) --- */
+        .sidebar {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: #111111;
+            z-index: 2000;
+            transition: 0.4s ease;
+            border-right: 2px solid var(--primary-gold);
+            padding: 25px;
         }
 
-        /* Main Container */
-        .container {
-            background-color: var(--card-bg);
-            width: 100%;
-            max-width: 450px;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: all 0.3s ease;
-        }
+        .sidebar.active { left: 0; }
 
-        /* Logo */
-        .logo {
-            width: 150px;
-            height: auto;
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-gold);
             margin-bottom: 30px;
-            border-radius: 8px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #222;
         }
 
-        /* Elements */
-        h2 { color: var(--secondary-color); margin-bottom: 20px; }
-        p { color: #666; margin-bottom: 20px; }
-
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            color: #ffffff;
+            text-decoration: none;
+            border-bottom: 1px solid #1a1a1a;
             font-weight: 600;
-            color: var(--secondary-color);
         }
 
+        .sidebar-item i { color: var(--primary-gold); margin-right: 15px; width: 25px; text-align: center; }
+
+        /* --- Profile Image Area --- */
+        .profile-img-container {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-gold);
+            overflow: hidden;
+            background: #111;
+            cursor: pointer;
+        }
+        .profile-img-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- Coupon Content --- */
+        .section-title {
+            color: var(--primary-gold);
+            margin: 10px 0 25px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .coupon-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            text-align: center;
+        }
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; font-size: 0.75rem; color: var(--primary-gold); margin-bottom: 8px; font-weight: 700; text-transform: uppercase; }
+        
         select, input[type="number"], input[type="file"] {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box; /* Fix padding issue */
-            font-size: 16px;
+            padding: 14px;
+            background: #000;
+            border: 1px solid #222;
+            border-radius: 10px;
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
         }
 
         .total-display {
-            background-color: #eef2f5;
-            padding: 15px;
-            border-radius: 6px;
+            background: #050505;
+            padding: 20px;
+            border-radius: 12px;
             margin: 20px 0;
-            font-weight: bold;
-            color: var(--secondary-color);
-            font-size: 1.2rem;
+            border: 1px dashed var(--primary-gold);
         }
 
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 15px 30px;
+        .total-display span { font-size: 1.5rem; color: var(--accent-green); font-weight: 700; }
+
+        .gold-btn {
             width: 100%;
-            border-radius: 6px;
-            font-size: 16px;
+            padding: 18px;
+            background: var(--gradient-gold);
+            border: none;
+            color: black;
+            font-weight: 800;
+            border-radius: 12px;
             cursor: pointer;
-            transition: background 0.3s;
-            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            box-shadow: 0 5px 15px rgba(170, 119, 28, 0.3);
         }
 
-        button:hover {
-            background-color: #0989b8;
-        }
-
-        /* Bank Details Box */
         .bank-details {
-            background-color: #fff8e1;
-            border: 1px solid #ffe0b2;
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid var(--primary-gold);
             padding: 15px;
-            border-radius: 6px;
+            border-radius: 10px;
             margin-bottom: 20px;
             text-align: left;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            line-height: 1.6;
         }
 
-        /* Coupon Result Bar */
-        .coupon-container {
-            margin-top: 20px;
-            padding: 20px;
-            border: 2px dashed var(--secondary-color);
-            border-radius: 8px;
-            background-color: #fafafa;
-        }
-
+        /* Result Area */
         .status-badge {
             display: inline-block;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
         }
-
-        .status-pending {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-
-        .status-approved {
-            background-color: #d4edda;
-            color: #155724;
-        }
+        .status-pending { background: #332b00; color: #ffcc00; }
+        .status-approved { background: #003311; color: #00ff88; }
 
         .code-display {
             font-family: 'Courier New', monospace;
-            font-size: 24px;
-            letter-spacing: 2px;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
             font-weight: bold;
-            color: var(--primary-color);
-            margin-top: 10px;
-            display: none; /* Hidden until approved */
+            color: var(--primary-gold);
+            background: #000;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #222;
+            margin-top: 15px;
         }
 
-        /* Utility to toggle sections */
-        .hidden {
-            display: none;
-        }
+        .hidden { display: none; }
+
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1500; }
     </style>
 </head>
 <body>
 
-    <a href="dashboard.html" class="nav-arrow">
-        &#8592; Back to Dashboard
-    </a>
+    <div class="overlay" id="mainOverlay" onclick="toggleSidebar()"></div>
 
-    <div class="container">
-        
-        <div id="section-landing">
-            <img src="https://i.ibb.co/ZzNFQbRx/918-CFC59-9989-4-D61-8605-1-BFDAADADD57.jpg" alt="Website Logo" class="logo">
-            <h1>purchase your CASHX coupon code</h1>
-            <p>Select a package </p>
-            <button onclick="showSection('section-form')">Purchase Coupon Code</button>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3 style="letter-spacing: 2px;">MENU</h3>
+            <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
         </div>
+        <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>
+        <a href="monetization.html" class="sidebar-item"><i class="fas fa-tv"></i> ADs</a>
+        <a href="coupon.html" class="sidebar-item" style="color: var(--primary-gold);"><i class="fas fa-key"></i> Coupon</a>
+        <a href="#" class="sidebar-item" style="color: #ff4d4d;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
 
-        <div id="section-form" class="hidden">
-            <h2>Select Package</h2>
-            
-            <div class="form-group">
-                <label for="package-select">Choose Package</label>
-                <select id="package-select" onchange="calculateTotal()">
-                    <option value="0">-- Select --</option>
-                    <option value="2750">Pkg 1 (2,750)</option>
-                    <option value="5750">Pkg 2 (5,750)</option>
-                    <option value="8750">Pkg 3 (8,750)</option>
-                    <option value="11750">Pkg 4 (11,750)</option>
-                </select>
+    <div class="phone-wrapper">
+        <header class="header">
+            <div class="nav-trigger" id="hamburgerBtn">
+                <i class="fas fa-bars fa-lg"></i>
+                <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo" class="header-logo">
             </div>
-
-            <div class="form-group">
-                <label for="quantity">Number of Coupons</label>
-                <input type="number" id="quantity" value="1" min="1" oninput="calculateTotal()">
-            </div>
-
-            <div class="total-display">
-                Total to Pay: <span id="total-amount">0.00</span>
-            </div>
-
-            <button onclick="goToPayment()">Proceed to Payment</button>
-            <p style="margin-top:15px; font-size: 12px; cursor:pointer;" onclick="showSection('section-landing')">Cancel</p>
-        </div>
-
-        <div id="section-payment" class="hidden">
-            <h2>Payment Details</h2>
-            <p>Please make a transfer of <strong><span id="pay-amount">0.00</span></strong> to the account below.</p>
-
-            <div class="bank-details">
-                <strong>Bank:</strong> Paystack Simulation Bank<br>
-                <strong>Account No:</strong> 1234 567 890<br>
-                <strong>Account Name:</strong> Coupon Ventures Ltd
-            </div>
-
-            <div class="form-group">
-                <label>Upload Payment Receipt</label>
-                <input type="file" id="receipt-file" accept="image/*">
-            </div>
-
-            <button onclick="submitReceipt()">Drop Receipt (Submit)</button>
-        </div>
-
-        <div id="section-result" class="hidden">
-            <h2>Order Status</h2>
-            
-            <div class="coupon-container">
-                <div id="status-indicator" class="status-badge status-pending">
-                    Pending Validation...
+            <div class="header-icons">
+                 <div class="profile-img-container" onclick="location.href='profile.html'">
+                    <img id="headerAvatar" src="https://via.placeholder.com/150/111111/D4AF37?text=U" alt="User">
                 </div>
-                
-                <div id="loading-text">
-                    <p>We are verifying your receipt. Please wait...</p>
-                    <img src="https://i.gifer.com/ZKZg.gif" alt="loading" style="width:30px;">
-                </div>
+            </div>
+        </header>
 
-                <div id="final-coupon" class="code-display">
+        <div id="main-content">
+            
+            <div id="section-landing">
+                <div class="coupon-card">
+                    <i class="fas fa-ticket-alt" style="font-size: 3rem; color: var(--primary-gold); margin-bottom: 15px;"></i>
+                    <h2 class="section-title">Protege ACTIVATION</h2>
+                    <p style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 25px;">Purchase unique coupon codes to upgrade your account packages.</p>
+                    <button class="gold-btn" onclick="showSection('section-form')">Get Code Now</button>
+                </div>
+            </div>
+
+            <div id="section-form" class="hidden">
+                <div class="coupon-card">
+                    <h2 class="section-title">Select Package</h2>
+                    
+                    <div class="form-group">
+                        <label>Choose Plan</label>
+                        <select id="package-select" onchange="calculateTotal()">
+                            <option value="0">-- Select Package --</option>
+                            <option value="2750">Bronze Plan (₦2,750)</option>
+                            <option value="5750">Silver Plan (₦5,750)</option>
+                            <option value="8750">Gold Plan (₦8,750)</option>
+                            <option value="11750">Diamond Plan (₦11,750)</option>
+                        </select>
                     </div>
-            </div>
-            
-            <br>
-            <button onclick="location.reload()">Buy Another</button>
-        </div>
 
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input type="number" id="quantity" value="1" min="1" oninput="calculateTotal()">
+                    </div>
+
+                    <div class="total-display">
+                        <p style="font-size: 0.7rem; color: var(--text-gray); margin-bottom: 5px;">ESTIMATED TOTAL</p>
+                        ₦<span id="total-amount">0</span>
+                    </div>
+
+                    <button class="gold-btn" onclick="goToPayment()">Continue to Payment</button>
+                    <p style="margin-top:20px; font-size: 12px; color: var(--text-gray); cursor:pointer;" onclick="showSection('section-landing')">Go Back</p>
+                </div>
+            </div>
+
+            <div id="section-payment" class="hidden">
+                <div class="coupon-card">
+                    <h2 class="section-title">Transfer Details</h2>
+                    <p style="font-size: 0.8rem; margin-bottom: 15px;">Pay exactly: <strong style="color: var(--accent-green);">₦<span id="pay-amount">0</span></strong></p>
+
+                    <div class="bank-details">
+                        <strong style="color: var(--primary-gold)">BANK:</strong> OPay / Moniepoint<br>
+                        <strong style="color: var(--primary-gold)">ACC NO:</strong> 8123 456 789<br>
+                        <strong style="color: var(--primary-gold)">NAME:</strong> CASHX VENTURES LTD
+                    </div>
+
+                    <div class="form-group">
+                        <label>Proof of Payment</label>
+                        <input type="file" id="receipt-file" accept="image/*">
+                    </div>
+
+                    <button class="gold-btn" onclick="submitReceipt()">Confirm Transfer</button>
+                </div>
+            </div>
+
+            <div id="section-result" class="hidden">
+                <div class="coupon-card">
+                    <h2 class="section-title">Order Status</h2>
+                    
+                    <div id="status-indicator" class="status-badge status-pending">
+                        Verifying Payment...
+                    </div>
+                    
+                    <div id="loading-text" style="margin: 20px 0;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary-gold)"></i>
+                        <p style="font-size: 0.8rem; color: var(--text-gray); mt-10">Hold on while we check our records...</p>
+                    </div>
+
+                    <div id="final-coupon" class="code-display hidden"></div>
+                    
+                    <button class="gold-btn" style="margin-top: 30px;" onclick="location.reload()">Buy Another</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Variables to hold state
+        // Sidebar Logic
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('mainOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
+        }
+
+        document.getElementById('hamburgerBtn').onclick = toggleSidebar;
+        document.getElementById('closeSidebarBtn').onclick = toggleSidebar;
+
+        // Persist Avatar
+        const savedAvatar = localStorage.getItem('userAvatar');
+        if(savedAvatar) document.getElementById('headerAvatar').src = savedAvatar;
+
+        // Coupon Logic
         let currentTotal = 0;
 
-        // Function to switch between visible sections
         function showSection(sectionId) {
-            // Hide all main divs inside container
-            const sections = ['section-landing', 'section-form', 'section-payment', 'section-result'];
-            sections.forEach(id => {
+            ['section-landing', 'section-form', 'section-payment', 'section-result'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
-            // Show the requested one
             document.getElementById(sectionId).classList.remove('hidden');
         }
 
-        // Function to calculate price
         function calculateTotal() {
             const price = parseFloat(document.getElementById('package-select').value);
-            const qty = parseInt(document.getElementById('quantity').value);
-            
-            if (price > 0 && qty > 0) {
-                currentTotal = price * qty;
-                // Format with commas
-                document.getElementById('total-amount').innerText = currentTotal.toLocaleString();
-            } else {
-                currentTotal = 0;
-                document.getElementById('total-amount').innerText = "0.00";
-            }
+            const qty = parseInt(document.getElementById('quantity').value) || 1;
+            currentTotal = price * qty;
+            document.getElementById('total-amount').innerText = currentTotal.toLocaleString();
         }
 
-        // Proceed to Payment
         function goToPayment() {
-            if (currentTotal === 0) {
-                alert("Please select a package and quantity first.");
-                return;
-            }
-            // Update the payment screen amount
+            if (currentTotal === 0) return alert("Please select a package.");
             document.getElementById('pay-amount').innerText = currentTotal.toLocaleString();
             showSection('section-payment');
         }
 
-        
         function submitReceipt() {
-            const fileInput = document.getElementById('receipt-file');
-            
-            if (fileInput.files.length === 0) {
-                alert("Please upload your receipt photo first.");
-                return;
-            }
-
-            // Move to Result section
+            if (document.getElementById('receipt-file').files.length === 0) return alert("Upload receipt image.");
             showSection('section-result');
 
             setTimeout(() => {
-                // Change Status
                 const statusBadge = document.getElementById('status-indicator');
-                statusBadge.innerText = "Approved";
-                statusBadge.classList.remove('status-pending');
-                statusBadge.classList.add('status-approved');
+                statusBadge.innerText = "Payment Successful";
+                statusBadge.classList.replace('status-pending', 'status-approved');
 
-                // Hide loading text
                 document.getElementById('loading-text').style.display = 'none';
-
-                // Generate and show coupon code
-                const randomCode = 'CPN-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+                
+                const randomCode = 'CX-' + Math.random().toString(36).substr(2, 8).toUpperCase();
                 const codeDiv = document.getElementById('final-coupon');
                 codeDiv.innerText = randomCode;
-                codeDiv.style.display = 'block';
-
-                alert("Payment Approved! Your Coupon Code is ready.");
-
-            }, 4000); // 4 seconds delay
+                codeDiv.classList.remove('hidden');
+            }, 3500);
         }
     </script>
 </body>
