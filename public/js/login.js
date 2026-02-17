@@ -1,3 +1,68 @@
+// Modal helpers
+const loginModal = document.getElementById('loginModal');
+const loginModalTitle = document.getElementById('loginModalTitle');
+const loginModalMessage = document.getElementById('loginModalMessage');
+const loginModalCountdown = document.getElementById('loginModalCountdown');
+const loginModalDashboard = document.getElementById('loginModalDashboard');
+const loginError = document.getElementById('loginError');
+
+let redirectTimerId = null;
+let redirectCountdownId = null;
+
+function showLoginError(message) {
+    if (!loginError) return;
+    loginError.textContent = message || '';
+    loginError.style.display = message ? 'block' : 'none';
+}
+
+function openLoginModal({ title, message, countdownSeconds, redirectOnTimeout }) {
+    if (loginModalTitle) loginModalTitle.textContent = title || 'Status';
+    if (loginModalMessage) loginModalMessage.textContent = message || '';
+
+    if (loginModalCountdown) {
+        if (countdownSeconds && redirectOnTimeout) {
+            let remaining = countdownSeconds;
+            loginModalCountdown.style.display = 'block';
+            loginModalCountdown.textContent = `Redirecting to dashboard in ${remaining}s...`;
+
+            if (redirectCountdownId) clearInterval(redirectCountdownId);
+            redirectCountdownId = setInterval(() => {
+                remaining -= 1;
+                if (remaining <= 0) {
+                    clearInterval(redirectCountdownId);
+                    redirectCountdownId = null;
+                }
+                if (remaining >= 0) {
+                    loginModalCountdown.textContent = `Redirecting to dashboard in ${remaining}s...`;
+                }
+            }, 1000);
+
+            if (redirectTimerId) clearTimeout(redirectTimerId);
+            redirectTimerId = setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, countdownSeconds * 1000);
+        } else {
+            loginModalCountdown.style.display = 'none';
+        }
+    }
+
+    if (loginModal) loginModal.style.display = 'flex';
+}
+
+if (loginModalDashboard) {
+    loginModalDashboard.onclick = () => {
+        if (redirectTimerId) {
+            clearTimeout(redirectTimerId);
+            redirectTimerId = null;
+        }
+        if (redirectCountdownId) {
+            clearInterval(redirectCountdownId);
+            redirectCountdownId = null;
+        }
+        window.location.href = 'dashboard.html';
+    };
+}
+
 // Form Submission
 const loginForm = document.getElementById('loginForm');
 
@@ -28,18 +93,21 @@ loginForm.addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            // Success
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
-            alert('Login successful!');
-            window.location.href = 'dashboard.html'; // Redirect to dashboard
+            showLoginError('');
+            openLoginModal({
+                title: 'Login successful',
+                message: 'You are now signed in.',
+                countdownSeconds: 5,
+                redirectOnTimeout: true
+            });
         } else {
-            // Error
-            alert(data.message || 'Login failed');
+            showLoginError(data.message || 'Login failed');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('An error occurred. Please try again.');
+        showLoginError('An error occurred. Please try again.');
     } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;

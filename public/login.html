@@ -233,9 +233,36 @@
             font-weight: 600;
         }
 
+        .error-text {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: #ff4d4f;
+            text-align: center;
+            display: none;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 1500;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-box {
+            background: #0a0a0a;
+            border: 1px solid var(--primary-gold);
+            border-radius: 20px;
+            padding: 25px;
+            width: 85%;
+            max-width: 350px;
+            text-align: center;
+        }
+
     </style>
 </head>
-<body>
 
     <div class="nav-container">
         <div class="hamburger-menu" id="hamburgerMenu">
@@ -292,10 +319,23 @@
             </button>
         </form>
 
+        <p id="loginError" class="error-text"></p>
+
         <p class="signup-text">
             Don't have an account? <a href="register.html">Sign Up Here</a>
         </p>
 
+    </div>
+
+    <div id="loginModal" class="overlay">
+        <div class="modal-box">
+            <h3 id="loginModalTitle" style="color:white; margin-bottom:10px;">Status</h3>
+            <p id="loginModalMessage" style="color:var(--text-gray); font-size:0.9rem; margin-bottom:15px;"></p>
+            <p id="loginModalCountdown" style="color:var(--primary-gold); font-size:0.8rem; margin-bottom:20px; display:none;"></p>
+            <button id="loginModalDashboard" style="width:100%; padding:12px; border-radius:10px; background:var(--gradient-gold); color:black; border:none; cursor:pointer; font-weight:800;">
+                Go to dashboard
+            </button>
+        </div>
     </div>
 
     <script src="js/login.js"></script>
