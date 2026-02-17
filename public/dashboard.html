@@ -343,11 +343,11 @@
             <div class="revenue-row">
                 <div class="card">
                     <p class="label">Revenue</p>
-                    <p class="amt">$500.00</p>
+                    <p class="amt" id="revenueAmount">$500.00</p>
                 </div>
                 <div class="card">
                     <p class="label">Task Pay</p>
-                    <p class="amt">$120.00</p>
+                    <p class="amt" id="taskPayAmount">$120.00</p>
                 </div>
             </div>
 
@@ -369,6 +369,8 @@
         </nav>
     </div>
 
+    <script src="js/auth-guard.js"></script>
+    <script src="js/dashboard.js"></script>
     <script>
         const hamburgerBtn = document.getElementById('hamburgerBtn');
         const sidebar = document.getElementById('sidebar');

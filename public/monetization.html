@@ -211,6 +211,30 @@
             </div>
         </header>
 
+        <div class="monetize-card" id="streakCard">
+            <div class="platform-info">
+                <div class="platform-icon"><i class="fas fa-fire"></i></div>
+                <div class="platform-meta">
+                    <h3>Daily Check-in</h3>
+                    <p id="streakSubtitle">Earn ₦50 every day you check in.</p>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span id="streakDayLabel">Day 0 of 0</span>
+                    <span id="streakCountLabel">Streak: 0 days</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="streakProgress" style="width: 0%;"></div>
+                </div>
+            </div>
+            <div style="margin-top:12px; font-size:0.75rem; color:var(--text-gray); display:flex; justify-content:space-between; align-items:center;">
+                <span id="streakMonthLabel">Month: -</span>
+                <span id="streakRewardLabel">Today: ₦50</span>
+            </div>
+            <button class="btn-action" id="checkinBtn" style="margin-top:15px;">Check in for today</button>
+        </div>
+
         <h2 class="section-title">Social Monetization</h2>
 
         <div class="monetize-card">
@@ -283,6 +307,7 @@
 
     </div>
 
+    <script src="js/auth-guard.js"></script>
     <script>
         function toggleSidebar() {
             const sb = document.getElementById('sidebar');
@@ -290,6 +315,103 @@
             sb.classList.toggle('active');
             ov.style.display = sb.classList.contains('active') ? 'block' : 'none';
         }
+
+        async function loadStreak() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const streakDayLabel = document.getElementById('streakDayLabel');
+            const streakCountLabel = document.getElementById('streakCountLabel');
+            const streakProgress = document.getElementById('streakProgress');
+            const streakMonthLabel = document.getElementById('streakMonthLabel');
+            const streakRewardLabel = document.getElementById('streakRewardLabel');
+            const streakSubtitle = document.getElementById('streakSubtitle');
+            const checkinBtn = document.getElementById('checkinBtn');
+
+            try {
+                const res = await fetch('/api/auth/streak', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!res.ok) return;
+                const data = await res.json();
+                const cal = data.calendar;
+
+                streakDayLabel.textContent = `Day ${cal.dayOfMonth} of ${cal.daysInMonth}`;
+                streakCountLabel.textContent = `Streak: ${data.currentStreak} day${data.currentStreak === 1 ? '' : 's'}`;
+                streakMonthLabel.textContent = `Month: ${cal.monthName} ${cal.year}`;
+
+                const progressPercent = Math.round((cal.dayOfMonth / cal.daysInMonth) * 100);
+                streakProgress.style.width = `${progressPercent}%`;
+
+                streakRewardLabel.textContent = `Today: ₦${data.todayPotentialReward}`;
+
+                if (data.hasCheckedInToday) {
+                    checkinBtn.textContent = 'Already checked in';
+                    checkinBtn.disabled = true;
+                    checkinBtn.style.opacity = '0.6';
+                    streakSubtitle.textContent = 'You have checked in for today.';
+                } else {
+                    checkinBtn.textContent = 'Check in for today';
+                    checkinBtn.disabled = false;
+                    checkinBtn.style.opacity = '1';
+                    streakSubtitle.textContent = 'Earn ₦50 daily, ₦150 on streak milestones.';
+                }
+            } catch (e) {
+            }
+        }
+
+        async function doCheckin() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const checkinBtn = document.getElementById('checkinBtn');
+            if (!checkinBtn || checkinBtn.disabled) return;
+
+            const originalText = checkinBtn.textContent;
+            checkinBtn.disabled = true;
+            checkinBtn.textContent = 'Checking...';
+
+            try {
+                const res = await fetch('/api/auth/streak/checkin', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (!data.alreadyCheckedIn) {
+                        alert(`Check-in successful! You earned ₦${data.todayReward} today.`);
+                        const userStr = localStorage.getItem('user');
+                        if (userStr) {
+                            try {
+                                const user = JSON.parse(userStr);
+                                user.taskBalance = data.taskBalance;
+                                localStorage.setItem('user', JSON.stringify(user));
+                            } catch (e) {
+                            }
+                        }
+                    }
+                    await loadStreak();
+                } else {
+                    checkinBtn.disabled = false;
+                    checkinBtn.textContent = originalText;
+                }
+            } catch (e) {
+                checkinBtn.disabled = false;
+                checkinBtn.textContent = originalText;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('checkinBtn');
+            if (btn) {
+                btn.addEventListener('click', doCheckin);
+            }
+            loadStreak();
+        });
     </script>
 </body>
 </html>

@@ -2,10 +2,58 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const https = require('https');
 const User = require('../models/User');
 
 const SECRET_KEY = 'your-secret-key'; // In production, use environment variable
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '2m';
+
+function fetchJson(url) {
+    return new Promise((resolve, reject) => {
+        https
+            .get(url, res => {
+                let data = '';
+                res.on('data', chunk => {
+                    data += chunk;
+                });
+                res.on('end', () => {
+                    try {
+                        const parsed = JSON.parse(data);
+                        resolve(parsed);
+                    } catch (err) {
+                        reject(err);
+                    }
+                });
+            })
+            .on('error', reject);
+    });
+}
+
+async function getLagosDateInfo() {
+    try {
+        const data = await fetchJson('https://worldtimeapi.org/api/timezone/Africa/Lagos');
+        if (!data || !data.datetime) {
+            throw new Error('Invalid time data');
+        }
+        const date = new Date(data.datetime);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const daysInMonth = new Date(year, month, 0).getDate();
+        const monthName = date.toLocaleString('en-US', { month: 'long' });
+        const dateKey = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        return { year, month, day, daysInMonth, monthName, dateKey };
+    } catch (e) {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
+        const day = now.getDate();
+        const daysInMonth = new Date(year, month, 0).getDate();
+        const monthName = now.toLocaleString('en-US', { month: 'long' });
+        const dateKey = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        return { year, month, day, daysInMonth, monthName, dateKey };
+    }
+}
 
 // Register Route
 router.post('/register', async (req, res) => {
@@ -188,6 +236,148 @@ router.get('/withdraw-info', verifyToken, async (req, res) => {
             taskBalance: user.taskBalance || 0,
             country: user.country,
             bankAccounts: user.bankAccounts || []
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.get('/streak', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const { year, month, day, daysInMonth, monthName, dateKey } = await getLagosDateInfo();
+
+        let streakCurrent = user.streakCurrent || 0;
+        let streakLastCheckinDate = user.streakLastCheckinDate || null;
+        let streakYear = user.streakYear;
+        let streakMonth = user.streakMonth;
+
+        if (streakYear !== year || streakMonth !== month) {
+            streakCurrent = 0;
+        }
+
+        const hasCheckedInToday = streakLastCheckinDate === dateKey;
+
+        let potentialStreak = streakCurrent;
+        if (!hasCheckedInToday) {
+            if (streakLastCheckinDate) {
+                const current = new Date(dateKey);
+                const previous = new Date(streakLastCheckinDate);
+                const diffDays = Math.round((current - previous) / (1000 * 60 * 60 * 24));
+                if (diffDays === 1 && streakYear === year && streakMonth === month) {
+                    potentialStreak = streakCurrent + 1;
+                } else {
+                    potentialStreak = 1;
+                }
+            } else {
+                potentialStreak = 1;
+            }
+        }
+
+        const baseReward = 50;
+        const bonusReward = 150;
+        const potentialReward = potentialStreak > 0 && potentialStreak % 7 === 0 ? bonusReward : baseReward;
+
+        res.json({
+            hasCheckedInToday,
+            currentStreak: streakCurrent,
+            potentialStreak,
+            todayPotentialReward: potentialReward,
+            calendar: {
+                year,
+                month,
+                monthName,
+                dayOfMonth: day,
+                daysInMonth
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/streak/checkin', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const { year, month, day, daysInMonth, monthName, dateKey } = await getLagosDateInfo();
+
+        if (user.streakLastCheckinDate === dateKey && user.streakYear === year && user.streakMonth === month) {
+            return res.json({
+                alreadyCheckedIn: true,
+                currentStreak: user.streakCurrent || 0,
+                todayReward: 0,
+                hasCheckedInToday: true,
+                calendar: {
+                    year,
+                    month,
+                    monthName,
+                    dayOfMonth: day,
+                    daysInMonth
+                },
+                balance: user.balance,
+                taskBalance: user.taskBalance
+            });
+        }
+
+        let streakCurrent = user.streakCurrent || 0;
+
+        if (user.streakYear !== year || user.streakMonth !== month) {
+            streakCurrent = 0;
+            user.streakDaysThisMonth = 0;
+            user.streakTotalEarnedThisMonth = 0;
+        }
+
+        if (user.streakLastCheckinDate) {
+            const current = new Date(dateKey);
+            const previous = new Date(user.streakLastCheckinDate);
+            const diffDays = Math.round((current - previous) / (1000 * 60 * 60 * 24));
+            if (diffDays === 1 && user.streakYear === year && user.streakMonth === month) {
+                streakCurrent += 1;
+            } else {
+                streakCurrent = 1;
+            }
+        } else {
+            streakCurrent = 1;
+        }
+
+        const baseReward = 50;
+        const bonusReward = 150;
+        const todayReward = streakCurrent % 7 === 0 ? bonusReward : baseReward;
+
+        user.streakCurrent = streakCurrent;
+        user.streakLastCheckinDate = dateKey;
+        user.streakYear = year;
+        user.streakMonth = month;
+        user.streakDaysThisMonth = (user.streakDaysThisMonth || 0) + 1;
+        user.streakTotalEarnedThisMonth = (user.streakTotalEarnedThisMonth || 0) + todayReward;
+        user.taskBalance = (user.taskBalance || 0) + todayReward;
+
+        await user.save();
+
+        res.json({
+            alreadyCheckedIn: false,
+            currentStreak: streakCurrent,
+            todayReward,
+            hasCheckedInToday: true,
+            calendar: {
+                year,
+                month,
+                monthName,
+                dayOfMonth: day,
+                daysInMonth
+            },
+            balance: user.balance,
+            taskBalance: user.taskBalance
         });
     } catch (error) {
         console.error(error);

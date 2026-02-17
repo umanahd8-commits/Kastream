@@ -238,7 +238,7 @@
 <body>
 
     <div class="nav-container">
-        <div class="hamburger-menu" onclick="const d = document.getElementById('navDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'">
+        <div class="hamburger-menu" id="hamburgerMenu">
             <div class="hamburger-line"></div>
             <div class="hamburger-line"></div>
             <div class="hamburger-line"></div>
@@ -298,18 +298,6 @@
 
     </div>
 
-    <script>
-        // Toggle Password Visibility
-        const toggleEye = document.getElementById('toggleEye');
-        const passwordInput = document.getElementById('password');
-
-        toggleEye.addEventListener('click', function () {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.classList.toggle('fa-eye');
-            this.classList.toggle('fa-eye-slash');
-        });
-    </script>
-
+    <script src="js/login.js"></script>
 </body>
 </html>

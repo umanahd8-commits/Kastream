@@ -207,7 +207,7 @@
 <body>
 
     <div class="nav-container">
-        <div class="hamburger-menu" onclick="const d = document.getElementById('navDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'">
+        <div class="hamburger-menu" id="hamburgerMenu">
             <div class="hamburger-line"></div>
             <div class="hamburger-line"></div>
             <div class="hamburger-line"></div>
@@ -237,7 +237,7 @@
                 <label><i class="fas fa-user"></i> Fullname</label>
                 <div class="input-with-icon">
                     <i class="fas fa-user input-icon"></i>
-                    <input type="text" placeholder="Your Full Name" required>
+                    <input type="text" id="fullName" placeholder="Your Full Name" required>
                 </div>
             </div>
 
@@ -245,7 +245,7 @@
                 <label><i class="fas fa-envelope"></i> Email</label>
                 <div class="input-with-icon">
                     <i class="fas fa-envelope input-icon"></i>
-                    <input type="email" placeholder="Email Address" required>
+                    <input type="email" id="email" placeholder="Email Address" required>
                 </div>
             </div>
 
@@ -253,7 +253,15 @@
                 <label><i class="fas fa-at"></i> Username</label>
                 <div class="input-with-icon">
                     <i class="fas fa-at input-icon"></i>
-                    <input type="text" placeholder="Username" required>
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-phone"></i> Phone Number</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-phone input-icon"></i>
+                    <input type="tel" id="phone" placeholder="Phone Number" required>
                 </div>
             </div>
 
@@ -261,7 +269,20 @@
                 <label><i class="fas fa-user-friends"></i> Referred By (Optional)</label>
                 <div class="input-with-icon">
                     <i class="fas fa-user-tie input-icon"></i>
-                    <input type="text" placeholder="Referrer Username">
+                    <input type="text" id="referrer" placeholder="Referrer Username">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-flag"></i> Country</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-globe input-icon"></i>
+                    <select id="country" required>
+                        <option value="NG" selected>Nigeria</option>
+                        <option value="US">United States</option>
+                        <option value="GH">Ghana</option>
+                        <option value="KE">Kenya</option>
+                    </select>
                 </div>
             </div>
 
@@ -269,7 +290,19 @@
                 <label><i class="fas fa-lock"></i> Password</label>
                 <div class="input-with-icon">
                     <i class="fas fa-key input-icon"></i>
-                    <input type="password" placeholder="Password" required>
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-box"></i> Package Type</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-layer-group input-icon"></i>
+                    <select id="packageType" required>
+                        <option value="basic" selected>Basic Package</option>
+                        <option value="standard">Standard Package</option>
+                        <option value="premium">Premium Package</option>
+                    </select>
                 </div>
             </div>
 
@@ -277,7 +310,7 @@
                 <label><i class="fas fa-tag"></i> Coupon Code</label>
                 <div class="input-with-icon">
                     <i class="fas fa-ticket-alt input-icon"></i>
-                    <input type="text" placeholder="Enter Coupon Code">
+                    <input type="text" id="couponCode" placeholder="Enter Coupon Code">
                 </div>
                 <span class="coupon-link-text">
                     Don't have a coupon code? <a href="merchants.html">Get one here</a>
@@ -297,5 +330,6 @@
         </p>
     </div>
 
+    <script src="js/register.js"></script>
 </body>
 </html>

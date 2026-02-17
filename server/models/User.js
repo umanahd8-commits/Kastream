@@ -88,6 +88,30 @@ const UserSchema = new mongoose.Schema({
         paypalName: String,
         paypalEmail: String
     }],
+    streakCurrent: {
+        type: Number,
+        default: 0
+    },
+    streakLastCheckinDate: {
+        type: String,
+        default: null
+    },
+    streakYear: {
+        type: Number,
+        default: null
+    },
+    streakMonth: {
+        type: Number,
+        default: null
+    },
+    streakDaysThisMonth: {
+        type: Number,
+        default: 0
+    },
+    streakTotalEarnedThisMonth: {
+        type: Number,
+        default: 0
+    },
     createdAt: {
         type: Date,
         default: Date.now

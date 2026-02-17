@@ -60,16 +60,18 @@ registerForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Toggle password visibility
+// Toggle password visibility (if eye icon exists)
 const togglePassword = document.querySelector('#toggleEye');
 const password = document.querySelector('#password');
 
-togglePassword.addEventListener('click', function (e) {
-    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-    password.setAttribute('type', type);
-    this.classList.toggle('fa-eye');
-    this.classList.toggle('fa-eye-slash');
-});
+if (togglePassword && password) {
+    togglePassword.addEventListener('click', function () {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
+}
 
 // Add focus effects for inputs
 const inputs = document.querySelectorAll('input, select');
@@ -86,22 +88,24 @@ inputs.forEach(input => {
 const hamburgerMenu = document.getElementById('hamburgerMenu');
 const navDropdown = document.getElementById('navDropdown');
 
-hamburgerMenu.addEventListener('click', function() {
-    navDropdown.classList.toggle('active');
-    // Animate hamburger lines
-    const lines = this.querySelectorAll('.hamburger-line');
-    lines[0].style.transform = navDropdown.classList.contains('active') ? 'rotate(45deg) translate(5px, 5px)' : 'none';
-    lines[1].style.opacity = navDropdown.classList.contains('active') ? '0' : '1';
-    lines[2].style.transform = navDropdown.classList.contains('active') ? 'rotate(-45deg) translate(7px, -6px)' : 'none';
-});
+if (hamburgerMenu && navDropdown) {
+    hamburgerMenu.addEventListener('click', function (e) {
+        e.stopPropagation();
+        navDropdown.classList.toggle('active');
+        const lines = this.querySelectorAll('.hamburger-line');
+        const isActive = navDropdown.classList.contains('active');
+        lines[0].style.transform = isActive ? 'rotate(45deg) translate(5px, 5px)' : 'none';
+        lines[1].style.opacity = isActive ? '0' : '1';
+        lines[2].style.transform = isActive ? 'rotate(-45deg) translate(7px, -6px)' : 'none';
+    });
 
-// Close dropdown when clicking outside
-document.addEventListener('click', function(event) {
-    if (!navDropdown.contains(event.target) && !hamburgerMenu.contains(event.target)) {
-        navDropdown.classList.remove('active');
-        const lines = hamburgerMenu.querySelectorAll('.hamburger-line');
-        lines[0].style.transform = 'none';
-        lines[1].style.opacity = '1';
-        lines[2].style.transform = 'none';
-    }
-});
+    document.addEventListener('click', function (event) {
+        if (!navDropdown.contains(event.target) && !hamburgerMenu.contains(event.target)) {
+            navDropdown.classList.remove('active');
+            const lines = hamburgerMenu.querySelectorAll('.hamburger-line');
+            lines[0].style.transform = 'none';
+            lines[1].style.opacity = '1';
+            lines[2].style.transform = 'none';
+        }
+    });
+}
