@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Protege</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --text-white: #ffffff;
+            --text-muted: #888;
+            --accent-red: #ff4d4f;
+            --accent-green: #00c96f;
+            --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            margin: 0;
+            padding: 16px;
+        }
+
+        .shell {
+            max-width: 1100px;
+            margin: 0 auto 60px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand img {
+            width: 34px;
+            height: 34px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-text span:first-child {
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: var(--primary-gold);
+        }
+
+        .brand-text span:last-child {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .admin-chip {
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(212,175,55,0.4);
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .admin-chip i {
+            color: var(--primary-gold);
+        }
+
+        .logout-btn {
+            margin-left: 10px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,77,79,0.6);
+            background: transparent;
+            color: var(--accent-red);
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 14px;
+            border: 1px solid rgba(212, 175, 55, 0.18);
+            padding: 16px 14px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: var(--text-muted);
+        }
+
+        .card-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(212,175,55,0.08);
+            color: var(--primary-gold);
+            font-size: 0.9rem;
+        }
+
+        .card-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .card-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .muted {
+            color: var(--text-muted);
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(0, 201, 111, 0.08);
+            color: var(--accent-green);
+            font-size: 0.7rem;
+            margin-top: 4px;
+        }
+
+        .section-title {
+            margin: 22px 0 10px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: var(--text-muted);
+        }
+
+        .table-card {
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+
+        th, td {
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        th {
+            text-align: left;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        td {
+            color: #e0e0e0;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .empty-state {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 18px 0 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <div class="topbar">
+            <div class="brand">
+                <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo">
+                <div class="brand-text">
+                    <span>Protege admin</span>
+                    <span id="adminSubtitle">Loading admin...</span>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <div class="admin-chip" id="adminChip">
+                    <i class="fas fa-user-shield"></i>
+                    <span id="adminName">Admin</span>
+                </div>
+                <button class="logout-btn" id="adminLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Registered users</div>
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="card-value" id="statTotalUsers">0</div>
+                <div class="card-sub muted">Total accounts in the system</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Main wallet balance</div>
+                    <div class="card-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                </div>
+                <div class="card-value" id="statTotalBalance">₦0</div>
+                <div class="card-sub muted">Sum of all user balances</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Task wallet balance</div>
+                    <div class="card-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                </div>
+                <div class="card-value" id="statTotalTaskBalance">₦0</div>
+                <div class="card-sub muted">Sum of all task balances</div>
+            </div>
+        </div>
+
+        <div class="section-title">System snapshot</div>
+
+        <div class="card table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th class="right">Value</th>
+                    </tr>
+                </thead>
+                <tbody id="overviewTableBody">
+                    <tr>
+                        <td colspan="2" class="empty-state">Loading overview...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function formatCurrency(value) {
+            const n = Number(value) || 0;
+            return '₦' + n.toLocaleString('en-NG');
+        }
+
+        function loadAdminFromStorage() {
+            let adminInfo = null;
+            try {
+                const raw = localStorage.getItem('adminInfo');
+                if (raw) adminInfo = JSON.parse(raw);
+            } catch (err) {}
+            return adminInfo || {};
+        }
+
+        async function fetchOverview() {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/auth/admin/overview', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                if (!res.ok) {
+                    if (res.status === 401 || res.status === 403) {
+                        localStorage.removeItem('adminToken');
+                        localStorage.removeItem('adminInfo');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    throw new Error('Failed to load overview');
+                }
+
+                const data = await res.json();
+
+                document.getElementById('statTotalUsers').textContent = data.totalUsers ?? 0;
+                document.getElementById('statTotalBalance').textContent = formatCurrency(data.totalBalance);
+                document.getElementById('statTotalTaskBalance').textContent = formatCurrency(data.totalTaskBalance);
+
+                const tbody = document.getElementById('overviewTableBody');
+                tbody.innerHTML = '';
+
+                const rows = [
+                    { label: 'Registered users', value: String(data.totalUsers ?? 0) },
+                    { label: 'Total main wallet balance', value: formatCurrency(data.totalBalance) },
+                    { label: 'Total task wallet balance', value: formatCurrency(data.totalTaskBalance) }
+                ];
+
+                rows.forEach(row => {
+                    const tr = document.createElement('tr');
+                    const tdLabel = document.createElement('td');
+                    tdLabel.textContent = row.label;
+                    const tdValue = document.createElement('td');
+                    tdValue.textContent = row.value;
+                    tdValue.className = 'right';
+                    tr.appendChild(tdLabel);
+                    tr.appendChild(tdValue);
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                const tbody = document.getElementById('overviewTableBody');
+                tbody.innerHTML = '<tr><td colspan="2" class="empty-state">Unable to load overview.</td></tr>';
+            }
+        }
+
+        function initAdminHeader() {
+            const info = loadAdminFromStorage();
+            const adminNameEl = document.getElementById('adminName');
+            const subtitleEl = document.getElementById('adminSubtitle');
+            const chipEl = document.getElementById('adminChip');
+
+            if (adminNameEl) {
+                adminNameEl.textContent = info.username || 'Admin';
+            }
+
+            if (subtitleEl) {
+                if (info.envAdmin) {
+                    subtitleEl.textContent = 'Signed in as environment admin';
+                } else if (info.username) {
+                    subtitleEl.textContent = 'Signed in as ' + info.username;
+                } else {
+                    subtitleEl.textContent = 'Admin session';
+                }
+            }
+
+            if (chipEl && info.envAdmin) {
+                chipEl.style.borderColor = 'rgba(0,201,111,0.6)';
+            }
+        }
+
+        function guardAdminAccess() {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        document.getElementById('adminLogoutBtn').onclick = () => {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminInfo');
+            window.location.href = 'login.html';
+        };
+
+        window.onload = () => {
+            if (!guardAdminAccess()) return;
+            initAdminHeader();
+            fetchOverview();
+        };
+    </script>
+</body>
+</html>
+

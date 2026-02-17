@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Protege</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --text-white: #ffffff;
+            --input-bg: #151515;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-wrapper {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-container img {
+            width: 80px;
+            height: auto;
+        }
+
+        .logo-container h1 {
+            margin: 10px 0 4px;
+            color: var(--primary-gold);
+            font-size: 1.4rem;
+        }
+
+        .logo-container p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 24px 20px 20px;
+            border-radius: 14px;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9);
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #aaa;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--primary-gold);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-gold);
+            font-size: 0.85rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px 12px 11px 38px;
+            background: var(--input-bg);
+            border: 1px solid #222;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.15);
+        }
+
+        .login-btn {
+            width: 100%;
+            margin-top: 8px;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: var(--gradient-gold);
+            color: #000;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: default;
+        }
+
+        .error-text {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #ff4d4f;
+            text-align: center;
+            display: none;
+        }
+
+        .hint {
+            margin-top: 14px;
+            font-size: 0.7rem;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <div class="logo-container">
+            <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo">
+            <h1>Protege Admin</h1>
+            <p>Restricted access • /fiazzy/admin</p>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Admin login</div>
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label class="form-label">ID / Username</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user-shield"></i>
+                        <input type="text" id="adminLoginId" placeholder="Admin ID" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="adminPassword" placeholder="Admin password" required>
+                    </div>
+                </div>
+                <button type="submit" class="login-btn" id="adminLoginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Log in
+                </button>
+            </form>
+            <p class="error-text" id="adminLoginError"></p>
+            <p class="hint">Default admin credentials are configured in the server .env file.</p>
+        </div>
+    </div>
+
+    <script>
+        const adminLoginForm = document.getElementById('adminLoginForm');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const adminLoginError = document.getElementById('adminLoginError');
+
+        function showAdminError(message) {
+            if (!adminLoginError) return;
+            adminLoginError.textContent = message || '';
+            adminLoginError.style.display = message ? 'block' : 'none';
+        }
+
+        adminLoginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const loginId = document.getElementById('adminLoginId').value.trim();
+            const password = document.getElementById('adminPassword').value;
+
+            if (!loginId || !password) {
+                showAdminError('Enter admin ID and password.');
+                return;
+            }
+
+            showAdminError('');
+
+            const originalText = adminLoginBtn.innerHTML;
+            adminLoginBtn.disabled = true;
+            adminLoginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+
+            try {
+                const res = await fetch('/api/auth/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ loginId, password })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    showAdminError(data.message || 'Admin login failed');
+                    return;
+                }
+
+                try {
+                    localStorage.setItem('adminToken', data.token);
+                    localStorage.setItem('adminInfo', JSON.stringify(data.admin || {}));
+                } catch (err) {}
+
+                window.location.href = 'dashboard.html';
+            } catch (err) {
+                showAdminError('Network error. Please try again.');
+            } finally {
+                adminLoginBtn.disabled = false;
+                adminLoginBtn.innerHTML = originalText;
+            }
+        });
+    </script>
+</body>
+</html>
+

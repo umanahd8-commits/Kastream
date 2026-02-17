@@ -129,6 +129,13 @@ function generateGameBoard(width, typesCount) {
     return board;
 }
 
+function getEnvAdminConfig() {
+    const username = process.env.ADMIN_USERNAME || '';
+    const password = process.env.ADMIN_PASSWORD || '';
+    if (!username || !password) return null;
+    return { username, password };
+}
+
 // Register Route
 router.post('/register', async (req, res) => {
     try {
@@ -240,6 +247,78 @@ router.post('/login', async (req, res) => {
 });
 
 const verifyToken = require('../middleware/auth');
+
+function requireAdmin(req, res, next) {
+    if (!req.user || req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access only' });
+    }
+    next();
+}
+
+router.post('/admin/login', async (req, res) => {
+    try {
+        const { loginId, password } = req.body || {};
+
+        if (!loginId || !password) {
+            return res.status(400).json({ message: 'Please provide ID and password' });
+        }
+
+        const envAdmin = getEnvAdminConfig();
+
+        if (envAdmin && loginId === envAdmin.username && password === envAdmin.password) {
+            const token = jwt.sign(
+                { id: 'env-admin', username: envAdmin.username, role: 'admin', envAdmin: true },
+                SECRET_KEY,
+                { expiresIn: JWT_EXPIRES_IN }
+            );
+
+            return res.json({
+                message: 'Admin login successful',
+                token,
+                admin: {
+                    id: 'env-admin',
+                    username: envAdmin.username,
+                    envAdmin: true
+                }
+            });
+        }
+
+        const user = await User.findOne({
+            $or: [{ email: loginId }, { username: loginId }],
+            role: 'admin'
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid admin credentials' });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Invalid admin credentials' });
+        }
+
+        const token = jwt.sign(
+            { id: user.id, username: user.username, role: 'admin', envAdmin: false },
+            SECRET_KEY,
+            { expiresIn: JWT_EXPIRES_IN }
+        );
+
+        res.json({
+            message: 'Admin login successful',
+            token,
+            admin: {
+                id: user.userId || user.id,
+                username: user.username,
+                email: user.email,
+                envAdmin: false
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 
 // Get Current User (Protected)
 router.get('/me', verifyToken, async (req, res) => {
@@ -451,6 +530,33 @@ router.post('/game/finish', verifyToken, async (req, res) => {
             dailyEarnings: user.dailyEarnings || 0,
             playsToday,
             playsRemaining
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.get('/admin/overview', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const totalUsers = await User.countDocuments({});
+
+        const aggregates = await User.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    totalBalance: { $sum: '$balance' },
+                    totalTaskBalance: { $sum: '$taskBalance' }
+                }
+            }
+        ]);
+
+        const agg = aggregates[0] || {};
+
+        res.json({
+            totalUsers,
+            totalBalance: agg.totalBalance || 0,
+            totalTaskBalance: agg.totalTaskBalance || 0
         });
     } catch (error) {
         console.error(error);
