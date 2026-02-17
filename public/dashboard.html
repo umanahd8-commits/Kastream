@@ -402,10 +402,23 @@
                 reader.onload = function(e) {
                     userAvatar.src = e.target.result;
                     displayAvatar.src = e.target.result;
+                    try {
+                        localStorage.setItem('userAvatar', e.target.result);
+                    } catch (err) {}
                 }
                 reader.readAsDataURL(file);
             }
         };
+
+        (function applySavedAvatar() {
+            try {
+                const savedAvatar = localStorage.getItem('userAvatar');
+                if (savedAvatar) {
+                    userAvatar.src = savedAvatar;
+                    displayAvatar.src = savedAvatar;
+                }
+            } catch (err) {}
+        })();
     </script>
 </body>
 </html>

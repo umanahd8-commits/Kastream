@@ -8,6 +8,16 @@ const User = require('../models/User');
 const SECRET_KEY = 'your-secret-key'; // In production, use environment variable
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '2m';
 
+const GAME_CONFIG = {
+    timeLimitSeconds: Number(process.env.GAME_TIME_LIMIT_SECONDS) || 120,
+    movesLimit: Number(process.env.GAME_MOVES_LIMIT) || 30,
+    maxPlaysPerDay: Number(process.env.GAME_MAX_PLAYS_PER_DAY) || 2,
+    rewardPerWin: Number(process.env.GAME_REWARD_PER_WIN) || 100,
+    targetScore: Number(process.env.GAME_TARGET_SCORE) || 150,
+    boardWidth: 8,
+    candyTypes: 5
+};
+
 function fetchJson(url) {
     return new Promise((resolve, reject) => {
         https
@@ -77,6 +87,46 @@ function checkRemoteUrl(url) {
         req.on('error', reject);
         req.end();
     });
+}
+
+function generateGameBoard(width, typesCount) {
+    const total = width * width;
+    const board = [];
+
+    for (let index = 0; index < total; index++) {
+        let type;
+        let safe = false;
+
+        while (!safe) {
+            type = Math.floor(Math.random() * typesCount);
+            safe = true;
+
+            const row = Math.floor(index / width);
+            const col = index % width;
+
+            if (col >= 2) {
+                const left1 = board[index - 1];
+                const left2 = board[index - 2];
+                if (left1 === type && left2 === type) {
+                    safe = false;
+                }
+            }
+
+            if (!safe) continue;
+
+            if (row >= 2) {
+                const up1 = board[index - width];
+                const up2 = board[index - 2 * width];
+                if (up1 === type && up2 === type) {
+                    safe = false;
+                }
+            }
+        }
+
+        board.push(type);
+    }
+
+    return board;
 }
 
 // Register Route
@@ -264,6 +314,143 @@ router.get('/withdraw-info', verifyToken, async (req, res) => {
             taskBalance: user.taskBalance || 0,
             country: user.country,
             bankAccounts: user.bankAccounts || []
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.get('/game/state', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const { dateKey } = await getLagosDateInfo();
+
+        if (user.gameLastPlayDate !== dateKey) {
+            user.gameLastPlayDate = dateKey;
+            user.gamePlaysToday = 0;
+            user.gameTotalEarnedToday = 0;
+            await user.save();
+        }
+
+        const playsToday = user.gamePlaysToday || 0;
+        const playsRemaining = Math.max(0, GAME_CONFIG.maxPlaysPerDay - playsToday);
+
+        res.json({
+            dailyEarnings: user.dailyEarnings || 0,
+            todayGameEarnings: user.gameTotalEarnedToday || 0,
+            playsToday,
+            playsRemaining,
+            maxPlaysPerDay: GAME_CONFIG.maxPlaysPerDay,
+            timeLimitSeconds: GAME_CONFIG.timeLimitSeconds,
+            movesLimit: GAME_CONFIG.movesLimit,
+            rewardPerWin: GAME_CONFIG.rewardPerWin,
+            targetScore: GAME_CONFIG.targetScore
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/game/start', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const { dateKey } = await getLagosDateInfo();
+
+        if (user.gameLastPlayDate !== dateKey) {
+            user.gameLastPlayDate = dateKey;
+            user.gamePlaysToday = 0;
+            user.gameTotalEarnedToday = 0;
+        }
+
+        const playsToday = user.gamePlaysToday || 0;
+        if (playsToday >= GAME_CONFIG.maxPlaysPerDay) {
+            const playsRemaining = 0;
+            return res.status(400).json({
+                message: 'Daily game limit reached',
+                playsToday,
+                playsRemaining
+            });
+        }
+
+        user.gamePlaysToday = playsToday + 1;
+        user.gameLastPlayDate = dateKey;
+        await user.save();
+
+        const board = generateGameBoard(GAME_CONFIG.boardWidth, GAME_CONFIG.candyTypes);
+        const updatedPlaysToday = user.gamePlaysToday || 0;
+        const playsRemaining = Math.max(0, GAME_CONFIG.maxPlaysPerDay - updatedPlaysToday);
+
+        res.json({
+            board,
+            playsToday: updatedPlaysToday,
+            playsRemaining,
+            maxPlaysPerDay: GAME_CONFIG.maxPlaysPerDay,
+            timeLimitSeconds: GAME_CONFIG.timeLimitSeconds,
+            movesLimit: GAME_CONFIG.movesLimit,
+            rewardPerWin: GAME_CONFIG.rewardPerWin,
+            targetScore: GAME_CONFIG.targetScore
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/game/finish', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const { dateKey } = await getLagosDateInfo();
+
+        if (user.gameLastPlayDate !== dateKey) {
+            user.gameLastPlayDate = dateKey;
+            user.gamePlaysToday = 0;
+            user.gameTotalEarnedToday = 0;
+        }
+
+        const rawScore = req.body && typeof req.body.score === 'number' ? req.body.score : 0;
+        const score = rawScore < 0 ? 0 : rawScore;
+
+        let win = false;
+        let reward = 0;
+
+        if (score >= GAME_CONFIG.targetScore) {
+            win = true;
+            reward = GAME_CONFIG.rewardPerWin;
+            user.gameTotalEarnedToday = (user.gameTotalEarnedToday || 0) + reward;
+            user.taskBalance = (user.taskBalance || 0) + reward;
+            user.dailyEarnings = (user.dailyEarnings || 0) + reward;
+            await user.save();
+        }
+
+        const playsToday = user.gamePlaysToday || 0;
+        const playsRemaining = Math.max(0, GAME_CONFIG.maxPlaysPerDay - playsToday);
+
+        res.json({
+            win,
+            reward,
+            targetScore: GAME_CONFIG.targetScore,
+            score,
+            todayGameEarnings: user.gameTotalEarnedToday || 0,
+            dailyEarnings: user.dailyEarnings || 0,
+            playsToday,
+            playsRemaining
         });
     } catch (error) {
         console.error(error);

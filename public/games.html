@@ -252,6 +252,18 @@
             inset: 0; 
             background: rgba(0,0,0,0.85); 
             z-index: 1500; 
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-box {
+            background: #0a0a0a;
+            border: 1px solid var(--primary-gold);
+            border-radius: 20px;
+            padding: 25px;
+            width: 85%;
+            max-width: 350px;
+            text-align: center;
         }
     </style>
 </head>
@@ -299,8 +311,8 @@
                         <div class="stat-value" id="moves">30</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-label">Earnings</div>
-                        <div class="stat-value" id="score">₦0</div>
+                        <div class="stat-label">Score</div>
+                        <div class="stat-value" id="score">0</div>
                     </div>
                 </div>
                 <button id="start-btn">Start Game</button>
@@ -315,6 +327,31 @@
             <a href="history.html" class="nav-btn"><i class="fas fa-history"></i>History</a>
             <a href="profile.html" class="nav-btn"><i class="fas fa-user"></i>Profile</a>
         </nav>
+    </div>
+
+    <div id="resultModal" class="overlay">
+        <div class="modal-box">
+            <h3 id="resultTitle" style="color:white; margin-bottom:10px;">Game Result</h3>
+            <p id="resultMessage" style="color:var(--text-gray); font-size:0.85rem; margin-bottom:15px;"></p>
+            <div style="background:#000; padding:12px; border-radius:10px; border:1px solid #1a1a1a; font-size:0.8rem; text-align:left; margin-bottom:20px;">
+                <p style="margin-bottom:6px;">
+                    <strong style="color:var(--text-gray);">Score:</strong>
+                    <span id="resultScore" style="float:right;">0</span>
+                </p>
+                <p style="margin-bottom:6px;">
+                    <strong style="color:var(--text-gray);">Target:</strong>
+                    <span id="resultTarget" style="float:right;">0</span>
+                </p>
+                <p>
+                    <strong style="color:var(--text-gray);">Today's game earnings:</strong>
+                    <span id="resultEarnings" style="float:right;">₦0</span>
+                </p>
+                <div style="clear:both;"></div>
+            </div>
+            <button id="closeResultBtn" style="width:100%; padding:14px; background:var(--gradient-gold); border:none; border-radius:10px; color:black; font-weight:800; cursor:pointer; text-transform:uppercase;">
+                Close
+            </button>
+        </div>
     </div>
 
     <script src="js/auth-guard.js"></script>
@@ -341,6 +378,13 @@
         const timerDisplay = document.querySelector('#timer');
         const movesDisplay = document.querySelector('#moves');
         const scoreDisplay = document.querySelector('#score');
+        const resultModal = document.getElementById('resultModal');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultMessage = document.getElementById('resultMessage');
+        const resultScore = document.getElementById('resultScore');
+        const resultTarget = document.getElementById('resultTarget');
+        const resultEarnings = document.getElementById('resultEarnings');
+        const closeResultBtn = document.getElementById('closeResultBtn');
         
         const width = 8;
         const candyImages = [
@@ -354,13 +398,46 @@
         let squares = [];
         let score = 0;
         let movesLeft = 30;
-        let timeLeft = 60;
+        let timeLeft = 120;
+        let targetScore = 150;
+        let rewardPerWin = 100;
+        let playsRemaining = 2;
         let gameActive = false;
         let timerInterval = null;
         let selectedCandy = null;
         let isProcessing = false;
 
-        function createBoard() {
+        function openResultModal(payload) {
+            if (payload && typeof payload === 'object') {
+                if (payload.title && resultTitle) resultTitle.textContent = payload.title;
+                if (payload.message && resultMessage) resultMessage.textContent = payload.message;
+                if (typeof payload.score === 'number' && resultScore) resultScore.textContent = payload.score;
+                if (typeof payload.target === 'number' && resultTarget) resultTarget.textContent = payload.target;
+                if (typeof payload.earnings === 'number' && resultEarnings) {
+                    resultEarnings.textContent = `₦${payload.earnings}`;
+                }
+            }
+            if (resultModal) resultModal.style.display = 'flex';
+        }
+
+        function closeResultModal() {
+            if (resultModal) resultModal.style.display = 'none';
+            loadGameState();
+        }
+
+        if (closeResultBtn) {
+            closeResultBtn.onclick = closeResultModal;
+        }
+
+        if (resultModal) {
+            resultModal.addEventListener('click', function (e) {
+                if (e.target === resultModal) {
+                    closeResultModal();
+                }
+            });
+        }
+
+        function createBoard(initialTypes) {
             gridDisplay.innerHTML = '';
             squares = [];
             for (let i = 0; i < width * width; i++) {
@@ -368,9 +445,14 @@
                 square.className = 'candy';
                 square.setAttribute('data-id', i);
                 const img = document.createElement('img');
-                let randomType = Math.floor(Math.random() * candyImages.length);
-                img.src = candyImages[randomType];
-                square.setAttribute('data-type', randomType);
+                let type;
+                if (Array.isArray(initialTypes) && typeof initialTypes[i] === 'number') {
+                    type = initialTypes[i];
+                } else {
+                    type = Math.floor(Math.random() * candyImages.length);
+                }
+                img.src = candyImages[type];
+                square.setAttribute('data-type', type);
                 square.appendChild(img);
                 gridDisplay.appendChild(square);
                 squares.push(square);
@@ -378,8 +460,6 @@
                 // Add click event for player interaction
                 square.addEventListener('click', () => handleCandyClick(i));
             }
-            // Remove any initial matches
-            removeInitialMatches();
         }
 
         function removeInitialMatches() {
@@ -516,8 +596,8 @@
             while (matches.size > 0) {
                 // Animate matches
                 matches.forEach(i => squares[i].classList.add('matched'));
-                score += matches.size * 5;
-                scoreDisplay.textContent = `₦${score}`;
+                score += matches.size * 10;
+                scoreDisplay.textContent = score;
                 
                 await new Promise(r => setTimeout(r, 400));
                 
@@ -568,49 +648,153 @@
             }
         }
 
-        function startGame() {
+        async function startGame() {
             if (gameActive) return;
-            gameActive = true;
-            startBtn.disabled = true;
-            score = 0;
-            movesLeft = 30;
-            timeLeft = 60;
-            selectedCandy = null;
-            scoreDisplay.textContent = `₦0`;
-            movesDisplay.textContent = movesLeft;
-            timerDisplay.textContent = `${timeLeft}s`;
-            
-            createBoard();
-            
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                timerDisplay.textContent = `${timeLeft}s`;
-                if (timeLeft <= 0) {
-                    endGame();
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Please log in again to play.');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/auth/game/start', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    alert(data.message || 'Unable to start game.');
+                    if (typeof data.playsRemaining === 'number' && data.playsRemaining <= 0) {
+                        startBtn.disabled = true;
+                        startBtn.textContent = 'No plays left today';
+                    }
+                    return;
                 }
-            }, 1000);
+
+                gameActive = true;
+                startBtn.disabled = true;
+
+                score = 0;
+                movesLeft = data.movesLimit || movesLeft;
+                timeLeft = data.timeLimitSeconds || timeLeft;
+                targetScore = data.targetScore || targetScore;
+                rewardPerWin = data.rewardPerWin || rewardPerWin;
+                playsRemaining = typeof data.playsRemaining === 'number' ? data.playsRemaining : playsRemaining;
+                selectedCandy = null;
+
+                scoreDisplay.textContent = '0';
+                movesDisplay.textContent = movesLeft;
+                timerDisplay.textContent = `${timeLeft}s`;
+
+                createBoard(Array.isArray(data.board) ? data.board : null);
+
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    timerDisplay.textContent = `${timeLeft}s`;
+                    if (timeLeft <= 0) {
+                        endGame();
+                    }
+                }, 1000);
+            } catch (e) {
+                alert('Network error while starting game.');
+            }
         }
 
-        function endGame() {
+        async function endGame() {
+            if (!gameActive) return;
             clearInterval(timerInterval);
             gameActive = false;
             startBtn.disabled = false;
             isProcessing = false;
             
-            let message = `Game Over!\nYou earned ₦${score}\n`;
-            if (movesLeft <= 0) {
-                message += "No moves left!";
-            } else {
-                message += "Time's up!";
-            }
+            const finalScore = score;
+            let baseStatus = movesLeft <= 0 ? "No moves left!" : "Time's up!";
+            let modalTitle = 'Game Over';
+            let todayGameEarnings = null;
             
-            setTimeout(() => {
-                alert(message);
-            }, 300);
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
+                    const res = await fetch('/api/auth/game/finish', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ score: finalScore })
+                    });
+
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.win) {
+                            modalTitle = 'You Won!';
+                        }
+                        if (typeof data.todayGameEarnings === 'number') {
+                            todayGameEarnings = data.todayGameEarnings;
+                        }
+                        if (typeof data.playsRemaining === 'number') {
+                            playsRemaining = data.playsRemaining;
+                            if (playsRemaining <= 0) {
+                                startBtn.disabled = true;
+                                startBtn.textContent = 'No plays left today';
+                            } else {
+                                startBtn.textContent = 'Start Game';
+                            }
+                        }
+                    }
+                } catch (e) {}
+            }
+
+            openResultModal({
+                title: modalTitle,
+                message: `Score: ${finalScore}. Target: ${targetScore}. ${baseStatus}`,
+                score: finalScore,
+                target: targetScore,
+                earnings: typeof todayGameEarnings === 'number' ? todayGameEarnings : 0
+            });
+        }
+
+        async function loadGameState() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const res = await fetch('/api/auth/game/state', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!res.ok) return;
+
+                const data = await res.json();
+                timeLeft = data.timeLimitSeconds || timeLeft;
+                movesLeft = data.movesLimit || movesLeft;
+                targetScore = data.targetScore || targetScore;
+                rewardPerWin = data.rewardPerWin || rewardPerWin;
+                playsRemaining = typeof data.playsRemaining === 'number' ? data.playsRemaining : playsRemaining;
+
+                timerDisplay.textContent = `${timeLeft}s`;
+                movesDisplay.textContent = movesLeft;
+                scoreDisplay.textContent = '0';
+
+                if (playsRemaining <= 0) {
+                    startBtn.disabled = true;
+                    startBtn.textContent = 'No plays left today';
+                } else {
+                    startBtn.disabled = false;
+                    startBtn.textContent = 'Start Game';
+                }
+            } catch (e) {}
         }
 
         startBtn.onclick = startGame;
-        window.onload = createBoard;
+        window.onload = loadGameState;
     </script>
 </body>
 </html>

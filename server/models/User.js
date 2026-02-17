@@ -62,6 +62,18 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    gameLastPlayDate: {
+        type: String,
+        default: null
+    },
+    gamePlaysToday: {
+        type: Number,
+        default: 0
+    },
+    gameTotalEarnedToday: {
+        type: Number,
+        default: 0
+    },
     role: {
         type: String,
         default: 'user'
