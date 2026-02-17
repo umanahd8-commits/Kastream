@@ -3,172 +3,345 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>60s Candy Crush Simulation</title>
+    <title>Play & Earn | CASHX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
-            --bg-color: #282c34;
-            --grid-bg: #20232a;
+            --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --text-white: #ffffff;
+            --text-gray: #888888;
+            --accent-green: #00ff88;
+            --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            background-color: var(--bg-black);
+            color: var(--text-white);
             min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-wrapper {
+            width: 90%; 
+            max-width: 420px;
+            background: var(--bg-black);
+            min-height: 100vh;
+            padding-bottom: 100px;
             position: relative;
         }
 
-        /* Back arrow button */
-        .back-arrow {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: none;
-            border: none;
-            color: #61dafb;
-            font-size: 2.5rem;
-            cursor: pointer;
-            padding: 0;
-            width: 50px;
-            height: 50px;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .header-logo {
+            width: 45px;
+            height: auto;
+            margin-left: 10px;
+        }
+
+        .nav-trigger {
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition: transform 0.3s, color 0.3s;
-            text-decoration: none;
+            gap: 10px;
+            color: var(--primary-gold);
+            cursor: pointer;
         }
 
-        .back-arrow:hover {
-            transform: scale(1.1);
+        .sidebar {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: #111111;
+            z-index: 2000;
+            transition: 0.4s ease;
+            border-right: 2px solid var(--primary-gold);
+            padding: 25px;
+        }
+
+        .sidebar.active { left: 0; }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-gold);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #222;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
             color: #ffffff;
+            text-decoration: none;
+            border-bottom: 1px solid #1a1a1a;
+            font-weight: 600;
         }
 
-        .header {
+        .sidebar-item i { color: var(--primary-gold); margin-right: 15px; width: 25px; text-align: center; }
+
+        .profile-img-container {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-gold);
+            overflow: hidden;
+            background: #111;
+            cursor: pointer;
+        }
+        .profile-img-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        .game-header {
             text-align: center;
             margin-bottom: 20px;
-            margin-top: 20px;
         }
 
-        .stats {
-            display: flex;
-            gap: 20px;
+        .game-title {
+            color: var(--primary-gold);
             font-size: 1.2rem;
-            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
         }
+
+        .stats-panel {
+            display: flex;
+            justify-content: space-between;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .stat-item { text-align: center; flex: 1; }
+        .stat-label { font-size: 0.6rem; color: var(--text-gray); text-transform: uppercase; }
+        .stat-value { font-size: 1.1rem; font-weight: 700; color: var(--primary-gold); }
 
         #start-btn {
-            padding: 10px 25px;
-            font-size: 1rem;
-            background-color: #61dafb;
-            color: #000;
+            width: 100%;
+            padding: 15px;
+            background: var(--gradient-gold);
             border: none;
-            border-radius: 5px;
+            color: black;
+            font-weight: 800;
+            border-radius: 10px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
+            margin-bottom: 20px;
+            text-transform: uppercase;
         }
 
         #start-btn:disabled {
-            background-color: #4b5263;
+            background: #333;
+            color: #666;
             cursor: not-allowed;
+            box-shadow: none;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(8, 50px);
-            grid-template-rows: repeat(8, 50px);
-            gap: 5px;
-            background-color: var(--grid-bg);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            background-color: #050505;
+            padding: 8px;
+            border-radius: 15px;
+            border: 2px solid var(--primary-gold);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+            margin: 0 auto;
+            user-select: none;
         }
 
         .candy {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+            aspect-ratio: 1/1;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden; /* Ensures the image fits nicely */
-            transition: transform 0.3s ease;
+            overflow: hidden;
+            background: #111;
+            border: 1px solid #222;
+            cursor: pointer;
+            transition: transform 0.1s;
         }
 
-        .candy img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Makes sure the image fills the space */
+        .candy:active {
+            transform: scale(0.95);
         }
 
-        .empty {
-            background-color: transparent !important;
-            transform: scale(0);
+        .candy.selected {
+            border: 2px solid var(--primary-gold);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+            transform: scale(1.05);
         }
-        
-        .empty img {
-            display: none;
+
+        .candy img { 
+            width: 90%; 
+            height: 90%; 
+            object-fit: contain;
+            pointer-events: none;
         }
-        
-        .matched {
-            animation: pop 0.4s ease-out;
+
+        .empty { 
+            opacity: 0; 
+            transform: scale(0.5); 
+            transition: 0.3s; 
         }
-        
-        @keyframes pop {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
+
+        .matched { 
+            animation: gold-pop 0.4s ease-out; 
+        }
+
+        @keyframes gold-pop {
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.2); filter: brightness(2) sepia(1) hue-rotate(10deg); }
             100% { transform: scale(0); opacity: 0; }
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 600px) {
-            .back-arrow {
-                top: 10px;
-                left: 10px;
-                font-size: 2rem;
-                width: 40px;
-                height: 40px;
-            }
-            
-            .header {
-                margin-top: 40px;
-            }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 90%;
+            max-width: 420px;
+            background: #050505;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            z-index: 900;
+        }
+        .nav-btn { 
+            text-decoration: none; 
+            color: #444; 
+            font-size: 0.65rem; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 5px; 
+        }
+        .nav-btn.active { color: var(--primary-gold); }
+        .nav-btn i { font-size: 1.3rem; }
+
+        .overlay { 
+            display: none; 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0,0,0,0.85); 
+            z-index: 1500; 
         }
     </style>
-    <script src="js/auth-guard.js"></script>
 </head>
 <body>
 
-    <!-- Back arrow button -->
-    <a href="dashboard.html" class="back-arrow" title="Back to Dashboard">
-        &#8592; <!-- Left arrow HTML entity -->
-    </a>
+    <div class="overlay" id="mainOverlay" onclick="toggleSidebar()"></div>
 
-    <div class="header">
-        <h1>PLAY AND EARN</h1>
-        <div class="stats">
-            <div id="timer">Time: 60s</div>
-            <div id="score">Score: 0</div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3 style="letter-spacing: 2px;">MENU</h3>
+            <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
         </div>
-        <button id="start-btn">Start Game</button>
+      <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>
+        <a href="loans.html" class="sidebar-item"><i class="fas fa-university"></i> Loans/scholarship</a>
+        <a href="ads.html" class="sidebar-item"><i class="fas fa-tv"></i> ADs</a>
+        <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a>
+        <a href="coupon.html" class="sidebar-item"><i class="fas fa-key"></i> Coupon</a>
+        <a href="#" class="sidebar-item" style="color: var(--accent-red);"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
-    <div id="grid" class="grid"></div>
+    <div class="phone-wrapper">
+        <header class="header">
+            <div class="nav-trigger" id="hamburgerBtn">
+                <i class="fas fa-bars fa-lg"></i>
+                <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo" class="header-logo">
+            </div>
+            <div class="header-icons">
+                 <div class="profile-img-container" onclick="location.href='profile.html'">
+                    <img id="headerAvatar" src="https://via.placeholder.com/150/111111/D4AF37?text=U" alt="User">
+                </div>
+            </div>
+        </header>
+
+        <div id="main-content">
+            <div class="game-header">
+                <h1 class="game-title">Candy Monetize</h1>
+                <div class="stats-panel">
+                    <div class="stat-item">
+                        <div class="stat-label">Timer</div>
+                        <div class="stat-value" id="timer">60s</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Moves</div>
+                        <div class="stat-value" id="moves">30</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Earnings</div>
+                        <div class="stat-value" id="score">₦0</div>
+                    </div>
+                </div>
+                <button id="start-btn">Start Game</button>
+            </div>
+
+            <div id="grid" class="grid"></div>
+        </div>
+
+        <nav class="bottom-nav">
+            <a href="dashboard.html" class="nav-btn"><i class="fas fa-house"></i>Home</a>
+            <a href="articles.html" class="nav-btn"><i class="fas fa-newspaper"></i>News</a>
+            <a href="history.html" class="nav-btn"><i class="fas fa-history"></i>History</a>
+            <a href="profile.html" class="nav-btn"><i class="fas fa-user"></i>Profile</a>
+        </nav>
+    </div>
 
     <script>
+        // Sidebar UI
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('mainOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
+        }
+
+        document.getElementById('hamburgerBtn').onclick = toggleSidebar;
+        document.getElementById('closeSidebarBtn').onclick = toggleSidebar;
+
+        // Persistent Avatar
+        const savedAvatar = localStorage.getItem('userAvatar');
+        if(savedAvatar) document.getElementById('headerAvatar').src = savedAvatar;
+
+        // Game Logic
         const gridDisplay = document.querySelector('#grid');
         const startBtn = document.querySelector('#start-btn');
         const timerDisplay = document.querySelector('#timer');
+        const movesDisplay = document.querySelector('#moves');
         const scoreDisplay = document.querySelector('#score');
         
         const width = 8;
-        // Array of your image URLs
         const candyImages = [
             'https://i.ibb.co/v6txG3jn/candy-4.jpg',
             'https://i.ibb.co/8g2YZnLd/candy-5.jpg',
@@ -176,336 +349,267 @@
             'https://i.ibb.co/QFj4CZTF/candy-2.jpg',
             'https://i.ibb.co/q3NDdHL0/candy-1.jpg'
         ];
+        
         let squares = [];
         let score = 0;
+        let movesLeft = 30;
         let timeLeft = 60;
         let gameActive = false;
         let timerInterval = null;
+        let selectedCandy = null;
         let isProcessing = false;
 
-        // Create the board
         function createBoard() {
-            console.log('Creating board...');
             gridDisplay.innerHTML = '';
             squares = [];
-            
             for (let i = 0; i < width * width; i++) {
                 const square = document.createElement('div');
-                square.setAttribute('id', i.toString());
                 square.className = 'candy';
-                
-                // Create an image element
+                square.setAttribute('data-id', i);
                 const img = document.createElement('img');
-                let randomImageIndex = Math.floor(Math.random() * candyImages.length);
-                img.src = candyImages[randomImageIndex];
-                img.alt = `Candy ${randomImageIndex + 1}`;
-                
-                // Store the image index as a data attribute for easy comparison
-                square.setAttribute('data-candy-type', randomImageIndex.toString());
-                
+                let randomType = Math.floor(Math.random() * candyImages.length);
+                img.src = candyImages[randomType];
+                square.setAttribute('data-type', randomType);
                 square.appendChild(img);
                 gridDisplay.appendChild(square);
                 squares.push(square);
+                
+                // Add click event for player interaction
+                square.addEventListener('click', () => handleCandyClick(i));
             }
-            
-            console.log('Board created with', squares.length, 'squares');
+            // Remove any initial matches
+            removeInitialMatches();
         }
 
-        // Find all matches
-        function findMatches() {
-            const matchedIndices = new Set();
-            
-            // Check rows for 3 in a row
-            for (let row = 0; row < width; row++) {
-                for (let col = 0; col < width - 2; col++) {
-                    const index = row * width + col;
-                    const candyType1 = squares[index].getAttribute('data-candy-type');
-                    
-                    if (!candyType1 || squares[index].classList.contains('empty')) continue;
-                    
-                    const candyType2 = squares[index + 1].getAttribute('data-candy-type');
-                    const candyType3 = squares[index + 2].getAttribute('data-candy-type');
-                    
-                    if (candyType1 === candyType2 && candyType2 === candyType3) {
-                        matchedIndices.add(index);
-                        matchedIndices.add(index + 1);
-                        matchedIndices.add(index + 2);
-                    }
-                }
-            }
-            
-            // Check columns for 3 in a column
-            for (let col = 0; col < width; col++) {
-                for (let row = 0; row < width - 2; row++) {
-                    const index = row * width + col;
-                    const candyType1 = squares[index].getAttribute('data-candy-type');
-                    
-                    if (!candyType1 || squares[index].classList.contains('empty')) continue;
-                    
-                    const candyType2 = squares[index + width].getAttribute('data-candy-type');
-                    const candyType3 = squares[index + width * 2].getAttribute('data-candy-type');
-                    
-                    if (candyType1 === candyType2 && candyType2 === candyType3) {
-                        matchedIndices.add(index);
-                        matchedIndices.add(index + width);
-                        matchedIndices.add(index + width * 2);
-                    }
-                }
-            }
-            
-            return matchedIndices;
-        }
-
-        // Clear matched candies with animation
-        function clearMatches() {
-            const matchedIndices = findMatches();
-            
-            if (matchedIndices.size > 0) {
-                // Add animation class
-                matchedIndices.forEach(index => {
-                    squares[index].classList.add('matched');
+        function removeInitialMatches() {
+            let matches = findMatches();
+            while (matches.size > 0) {
+                matches.forEach(i => {
+                    let type = Math.floor(Math.random() * candyImages.length);
+                    squares[i].setAttribute('data-type', type);
+                    squares[i].innerHTML = `<img src="${candyImages[type]}">`;
                 });
-                
-                // Update score
-                score += matchedIndices.size * 10;
-                scoreDisplay.textContent = `Score: ${score}`;
-                
-                // Clear after animation
-                setTimeout(() => {
-                    matchedIndices.forEach(index => {
-                        squares[index].className = 'candy empty';
-                        squares[index].setAttribute('data-candy-type', '');
-                        squares[index].classList.remove('matched');
-                    });
-                }, 400);
-                
-                return true;
-            }
-            return false;
-        }
-
-        // Apply gravity
-        function applyGravity() {
-            let moved = false;
-            
-            // Start from bottom, move up
-            for (let i = squares.length - 1; i >= width; i--) {
-                // If current is empty and above has candy, move it down
-                const currentIsEmpty = squares[i].classList.contains('empty');
-                const aboveHasCandy = !squares[i - width].classList.contains('empty');
-                
-                if (currentIsEmpty && aboveHasCandy) {
-                    // Move the candy down
-                    squares[i].className = 'candy';
-                    squares[i].setAttribute('data-candy-type', squares[i - width].getAttribute('data-candy-type'));
-                    
-                    // Copy the image
-                    const newImg = squares[i - width].querySelector('img').cloneNode(true);
-                    squares[i].innerHTML = '';
-                    squares[i].appendChild(newImg);
-                    
-                    // Clear the above cell
-                    squares[i - width].className = 'candy empty';
-                    squares[i - width].setAttribute('data-candy-type', '');
-                    squares[i - width].innerHTML = '';
-                    
-                    moved = true;
-                }
-            }
-            
-            return moved;
-        }
-
-        // Fill top row
-        function fillTopRow() {
-            for (let i = 0; i < width; i++) {
-                if (squares[i].classList.contains('empty')) {
-                    let randomImageIndex = Math.floor(Math.random() * candyImages.length);
-                    
-                    squares[i].className = 'candy';
-                    squares[i].setAttribute('data-candy-type', randomImageIndex.toString());
-                    
-                    const img = document.createElement('img');
-                    img.src = candyImages[randomImageIndex];
-                    img.alt = `Candy ${randomImageIndex + 1}`;
-                    
-                    squares[i].innerHTML = '';
-                    squares[i].appendChild(img);
-                }
+                matches = findMatches();
             }
         }
 
-        // Make a random move
-        function makeRandomMove() {
-            // Try a few random positions
-            for (let attempt = 0; attempt < 10; attempt++) {
-                const randomIndex = Math.floor(Math.random() * squares.length);
-                const row = Math.floor(randomIndex / width);
-                const col = randomIndex % width;
-                
-                // Try swapping with right neighbor
-                if (col < width - 1) {
-                    const swapIndex = randomIndex + 1;
-                    
-                    // Get current data
-                    const type1 = squares[randomIndex].getAttribute('data-candy-type');
-                    const type2 = squares[swapIndex].getAttribute('data-candy-type');
-                    const html1 = squares[randomIndex].innerHTML;
-                    const html2 = squares[swapIndex].innerHTML;
-                    
-                    // Swap temporarily
-                    squares[randomIndex].setAttribute('data-candy-type', type2);
-                    squares[randomIndex].innerHTML = html2;
-                    
-                    squares[swapIndex].setAttribute('data-candy-type', type1);
-                    squares[swapIndex].innerHTML = html1;
-                    
-                    // Check if it creates a match
-                    if (findMatches().size > 0) {
-                        console.log('Made a move at', randomIndex, 'swapping with', swapIndex);
-                        return true; // Keep the swap
-                    }
-                    
-                    // Swap back if no match
-                    squares[randomIndex].setAttribute('data-candy-type', type1);
-                    squares[randomIndex].innerHTML = html1;
-                    
-                    squares[swapIndex].setAttribute('data-candy-type', type2);
-                    squares[swapIndex].innerHTML = html2;
-                }
-                
-                // Try swapping with bottom neighbor
-                if (row < width - 1) {
-                    const swapIndex = randomIndex + width;
-                    
-                    // Get current data
-                    const type1 = squares[randomIndex].getAttribute('data-candy-type');
-                    const type2 = squares[swapIndex].getAttribute('data-candy-type');
-                    const html1 = squares[randomIndex].innerHTML;
-                    const html2 = squares[swapIndex].innerHTML;
-                    
-                    // Swap temporarily
-                    squares[randomIndex].setAttribute('data-candy-type', type2);
-                    squares[randomIndex].innerHTML = html2;
-                    
-                    squares[swapIndex].setAttribute('data-candy-type', type1);
-                    squares[swapIndex].innerHTML = html1;
-                    
-                    // Check if it creates a match
-                    if (findMatches().size > 0) {
-                        console.log('Made a move at', randomIndex, 'swapping with', swapIndex);
-                        return true; // Keep the swap
-                    }
-                    
-                    // Swap back if no match
-                    squares[randomIndex].setAttribute('data-candy-type', type1);
-                    squares[randomIndex].innerHTML = html1;
-                    
-                    squares[swapIndex].setAttribute('data-candy-type', type2);
-                    squares[swapIndex].innerHTML = html2;
-                }
-            }
-            
-            return false;
-        }
-
-        // One simulation step
-        async function simulationStep() {
+        function handleCandyClick(index) {
             if (!gameActive || isProcessing) return;
             
+            const clickedCandy = squares[index];
+            
+            if (clickedCandy.classList.contains('empty')) return;
+            
+            // First selection
+            if (selectedCandy === null) {
+                selectedCandy = index;
+                clickedCandy.classList.add('selected');
+                return;
+            }
+            
+            // Clicking same candy - deselect
+            if (selectedCandy === index) {
+                clickedCandy.classList.remove('selected');
+                selectedCandy = null;
+                return;
+            }
+            
+            // Check if candies are adjacent
+            const validMoves = [
+                selectedCandy - 1, // left
+                selectedCandy + 1, // right
+                selectedCandy - width, // up
+                selectedCandy + width  // down
+            ];
+            
+            // Check horizontal boundaries
+            if (selectedCandy % width === 0) validMoves.splice(validMoves.indexOf(selectedCandy - 1), 1);
+            if (selectedCandy % width === width - 1) validMoves.splice(validMoves.indexOf(selectedCandy + 1), 1);
+            
+            if (!validMoves.includes(index)) {
+                // Not adjacent - switch selection
+                squares[selectedCandy].classList.remove('selected');
+                selectedCandy = index;
+                clickedCandy.classList.add('selected');
+                return;
+            }
+            
+            // Valid swap - attempt move
+            squares[selectedCandy].classList.remove('selected');
+            attemptSwap(selectedCandy, index);
+            selectedCandy = null;
+        }
+
+        async function attemptSwap(index1, index2) {
             isProcessing = true;
             
-            try {
-                // Check for existing matches
-                let hadMatches = clearMatches();
-                
-                if (hadMatches) {
-                    // Wait for animation
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    
-                    // Apply gravity and fill
-                    let gravityMoved = false;
-                    do {
-                        gravityMoved = applyGravity();
-                        if (gravityMoved) {
-                            await new Promise(resolve => setTimeout(resolve, 100));
-                        }
-                    } while (gravityMoved);
-                    
-                    fillTopRow();
-                    await new Promise(resolve => setTimeout(resolve, 200));
-                    
-                    // Check again for cascading matches
-                    setTimeout(simulationStep, 100);
-                } else {
-                    // No matches, try to make a move
-                    const moveMade = makeRandomMove();
-                    
-                    if (moveMade) {
-                        await new Promise(resolve => setTimeout(resolve, 300));
-                        setTimeout(simulationStep, 100);
-                    } else {
-                        // Couldn't find a valid move, wait and try again
-                        setTimeout(simulationStep, 500);
+            // Swap candies
+            const type1 = squares[index1].getAttribute('data-type');
+            const type2 = squares[index2].getAttribute('data-type');
+            const html1 = squares[index1].innerHTML;
+            const html2 = squares[index2].innerHTML;
+            
+            squares[index1].setAttribute('data-type', type2);
+            squares[index1].innerHTML = html2;
+            squares[index2].setAttribute('data-type', type1);
+            squares[index2].innerHTML = html1;
+            
+            await new Promise(r => setTimeout(r, 200));
+            
+            // Check for matches
+            const matches = findMatches();
+            
+            if (matches.size === 0) {
+                // Invalid move - swap back
+                squares[index1].setAttribute('data-type', type1);
+                squares[index1].innerHTML = html1;
+                squares[index2].setAttribute('data-type', type2);
+                squares[index2].innerHTML = html2;
+                isProcessing = false;
+                return;
+            }
+            
+            // Valid move - decrease moves
+            movesLeft--;
+            movesDisplay.textContent = movesLeft;
+            
+            // Process matches
+            await processMatches();
+            
+            // Check game over conditions
+            if (movesLeft <= 0 || timeLeft <= 0) {
+                endGame();
+                return;
+            }
+            
+            isProcessing = false;
+        }
+
+        function findMatches() {
+            const matches = new Set();
+            for (let i = 0; i < 64; i++) {
+                let type = squares[i].getAttribute('data-type');
+                if (!type || squares[i].classList.contains('empty')) continue;
+
+                // Horizontal
+                if (i % 8 < 6) {
+                    if (squares[i+1].getAttribute('data-type') === type && 
+                        squares[i+2].getAttribute('data-type') === type) {
+                        [i, i+1, i+2].forEach(index => matches.add(index));
                     }
                 }
-            } catch (error) {
-                console.error('Error in simulation step:', error);
-            } finally {
-                isProcessing = false;
+                // Vertical
+                if (i < 48) {
+                    if (squares[i+8].getAttribute('data-type') === type && 
+                        squares[i+16].getAttribute('data-type') === type) {
+                        [i, i+8, i+16].forEach(index => matches.add(index));
+                    }
+                }
+            }
+            return matches;
+        }
+
+        async function processMatches() {
+            let matches = findMatches();
+            
+            while (matches.size > 0) {
+                // Animate matches
+                matches.forEach(i => squares[i].classList.add('matched'));
+                score += matches.size * 5;
+                scoreDisplay.textContent = `₦${score}`;
+                
+                await new Promise(r => setTimeout(r, 400));
+                
+                // Remove matched candies
+                matches.forEach(i => {
+                    squares[i].className = 'candy empty';
+                    squares[i].setAttribute('data-type', '');
+                    squares[i].innerHTML = '';
+                });
+
+                await new Promise(r => setTimeout(r, 100));
+
+                // Apply gravity
+                for (let col = 0; col < width; col++) {
+                    let emptySpaces = 0;
+                    for (let row = width - 1; row >= 0; row--) {
+                        const index = row * width + col;
+                        if (squares[index].classList.contains('empty')) {
+                            emptySpaces++;
+                        } else if (emptySpaces > 0) {
+                            const targetIndex = index + (emptySpaces * width);
+                            squares[targetIndex].className = 'candy';
+                            squares[targetIndex].setAttribute('data-type', squares[index].getAttribute('data-type'));
+                            squares[targetIndex].innerHTML = squares[index].innerHTML;
+                            squares[index].className = 'candy empty';
+                            squares[index].setAttribute('data-type', '');
+                            squares[index].innerHTML = '';
+                        }
+                    }
+                }
+
+                await new Promise(r => setTimeout(r, 200));
+
+                // Fill empty spaces from top
+                for (let i = 0; i < width * width; i++) {
+                    if (squares[i].classList.contains('empty')) {
+                        let type = Math.floor(Math.random() * candyImages.length);
+                        squares[i].className = 'candy';
+                        squares[i].setAttribute('data-type', type);
+                        squares[i].innerHTML = `<img src="${candyImages[type]}">`;
+                    }
+                }
+
+                await new Promise(r => setTimeout(r, 300));
+                
+                // Check for new matches
+                matches = findMatches();
             }
         }
 
-        // Start the game
         function startGame() {
-            console.log('Starting game...');
             if (gameActive) return;
-            
-            startBtn.disabled = true;
             gameActive = true;
+            startBtn.disabled = true;
             score = 0;
+            movesLeft = 30;
             timeLeft = 60;
-            scoreDisplay.textContent = `Score: 0`;
-            timerDisplay.textContent = `Time: 60s`;
+            selectedCandy = null;
+            scoreDisplay.textContent = `₦0`;
+            movesDisplay.textContent = movesLeft;
+            timerDisplay.textContent = `${timeLeft}s`;
             
             createBoard();
             
-            // Start timer
             timerInterval = setInterval(() => {
                 timeLeft--;
-                timerDisplay.textContent = `Time: ${timeLeft}s`;
+                timerDisplay.textContent = `${timeLeft}s`;
                 if (timeLeft <= 0) {
                     endGame();
                 }
             }, 1000);
-            
-            // Start simulation after a short delay
-            setTimeout(() => {
-                simulationStep();
-            }, 500);
-            
-            console.log('Game started!');
         }
 
-        // End the game
         function endGame() {
-            console.log('Ending game...');
-            gameActive = false;
             clearInterval(timerInterval);
+            gameActive = false;
             startBtn.disabled = false;
+            isProcessing = false;
+            
+            let message = `Game Over!\nYou earned ₦${score}\n`;
+            if (movesLeft <= 0) {
+                message += "No moves left!";
+            } else {
+                message += "Time's up!";
+            }
+            
             setTimeout(() => {
-                alert(`Simulation Over! Final Score: ${score}`);
-            }, 500);
+                alert(message);
+            }, 300);
         }
 
-        // Event listener
-        startBtn.addEventListener('click', startGame);
-
-        // Initialize board on load
-        window.addEventListener('load', () => {
-            console.log('Page loaded, creating initial board...');
-            createBoard();
-        });
+        startBtn.onclick = startGame;
+        window.onload = createBoard;
     </script>
 </body>
 </html>
