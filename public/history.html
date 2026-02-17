@@ -3,265 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaction History - CASHX</title>
+    <title>Transaction History | CASHX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --text-white: #ffffff;
+            --text-gray: #888888;
+            --accent-green: #00ff88;
+            --accent-red: #ff4d4d;
+            --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        :root {
-            --primary-bg: #0f172a;
-            --card-bg: #1e293b;
-            --text-light: #f8fafc;
-            --text-gray: #94a3b8;
-            --accent-green: #22c55e;
-            --accent-red: #ef4444;
-            --accent-blue: #3b82f6;
+            font-family: 'Montserrat', sans-serif;
         }
 
         body {
-            background-color: var(--primary-bg);
-            color: var(--text-light);
+            background-color: var(--bg-black);
+            color: var(--text-white);
             min-height: 100vh;
-            padding-bottom: 80px;
-        }
-
-        .header {
-            background-color: var(--card-bg);
-            padding: 1rem;
             display: flex;
-            align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .back-btn {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 1.2rem;
-            margin-right: 1rem;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
         }
 
-        .page-title {
-            font-size: 1.2rem;
+        /* --- Container --- */
+        .phone-wrapper {
+            width: 90%; 
+            max-width: 420px;
+            background: var(--bg-black);
+            min-height: 100vh;
+            padding-bottom: 100px;
+            position: relative;
+        }
+
+        /* --- Header --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .header-logo {
+            width: 45px;
+            height: auto;
+            margin-left: 10px;
+        }
+
+        .nav-trigger {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--primary-gold);
+            cursor: pointer;
+        }
+
+        /* --- Sidebar (FIXED BRIGHTNESS) --- */
+        .sidebar {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: #111111;
+            z-index: 2000;
+            transition: 0.4s ease;
+            border-right: 2px solid var(--primary-gold);
+            padding: 25px;
+        }
+
+        .sidebar.active { left: 0; }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-gold);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #222;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            color: #ffffff;
+            text-decoration: none;
+            border-bottom: 1px solid #1a1a1a;
             font-weight: 600;
         }
 
-        .container {
-            padding: 1rem;
-            max-width: 800px;
-            margin: 0 auto;
+        .sidebar-item i { color: var(--primary-gold); margin-right: 15px; width: 25px; text-align: center; }
+
+        /* --- Profile Image Circle --- */
+        .profile-img-container {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-gold);
+            overflow: hidden;
+            background: #111;
+            cursor: pointer;
         }
 
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+        .profile-img-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- History List --- */
+        .section-title {
+            color: var(--primary-gold);
+            margin: 10px 0 20px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
         }
 
         .history-item {
             background-color: var(--card-bg);
-            padding: 1rem;
+            padding: 15px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            margin-bottom: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
         }
 
         .history-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            margin-right: 1rem;
+            font-size: 1rem;
+            margin-right: 12px;
+            background: #000;
+            border: 1px solid #222;
         }
 
-        .icon-credit {
-            background-color: rgba(34, 197, 94, 0.1);
-            color: var(--accent-green);
-        }
+        .icon-credit { color: var(--accent-green); border-color: rgba(0, 255, 136, 0.2); }
+        .icon-debit { color: var(--accent-red); border-color: rgba(255, 77, 77, 0.2); }
 
-        .icon-debit {
-            background-color: rgba(239, 68, 68, 0.1);
-            color: var(--accent-red);
-        }
+        .history-title { font-weight: 600; font-size: 0.9rem; color: #fff; margin-bottom: 2px; }
+        .history-date { font-size: 0.75rem; color: var(--text-gray); }
 
-        .history-details {
-            flex: 1;
-        }
+        .history-amount { font-weight: 700; font-size: 1rem; }
+        .amount-credit { color: var(--accent-green); }
+        .amount-debit { color: var(--accent-red); }
 
-        .history-title {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .history-date {
-            font-size: 0.8rem;
-            color: var(--text-gray);
-        }
-
-        .history-amount {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .amount-credit {
-            color: var(--accent-green);
-        }
-
-        .amount-debit {
-            color: var(--accent-red);
-        }
-        
-        /* Bottom Navigation */
+        /* --- Bottom Nav --- */
         .bottom-nav {
             position: fixed;
             bottom: 0;
-            left: 0;
-            width: 100%;
-            background: var(--card-bg);
+            width: 90%;
+            max-width: 420px;
+            background: #050505;
             display: flex;
             justify-content: space-around;
-            padding: 15px 10px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            z-index: 1000;
+            padding: 15px 0;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            z-index: 900;
         }
 
-        .nav-btn {
-            color: var(--text-gray);
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 0.75rem;
-            gap: 5px;
-        }
+        .nav-btn { text-decoration: none; color: #444; font-size: 0.65rem; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .nav-btn.active { color: var(--primary-gold); }
+        .nav-btn i { font-size: 1.3rem; }
 
-        .nav-btn.active {
-            color: var(--accent-blue);
-        }
-
-        .nav-btn i {
-            font-size: 1.2rem;
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1500;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <a href="dashboard.html" class="back-btn">
-            <i class="fas fa-arrow-left"></i>
-        </a>
-        <div class="page-title">Transaction History</div>
-    </div>
+    <div class="overlay" id="overlay"></div>
 
-    <div class="container">
-        <div class="history-list" id="historyList">
-            <!-- Items will be populated by JS -->
-            <div style="text-align: center; color: var(--text-gray); margin-top: 2rem;">
-                <i class="fas fa-spinner fa-spin"></i> Loading records...
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3 style="letter-spacing: 2px;">MENU</h3>
+            <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
+        </div> 
+           <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a> 
+           <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a> 
+           <a href="ads.html" class="sidebar-item"><i class="fas fa-tv"></i> ADs</a> 
+           <a href="loans.html" class="sidebar-item"><i class="fas fa-university"></i> Loans/scholarship</a>
+           <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a> 
+           <a href="coupon.html" class="sidebar-item"><i class="fas fa-key"></i> Coupon</a>
+           <a href="#" class="sidebar-item" style="color: var(--accent-red);"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+ <div class="phone-wrapper"> <header class="header">
+            <div class="nav-trigger" id="hamburgerBtn">
+                <i class="fas fa-bars fa-lg"></i>
+                <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo" class="header-logo">
+            </div>
+            <div class="header-icons">
+                 <div class="profile-img-container" onclick="location.href='profile.html'">
+                    <img id="headerAvatar" src="https://via.placeholder.com/150/111111/D4AF37?text=U" alt="User">
+                </div>
+            </div>
+        </header>
+
+        <div id="main-content">
+            <h4 class="section-title">Activity Logs</h4>
+            <div class="history-list" id="historyList">
+                <div style="text-align: center; color: var(--primary-gold); margin-top: 2rem;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
             </div>
         </div>
+
+        <nav class="bottom-nav">
+            <a href="dashboard.html" class="nav-btn"><i class="fas fa-house"></i>Home</a>
+            <a href="articles.html" class="nav-btn"><i class="fas fa-newspaper"></i>News</a>
+            <a href="history.html" class="nav-btn active"><i class="fas fa-history"></i>History</a>
+            <a href="profile.html" class="nav-btn"><i class="fas fa-user"></i>Profile</a>
+        </nav>
     </div>
 
-    <nav class="bottom-nav">
-        <a href="dashboard.html" class="nav-btn">
-            <i class="fas fa-house"></i>
-            Home
-        </a>
-        <a href="articles.html" class="nav-btn">
-            <i class="fas fa-newspaper"></i>
-            Article
-        </a>
-        <a href="history.html" class="nav-btn active">
-            <i class="fas fa-history"></i>
-            History
-        </a>
-        <a href="profile.html" class="nav-btn">
-            <i class="fas fa-user"></i>
-            Profile
-        </a>
-    </nav>
-
-    <script src="js/auth-guard.js"></script>
     <script>
+        // UI Controls
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
+        }
+
+        hamburgerBtn.onclick = toggleSidebar;
+        closeSidebarBtn.onclick = toggleSidebar;
+        overlay.onclick = toggleSidebar;
+
+        // Avatar Persistent Loader
+        const savedAvatar = localStorage.getItem('userAvatar');
+        if(savedAvatar) document.getElementById('headerAvatar').src = savedAvatar;
+
+        // History Logic
         document.addEventListener('DOMContentLoaded', () => {
             const historyList = document.getElementById('historyList');
-            const userStr = localStorage.getItem('user');
             
-            if (!userStr) return;
+            // Simulation logic
+            const records = [
+                { title: 'Referral Bonus', type: 'credit', icon: 'fa-users', amount: 25.00, date: 'Feb 16, 2026' },
+                { title: 'Withdrawal', type: 'debit', icon: 'fa-wallet', amount: 50.00, date: 'Feb 14, 2026' },
+                { title: 'Task Earnings', type: 'credit', icon: 'fa-check-circle', amount: 12.50, date: 'Feb 12, 2026' },
+                { title: 'Daily Login', type: 'credit', icon: 'fa-calendar-day', amount: 1.00, date: 'Feb 12, 2026' }
+            ];
             
-            const user = JSON.parse(userStr);
-            const isNigeria = user.country === 'NG';
-            const locale = isNigeria ? 'en-NG' : 'en-US';
-            const currency = isNigeria ? 'NGN' : 'USD';
-            const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency: currency });
-
-            // Mock Data Generator based on user balance
-            // In a real app, fetch('/api/auth/history')
-            
-            const generateMockHistory = () => {
-                const types = [
-                    { title: 'Referral Bonus', type: 'credit', icon: 'fa-users' },
-                    { title: 'Task Earnings', type: 'credit', icon: 'fa-check-circle' },
-                    { title: 'Daily Login', type: 'credit', icon: 'fa-calendar-check' },
-                    { title: 'Withdrawal', type: 'debit', icon: 'fa-wallet' }
-                ];
-                
-                const history = [];
-                const now = new Date();
-                
-                for (let i = 0; i < 10; i++) {
-                    const item = types[Math.floor(Math.random() * types.length)];
-                    // If balance is 0, mostly show small earnings or old withdrawals
-                    const amount = (Math.random() * (isNigeria ? 5000 : 50)).toFixed(2);
-                    
-                    const date = new Date(now);
-                    date.setDate(date.getDate() - i * 2); // Spread out dates
-                    
-                    history.push({
-                        ...item,
-                        amount: parseFloat(amount),
-                        date: date
-                    });
-                }
-                return history;
-            };
-
-            const records = generateMockHistory();
-            
-            historyList.innerHTML = records.map(record => `
-                <div class="history-item">
-                    <div style="display: flex; align-items: center;">
-                        <div class="history-icon ${record.type === 'credit' ? 'icon-credit' : 'icon-debit'}">
-                            <i class="fas ${record.icon}"></i>
+            setTimeout(() => {
+                historyList.innerHTML = records.map(record => `
+                    <div class="history-item">
+                        <div style="display: flex; align-items: center;">
+                            <div class="history-icon ${record.type === 'credit' ? 'icon-credit' : 'icon-debit'}">
+                                <i class="fas ${record.icon}"></i>
+                            </div>
+                            <div class="history-details">
+                                <div class="history-title">${record.title}</div>
+                                <div class="history-date">${record.date}</div>
+                            </div>
                         </div>
-                        <div class="history-details">
-                            <div class="history-title">${record.title}</div>
-                            <div class="history-date">${record.date.toLocaleDateString()} ${record.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                        <div class="history-amount ${record.type === 'credit' ? 'amount-credit' : 'amount-debit'}">
+                            ${record.type === 'credit' ? '+' : '-'}$${record.amount.toFixed(2)}
                         </div>
                     </div>
-                    <div class="history-amount ${record.type === 'credit' ? 'amount-credit' : 'amount-debit'}">
-                        ${record.type === 'credit' ? '+' : '-'}${formatter.format(record.amount)}
-                    </div>
-                </div>
-            `).join('');
+                `).join('');
+            }, 800);
         });
     </script>
 </body>
