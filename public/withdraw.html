@@ -6,296 +6,375 @@
     <title>Withdraw Funds | CASHX</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/dashboard.css">
-    <script src="js/auth-guard.js"></script>
+    
     <style>
-        /* Withdraw Page Specific Overrides */
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --text-white: #ffffff;
+            --text-gray: #888888;
+            --accent-green: #00ff88;
+            --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* --- Container Responsiveness --- */
+        .phone-wrapper {
+            width: 90%; 
+            max-width: 420px;
+            background: var(--bg-black);
+            min-height: 100vh;
+            padding-bottom: 100px;
+            position: relative;
+        }
+
+        /* --- Header --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .header-logo {
+            width: 45px;
+            height: auto;
+            margin-left: 10px;
+        }
+
+        .nav-trigger {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--primary-gold);
+            cursor: pointer;
+        }
+
+        /* --- Sidebar (Solid & Bright Menu) --- */
+        .sidebar {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: #111111;
+            z-index: 2000;
+            transition: 0.4s ease;
+            border-right: 2px solid var(--primary-gold);
+            padding: 25px;
+        }
+
+        .sidebar.active { left: 0; }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-gold);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #222;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            color: #ffffff;
+            text-decoration: none;
+            border-bottom: 1px solid #1a1a1a;
+            font-weight: 600;
+        }
+
+        .sidebar-item i { color: var(--primary-gold); margin-right: 15px; width: 25px; text-align: center; }
+        .sidebar-item.active { background: rgba(212, 175, 55, 0.1); color: var(--primary-gold); }
+
+        /* --- Profile Circle --- */
+        .profile-img-container {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-gold);
+            overflow: hidden;
+            background: #111;
+            cursor: pointer;
+        }
+        .profile-img-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- Withdraw Content --- */
+        .section-title {
+            color: var(--primary-gold);
+            margin: 25px 0 12px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
         .method-card {
-            border: 1px solid rgba(255,255,255,0.1);
-            background: var(--card-dark);
-            color: white;
+            background: var(--card-bg);
+            border: 1px solid #222;
+            color: #666;
             padding: 15px;
-            border-radius: 15px;
+            border-radius: 12px;
             text-align: center;
             cursor: pointer;
             transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
         .method-card.active {
-            border-color: var(--accent-green);
-            background: rgba(163, 230, 53, 0.1);
+            border-color: var(--primary-gold);
+            background: rgba(212, 175, 55, 0.05);
+            color: var(--primary-gold);
         }
-        .method-card i {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: var(--text-gray);
-        }
-        .method-card.active i {
-            color: var(--accent-green);
-        }
-        
-        .wallet-select {
-            display: flex;
+        .method-card i { font-size: 1.4rem; margin-bottom: 8px; }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             margin-bottom: 20px;
         }
+
+        .wallet-select { display: flex; gap: 10px; margin-bottom: 20px; }
         .wallet-option {
             flex: 1;
-            background: var(--card-dark);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 15px;
+            background: var(--card-bg);
+            border: 1px solid #222;
+            border-radius: 12px;
             padding: 15px;
             cursor: pointer;
             position: relative;
-            transition: 0.3s;
         }
-        .wallet-option.active {
-            border-color: var(--accent-green);
-            background: rgba(163, 230, 53, 0.05);
-        }
-        .wallet-label {
-            display: block;
-            font-size: 0.8rem;
-            color: var(--text-gray);
-            margin-bottom: 5px;
-        }
-        .wallet-amount {
-            display: block;
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: white;
-        }
-        
+        .wallet-option.active { border-color: var(--accent-green); background: rgba(0, 255, 136, 0.05); }
+        .wallet-label { display: block; font-size: 0.7rem; color: var(--text-gray); margin-bottom: 4px; text-transform: uppercase; }
+        .wallet-amount { display: block; font-size: 1rem; font-weight: 700; color: white; }
+
         .amount-input-group {
-            background: var(--card-dark);
-            border-radius: 15px;
+            background: var(--card-bg);
+            border-radius: 12px;
             padding: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid #222;
         }
-        .currency-symbol {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-right: 10px;
-            color: var(--accent-green);
-        }
-        .amount-input {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-            width: 100%;
-            outline: none;
-        }
-        .amount-input::placeholder {
-            color: rgba(255,255,255,0.2);
-        }
-        
+        .currency-symbol { font-size: 1.5rem; font-weight: 700; margin-right: 12px; color: var(--primary-gold); }
+        .amount-input { background: transparent; border: none; color: white; font-size: 1.6rem; font-weight: 700; width: 100%; outline: none; }
+
         .withdraw-btn {
-            background: var(--accent-green);
+            background: var(--gradient-gold);
             color: black;
             width: 100%;
-            padding: 15px;
-            border-radius: 15px;
+            padding: 18px;
+            border-radius: 12px;
             border: none;
-            font-weight: bold;
-            font-size: 1rem;
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: 0.2s;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(170, 119, 28, 0.3);
         }
-        .withdraw-btn:active {
-            transform: scale(0.98);
+
+        /* Modals */
+        .modal-box {
+            background: #0a0a0a;
+            border: 1px solid var(--primary-gold);
+            border-radius: 20px;
+            padding: 25px;
+            width: 85%;
+            max-width: 350px;
+            text-align: center;
         }
-        
-        /* Modal overrides */
-        .modal {
-            background: var(--card-dark);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.1);
+        .confirm-details { background: #000; border: 1px solid #1a1a1a; border-radius: 10px; padding: 15px; margin: 20px 0; }
+        .confirm-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 90%;
+            max-width: 420px;
+            background: #050505;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            z-index: 900;
         }
-        .confirm-details {
-            background: rgba(255,255,255,0.05);
-        }
-        .confirm-details strong {
-            color: var(--text-gray);
-        }
+        .nav-btn { text-decoration: none; color: #444; font-size: 0.65rem; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .nav-btn.active { color: var(--primary-gold); }
+        .nav-btn i { font-size: 1.3rem; }
+
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1500; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
-    <div class="overlay" id="overlay"></div>
-    
-    <!-- Sidebar -->
+
+    <div class="overlay" id="mainOverlay" onclick="closeSidebar()"></div>
+
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3>Menu</h3>
-            <i class="fas fa-times" id="closeSidebarBtn" style="cursor:pointer"></i>
+            <h3 style="letter-spacing: 2px;">MENU</h3>
+            <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
         </div>
-        <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
-        <a href="withdraw.html" class="sidebar-item active" style="color:white; background:rgba(255,255,255,0.05)"><i class="fas fa-share-nodes"></i> Withdraw</a>
-        <a href="ads.html" class="sidebar-item"><i class="fas fa-broadcast-tower"></i> ADs</a>
-        <a href="coupon.html" class="sidebar-item"><i class="fas fa-lock"></i> coupon</a>
-        <a href="#" id="logoutBtn" class="sidebar-item" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>
+        <a href="loans.html" class="sidebar-item"><i class="fas fa-university"></i> Loans/scholarship</a>
+        <a href="ads.html" class="sidebar-item"><i class="fas fa-tv"></i> ADs</a>
+        <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a>
+        <a href="coupon.html" class="sidebar-item"><i class="fas fa-key"></i> Coupon</a>
+        <a href="#" class="sidebar-item" style="color: var(--accent-red);"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
     <div class="phone-wrapper">
         <header class="header">
             <div class="nav-trigger" id="hamburgerBtn">
                 <i class="fas fa-bars fa-lg"></i>
-                <span style="font-size: 1.2rem; font-weight: 700; margin-left: 10px;">Withdraw</span>
+                <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo" class="header-logo">
             </div>
             <div class="header-icons">
-                 <a href="dashboard.html" class="avatar-sm"><i class="fas fa-arrow-left"></i></a>
+                 <div class="profile-img-container" onclick="location.href='profile.html'">
+                    <img id="headerAvatar" src="https://via.placeholder.com/150/111111/D4AF37?text=U" alt="User">
+                </div>
             </div>
         </header>
 
         <div id="main-content">
-            <!-- Payment Methods -->
-            <h4 style="margin-bottom:15px; color: var(--text-gray);">Payment Method</h4>
-            <div class="action-grid" style="grid-template-columns: repeat(3, 1fr);">
+            <h4 class="section-title">Withdrawal Method</h4>
+            <div class="action-grid">
                 <div class="method-card active" onclick="setMethod(this, 'Direct Bank')">
                     <i class="fas fa-university"></i>
-                    <div>Bank</div>
+                    <div style="font-size: 0.7rem; font-weight: 700;">BANK</div>
                 </div>
                 <div class="method-card" onclick="setMethod(this, 'USDT')">
                     <i class="fas fa-coins"></i>
-                    <div>USDT</div>
+                    <div style="font-size: 0.7rem; font-weight: 700;">USDT</div>
                 </div>
                 <div class="method-card" onclick="setMethod(this, 'PayPal')">
                     <i class="fab fa-paypal"></i>
-                    <div>PayPal</div>
+                    <div style="font-size: 0.7rem; font-weight: 700;">PAYPAL</div>
                 </div>
             </div>
             
-            <!-- Wallet Selection -->
-            <h4 style="margin:25px 0 15px; color: var(--text-gray);">Select Wallet</h4>
+            <h4 class="section-title">Select Wallet</h4>
             <div class="wallet-select">
                 <div class="wallet-option active" onclick="selectWallet('Commission', this)">
                     <span class="wallet-label">Commission</span>
-                    <span class="wallet-amount" id="commissionBalance">...</span>
-                    <i class="fas fa-check-circle" style="position:absolute; top:10px; right:10px; color:var(--accent-green); display:block"></i>
+                    <span class="wallet-amount" id="commissionBalance">₦0.00</span>
+                    <i class="fas fa-check-circle" style="position:absolute; top:8px; right:8px; color:var(--accent-green); font-size: 0.8rem;"></i>
                 </div>
                 <div class="wallet-option" onclick="selectWallet('Tasks earnings', this)">
                     <span class="wallet-label">Tasks</span>
-                    <span class="wallet-amount" id="tasksBalance">...</span>
-                    <i class="fas fa-check-circle" style="position:absolute; top:10px; right:10px; color:var(--accent-green); display:none"></i>
+                    <span class="wallet-amount" id="tasksBalance">₦0.00</span>
+                    <i class="fas fa-check-circle" style="position:absolute; top:8px; right:8px; color:var(--accent-green); display:none; font-size: 0.8rem;"></i>
                 </div>
             </div>
-            <!-- Hidden input for wallet -->
             <input type="hidden" id="selectedWallet" value="Commission">
 
-            <!-- Amount -->
-            <h4 style="margin-bottom:15px; color: var(--text-gray);">Amount</h4>
+            <h4 class="section-title">Amount to Withdraw</h4>
             <div class="amount-input-group">
                 <span class="currency-symbol" id="currencySymbol">₦</span>
                 <input type="number" id="amtInput" class="amount-input" placeholder="0.00">
             </div>
-            <p id="minWithdrawalDisplay" style="color:var(--text-gray); font-size:0.8rem; margin-top:-10px; margin-bottom:25px; text-align: right;">Minimum: ₦1,000.00</p>
+            <p id="minWithdrawalDisplay" style="color:var(--text-gray); font-size:0.75rem; text-align: right; font-weight: 600;">Minimum: ₦1,000.00</p>
 
-            <button class="withdraw-btn" onclick="openConfirm()">Withdraw Funds</button>
+            <button class="withdraw-btn" onclick="openConfirm()">Request Payout</button>
             
-            <div style="margin-top:30px">
-                <h4 style="margin-bottom:15px; color: var(--text-gray);">History</h4>
+            <div style="margin-top:35px">
+                <h4 class="section-title">Recent Payouts</h4>
                 <div id="historyList">
-                    <p style="color:var(--text-gray); text-align:center; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 10px;">No recent history</p>
+                    <p style="color:#444; text-align:center; padding: 30px; background: #050505; border-radius: 15px; font-size: 0.8rem; border: 1px dashed #1a1a1a;">No transaction history found.</p>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Confirm Modal -->
-    <div id="confirmModal" class="overlay notification-modal">
-        <div class="notification-content" style="padding:20px; height:auto; width:85%">
-            <h3 style="margin-bottom:20px; text-align:center">Confirm Withdrawal</h3>
-            <div class="confirm-details" style="border-radius:10px; padding:15px; margin-bottom:20px">
-                <p style="display:flex; justify-content:space-between; margin-bottom:10px">
-                    <strong style="color:var(--text-gray)">Method:</strong> <span id="dispMethod">Bank</span>
-                </p>
-                <p style="display:flex; justify-content:space-between; margin-bottom:10px">
-                    <strong style="color:var(--text-gray)">Wallet:</strong> <span id="dispWallet">Commission</span>
-                </p>
-                <p style="display:flex; justify-content:space-between; margin-bottom:10px">
-                    <strong style="color:var(--text-gray)">Amount:</strong> <span id="dispAmt">0.00</span>
-                </p>
-                <p style="display:flex; justify-content:space-between; margin-bottom:10px">
-                    <strong style="color:var(--text-gray)">Fee:</strong> <span id="dispFee">0.00</span>
-                </p>
-                 <div style="border-top:1px solid rgba(255,255,255,0.1); margin:10px 0"></div>
-                <p style="display:flex; justify-content:space-between; font-weight:bold; font-size:1.1rem">
-                    <span>Total:</span> <span id="dispTotal" style="color:var(--accent-green)">0.00</span>
-                </p>
+    <div id="confirmModal" class="overlay">
+        <div class="modal-box">
+            <h3 style="color:var(--primary-gold); margin-bottom:10px;">Verify Transaction</h3>
+            <p style="font-size: 0.8rem; color: var(--text-gray);">Please review your request</p>
+            <div class="confirm-details">
+                <div class="confirm-row"><strong>Method:</strong> <span id="dispMethod">Bank</span></div>
+                <div class="confirm-row"><strong>Wallet:</strong> <span id="dispWallet">Commission</span></div>
+                <div class="confirm-row"><strong>Amount:</strong> <span id="dispAmt">0.00</span></div>
+                <div class="confirm-row"><strong>Fee (2%):</strong> <span id="dispFee">0.00</span></div>
+                <div style="border-top:1px solid #222; margin:10px 0;"></div>
+                <div class="confirm-row" style="font-weight:bold; font-size:1rem; color:var(--accent-green);">
+                    <span>Net Total:</span> <span id="dispTotal">0.00</span>
+                </div>
             </div>
             <div style="display:flex; gap:10px">
-                <button style="flex:1; padding:12px; border:none; border-radius:10px; background:rgba(255,255,255,0.1); color:white; cursor:pointer" onclick="closeModals()">Cancel</button>
-                <button style="flex:1; padding:12px; border:none; border-radius:10px; background:var(--accent-green); color:black; font-weight:bold; cursor:pointer" onclick="showReceipt()">Confirm</button>
+                <button style="flex:1; padding:12px; border-radius:10px; background:#1a1a1a; color:white; border:none; cursor:pointer; font-weight:700;" onclick="closeModals()">Cancel</button>
+                <button style="flex:1; padding:12px; border-radius:10px; background:var(--gradient-gold); color:black; border:none; cursor:pointer; font-weight:800;" onclick="showReceipt()">Confirm</button>
             </div>
         </div>
     </div>
     
-    <!-- Receipt Modal -->
-    <div id="receiptModal" class="overlay notification-modal">
-        <div class="notification-content" style="padding:20px; height:auto; text-align:center; width:85%">
-            <div style="width:60px; height:60px; background:rgba(163, 230, 53, 0.2); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px">
-                <i class="fas fa-check" style="font-size:30px; color:var(--accent-green)"></i>
+    <div id="receiptModal" class="overlay">
+        <div class="modal-box">
+            <div style="width:50px; height:50px; background:rgba(0, 255, 136, 0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 15px">
+                <i class="fas fa-paper-plane" style="font-size:20px; color:var(--accent-green)"></i>
             </div>
-            <h3>Withdrawal Submitted</h3>
-            <p style="color:var(--text-gray); margin-bottom:20px">Your request is being processed.</p>
+            <h3 style="color:white;">Request Sent</h3>
+            <p style="color:var(--text-gray); font-size:0.8rem; margin: 10px 0 20px;">Your withdrawal is being processed.</p>
             
-            <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px; margin-bottom:20px; text-align:left">
-                <p style="margin-bottom:10px"><strong style="color:var(--text-gray)">ID:</strong> <span id="transId" style="float:right">...</span></p>
-                <p style="margin-bottom:10px"><strong style="color:var(--text-gray)">Amount:</strong> <span id="recAmt" style="float:right">...</span></p>
-                <p><strong style="color:var(--text-gray)">Date:</strong> <span id="transDate" style="float:right">...</span></p>
+            <div style="background:#000; padding:15px; border-radius:10px; margin-bottom:20px; text-align:left; border: 1px solid #1a1a1a;">
+                <p style="margin-bottom:8px; font-size: 0.8rem;"><strong style="color:var(--text-gray)">Ref:</strong> <span id="transId" style="float:right; color:var(--primary-gold)">...</span></p>
+                <p style="font-size: 0.8rem;"><strong style="color:var(--text-gray)">Amount:</strong> <span id="recAmt" style="float:right">...</span></p>
             </div>
             
-            <button style="width:100%; padding:15px; background:var(--card-dark); border:1px solid rgba(255,255,255,0.1); color:white; border-radius:10px; cursor:pointer" onclick="finishTransaction()">Close</button>
+            <button style="width:100%; padding:15px; background:#111; border:1px solid #222; color:white; border-radius:10px; cursor:pointer; font-weight:700;" onclick="finishTransaction()">Done</button>
         </div>
     </div>
 
-    <!-- Bottom Nav -->
     <nav class="bottom-nav">
-        <a href="dashboard.html" class="nav-btn">
-            <i class="fas fa-house"></i>
-            Home
-        </a>
-        <a href="articles.html" class="nav-btn">
-            <i class="fas fa-newspaper"></i>
-            Article
-        </a>
-        <a href="history.html" class="nav-btn">
-            <i class="fas fa-history"></i>
-            History
-        </a>
-        <a href="profile.html" class="nav-btn">
-            <i class="fas fa-user"></i>
-            Profile
-        </a>
+        <a href="dashboard.html" class="nav-btn"><i class="fas fa-house"></i>Home</a>
+        <a href="articles.html" class="nav-btn"><i class="fas fa-newspaper"></i>News</a>
+        <a href="history.html" class="nav-btn"><i class="fas fa-history"></i>History</a>
+        <a href="profile.html" class="nav-btn"><i class="fas fa-user"></i>Profile</a>
     </nav>
 
-    <!-- Scripts -->
     <script>
-        // Sidebar Toggle Logic
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        // Sidebar Logic
         const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+        const overlay = document.getElementById('mainOverlay');
+        
+        document.getElementById('hamburgerBtn').onclick = () => {
+            sidebar.classList.add('active');
+            overlay.style.display = 'block';
+        };
 
-        function toggleSidebar() {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            overlay.style.display = 'none';
+            closeModals();
         }
 
-        if(hamburgerBtn) hamburgerBtn.addEventListener('click', toggleSidebar);
-        if(closeSidebarBtn) closeSidebarBtn.addEventListener('click', toggleSidebar);
-        if(overlay) overlay.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-            document.querySelectorAll('.overlay').forEach(m => m.style.display = 'none');
-        });
+        document.getElementById('closeSidebarBtn').onclick = closeSidebar;
+
+        // Avatar Persistent Loader
+        const savedAvatar = localStorage.getItem('userAvatar');
+        if(savedAvatar) document.getElementById('headerAvatar').src = savedAvatar;
 
         // Wallet Selection Logic
         function selectWallet(walletName, element) {
@@ -308,118 +387,29 @@
             document.getElementById('selectedWallet').value = walletName;
         }
 
-        // Ported logic
         let currentMethod = "Direct Bank";
-        let exchangeRate = 0;
-        let userBalances = {
-            main: 0,
-            task: 0
-        };
         
-        document.addEventListener('DOMContentLoaded', async function() {
-            // Fetch User Data
-            try {
-                const token = localStorage.getItem('token');
-                if (!token) window.location.href = 'login.html';
-
-                const userRes = await fetch('/api/auth/withdraw-info', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                
-                if (userRes.ok) {
-                    const user = await userRes.json();
-                    userBalances.main = user.balance || 0;
-                    userBalances.task = user.taskBalance || 0;
-                    updateBalanceDisplay();
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-
-            // Fetch Exchange Rate
-            try {
-                const rateRes = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-                const rateData = await rateRes.json();
-                exchangeRate = rateData.rates.NGN;
-            } catch (error) {
-                exchangeRate = 1500; // Fallback
-            }
-            
-            // Set Date
-             document.getElementById('transDate').textContent = new Date().toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-        });
-
         function setMethod(el, val) {
             document.querySelectorAll('.method-card').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
             currentMethod = val;
-            updateBalanceDisplay();
-        }
-
-        function updateBalanceDisplay() {
-            const isNaira = currentMethod === 'Direct Bank';
-            const symbol = isNaira ? '₦' : '$';
-            
-            document.getElementById('currencySymbol').textContent = symbol;
-            
-            const commissionEl = document.getElementById('commissionBalance');
-            const tasksEl = document.getElementById('tasksBalance');
-            
-            if (isNaira) {
-                commissionEl.textContent = formatCurrency(userBalances.main, 'NGN');
-                tasksEl.textContent = formatCurrency(userBalances.task, 'NGN');
-                document.getElementById('minWithdrawalDisplay').textContent = 'Minimum: ₦1,000.00';
-            } else {
-                const mainUSD = userBalances.main / exchangeRate;
-                const taskUSD = userBalances.task / exchangeRate;
-                
-                commissionEl.textContent = formatCurrency(mainUSD, 'USD');
-                tasksEl.textContent = formatCurrency(taskUSD, 'USD');
-                
-                const minUSD = 1000 / exchangeRate;
-                document.getElementById('minWithdrawalDisplay').textContent = `Minimum: ${formatCurrency(minUSD, 'USD')}`;
-            }
-        }
-
-        function formatCurrency(amount, currency) {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: currency,
-                minimumFractionDigits: 2
-            }).format(amount);
+            document.getElementById('currencySymbol').textContent = (val === 'Direct Bank') ? '₦' : '$';
+            document.getElementById('minWithdrawalDisplay').textContent = (val === 'Direct Bank') ? 'Minimum: ₦1,000.00' : 'Minimum: $10.00';
         }
 
         function openConfirm() {
             const amt = parseFloat(document.getElementById('amtInput').value);
-            const wallet = document.getElementById('selectedWallet').value;
-            const isNaira = currentMethod === 'Direct Bank';
+            if(!amt || amt <= 0) return alert("Enter a valid amount");
             
-            if(!amt || amt <= 0) {
-                alert("Please enter a valid amount");
-                return;
-            }
-            
-            const minAmt = isNaira ? 1000 : (1000 / exchangeRate);
-            if(amt < minAmt) {
-                alert(`Minimum withdrawal amount is ${isNaira ? '₦1,000.00' : '$' + minAmt.toFixed(2)}`);
-                return;
-            }
-
             document.getElementById('dispMethod').innerText = currentMethod;
-            document.getElementById('dispWallet').innerText = wallet;
+            document.getElementById('dispWallet').innerText = document.getElementById('selectedWallet').value;
             
-            const symbol = isNaira ? '₦' : '$';
-            document.getElementById('dispAmt').innerText = symbol + amt.toLocaleString('en-US', {minimumFractionDigits: 2});
+            const symbol = (currentMethod === 'Direct Bank') ? '₦' : '$';
+            document.getElementById('dispAmt').innerText = symbol + amt.toLocaleString();
             
-            const fee = amt * 0.02; 
-            const total = amt - fee;
-            
-            document.getElementById('dispFee').innerText = symbol + fee.toLocaleString('en-US', {minimumFractionDigits: 2});
-            document.getElementById('dispTotal').innerText = symbol + total.toLocaleString('en-US', {minimumFractionDigits: 2});
+            const fee = amt * 0.02;
+            document.getElementById('dispFee').innerText = symbol + fee.toLocaleString();
+            document.getElementById('dispTotal').innerText = symbol + (amt - fee).toLocaleString();
             
             document.getElementById('confirmModal').style.display = 'flex';
         }
@@ -429,22 +419,15 @@
         }
 
         function showReceipt() {
-            const amt = parseFloat(document.getElementById('amtInput').value);
-            const isNaira = currentMethod === 'Direct Bank';
-            const symbol = isNaira ? '₦' : '$';
-
+            const amt = document.getElementById('amtInput').value;
+            const symbol = (currentMethod === 'Direct Bank') ? '₦' : '$';
             document.getElementById('confirmModal').style.display = 'none';
-            document.getElementById('recAmt').innerText = symbol + amt.toLocaleString('en-US', {minimumFractionDigits: 2});
+            document.getElementById('recAmt').innerText = symbol + amt;
+            document.getElementById('transId').textContent = 'CHX-' + Math.floor(Math.random() * 900000);
             document.getElementById('receiptModal').style.display = 'flex';
-            
-            document.getElementById('transId').textContent = 'TX-' + Math.floor(100000 + Math.random() * 900000);
         }
         
-        function finishTransaction() {
-             closeModals();
-             // In real app, redirect or refresh
-             window.location.reload();
-        }
+        function finishTransaction() { window.location.reload(); }
     </script>
 </body>
 </html>
