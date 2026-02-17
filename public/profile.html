@@ -6,151 +6,226 @@
     <title>Profile | CASHX</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/dashboard.css">
-    <script src="js/auth-guard.js"></script>
+    
     <style>
-        /* Profile Specific Styles */
-        .section-title {
-            color: var(--text-gray);
-            margin: 20px 0 10px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --text-white: #ffffff;
+            --text-gray: #888888;
+            --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
         }
-        
-        .info-card {
-            background: var(--card-dark);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* --- Container Responsiveness --- */
+        .phone-wrapper {
+            width: 90%; 
+            max-width: 420px;
+            background: var(--bg-black);
+            min-height: 100vh;
+            padding-bottom: 100px;
+            position: relative;
+        }
+
+        /* --- Header --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
             margin-bottom: 20px;
         }
 
-        /* Clickable row card (used on profile Bank Details) */ 
-        .info-card-link { 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            gap: 12px; 
-            
-            width: 100%; 
-            text-decoration: none; 
-            
-            background: var(--card-dark); 
-            border: 1px solid rgba(255,255,255,0.05); 
-            border-radius: 15px; 
-            padding: 18px 20px; 
-            margin-bottom: 20px; 
-            transition: transform 0.2s;
-        } 
-        
-        /* remove default link coloring */ 
-        .info-card-link:link, 
-        .info-card-link:visited { 
-            color: inherit; 
-        } 
-        
-        /* align left content */ 
-        .info-card-link .info-label { 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            margin: 0; 
-            color: white; 
-        } 
-        
-        /* keep chevron on the far right */ 
-        .info-card-link .fa-chevron-right { 
-            flex: 0 0 auto; 
-            color: var(--text-gray); 
-        } 
-        
-        /* touch feedback */ 
-        .info-card-link:active { 
-            transform: scale(0.99); 
+        .header-logo {
+            width: 45px;
+            height: auto;
+            margin-left: 10px;
+        }
+
+        .nav-trigger {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--primary-gold);
+            cursor: pointer;
+        }
+
+        /* --- Sidebar (Solid & Bright) --- */
+        .sidebar {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: #111111;
+            z-index: 2000;
+            transition: 0.4s ease;
+            border-right: 2px solid var(--primary-gold);
+            padding: 25px;
+        }
+
+        .sidebar.active { left: 0; }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-gold);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #222;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            color: #ffffff;
+            text-decoration: none;
+            border-bottom: 1px solid #1a1a1a;
+            font-weight: 600;
+        }
+
+        .sidebar-item i { color: var(--primary-gold); margin-right: 15px; width: 25px; text-align: center; }
+
+        /* --- Profile Cards --- */
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-header-card {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(180deg, #0a0a0a 0%, #000 100%);
+        }
+
+        .avatar-container {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-gold);
+            overflow: hidden;
+            background: #111;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .section-title {
+            color: var(--primary-gold);
+            margin: 25px 0 12px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
         }
 
         .info-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 15px 0;
+            border-bottom: 1px solid #1a1a1a;
         }
-        .info-row:last-child {
-            border-bottom: none;
-        }
+
+        .info-row:last-child { border-bottom: none; }
+
         .info-label {
             color: var(--text-gray);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 10px;
         }
+
+        .info-label i { color: var(--primary-gold); width: 15px; }
+
         .info-value {
             color: white;
             font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-label {
-            display: block;
-            color: var(--text-gray);
-            margin-bottom: 8px;
             font-size: 0.9rem;
         }
-        .form-input {
-            width: 100%;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 12px 15px;
-            border-radius: 10px;
-            color: white;
-            font-size: 1rem;
-            outline: none;
+
+        /* --- Bank Card Link --- */
+        .info-card-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
             transition: 0.3s;
         }
-        .form-input:focus {
-            border-color: var(--accent-green);
-            background: rgba(163, 230, 53, 0.05);
-        }
 
-        .save-btn {
-            background: var(--accent-green);
-            color: black;
-            width: 100%;
-            padding: 15px;
-            border-radius: 10px;
-            border: none;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 10px;
-        }
-        .save-btn:active {
-            transform: scale(0.98);
-        }
+        .info-card-link:active { background: #151515; }
 
         .verified-badge {
-            background: rgba(163, 230, 53, 0.15);
-            color: var(--accent-green);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.7rem;
+            color: #00ff88;
             margin-left: 5px;
+            font-size: 0.8rem;
         }
-        
-        .status-dot {
-            height: 8px;
-            width: 8px;
-            background-color: var(--accent-green);
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 5px;
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary-gold);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* --- Bottom Nav --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 90%;
+            max-width: 420px;
+            background: #050505;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            z-index: 900;
+        }
+
+        .nav-btn { text-decoration: none; color: #444; font-size: 0.65rem; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .nav-btn.active { color: var(--primary-gold); }
+        .nav-btn i { font-size: 1.3rem; }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1500;
         }
     </style>
 </head>
@@ -158,49 +233,50 @@
 
     <div class="overlay" id="overlay"></div>
 
-    <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3>Menu</h3>
-            <i class="fas fa-times" id="closeSidebarBtn" style="cursor:pointer"></i>
+            <h3 style="letter-spacing: 2px;">MENU</h3>
+            <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
         </div>
         <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
-        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-share-nodes"></i> Withdraw</a>
-        <a href="ads.html" class="sidebar-item"><i class="fas fa-broadcast-tower"></i> ADs</a>
-        <a href="coupon.html" class="sidebar-item"><i class="fas fa-lock"></i> coupon</a>
-        <a href="#" id="logoutBtn" class="sidebar-item" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>                                
+        <a href="loans.html" class="sidebar-item"><i class="fas fa-university"></i> Loans/scholarship</a>
+        <a href="ads.html" class="sidebar-item"><i class="fas fa-tv"></i> ADs</a>
+        <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a>
+        <a href="coupon.html" class="sidebar-item"><i class="fas fa-key"></i> Coupon</a>
+        <a href="#" class="sidebar-item" style="color: var(--accent-red);"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
     <div class="phone-wrapper">
         <header class="header">
             <div class="nav-trigger" id="hamburgerBtn">
                 <i class="fas fa-bars fa-lg"></i>
-                <span style="font-size: 1.2rem; font-weight: 700; margin-left: 10px;">Profile</span>
+                <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo" class="header-logo">
             </div>
             <div class="header-icons">
-                 <a href="dashboard.html" class="avatar-sm"><i class="fas fa-arrow-left"></i></a>
+                 <a href="dashboard.html" style="color: var(--primary-gold); text-decoration: none;"><i class="fas fa-arrow-left fa-lg"></i></a>
             </div>
         </header>
 
         <div id="main-content">
-            <!-- Profile Header Card -->
-            <div class="card profile-card" style="text-align: center; display: block; padding: 30px 20px;">
-                <div class="avatar-lg" style="margin: 0 auto 15px; width: 80px; height: 80px; font-size: 2rem; line-height: 80px;">BI</div>
-                <h2 style="margin-bottom: 5px; font-size: 1.5rem;" id="userNameDisplay">Loading...</h2>
-                <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px;">Premium Member</p>
-                <div style="display: inline-flex; align-items: center; background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem;">
-                    <span class="status-dot"></span> Active
+            <div class="card profile-header-card">
+                <div class="avatar-container" onclick="document.getElementById('imageUpload').click()">
+                    <img id="profileImage" src="https://via.placeholder.com/150/111111/D4AF37?text=User" alt="Profile">
+                    <input type="file" id="imageUpload" hidden accept="image/*">
+                </div>
+                <h2 id="userNameDisplay" style="margin-bottom: 8px;">Loading...</h2>
+                <div class="status-badge">
+                    <i class="fas fa-crown" style="margin-right: 5px;"></i> PREMIUM MEMBER
                 </div>
             </div>
 
-            <!-- Personal Info -->
-            <h4 class="section-title">Personal Information</h4>
-            <div class="info-card">
+            <h4 class="section-title">Account Details</h4>
+            <div class="card">
                 <div class="info-row">
                     <span class="info-label"><i class="fas fa-user"></i> Full Name</span>
                     <span class="info-value">
                         <span id="fullNameDisplay">...</span>
-                        <span class="verified-badge"><i class="fas fa-check"></i></span>
+                        <i class="fas fa-check-circle verified-badge"></i>
                     </span>
                 </div>
                 <div class="info-row">
@@ -208,60 +284,46 @@
                     <span class="info-value" id="emailDisplay">...</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label"><i class="fas fa-phone"></i> Phone</span>
+                    <span class="info-label"><i class="fas fa-phone"></i> Mobile</span>
                     <span class="info-value" id="phoneDisplay">...</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label"><i class="fas fa-id-card"></i> ID</span>
-                    <span class="info-value" id="idDisplay">...</span>
+                    <span class="info-label"><i class="fas fa-id-badge"></i> User ID</span>
+                    <span class="info-value" id="idDisplay" style="color: var(--primary-gold);">...</span>
                 </div>
             </div>
 
-            <!-- Bank Settings -->
-            <h4 class="section-title">Bank Details</h4>
-            <a href="bank-details.html" class="info-card info-card-link">
-                <span class="info-label" style="color: white;"><i class="fas fa-university"></i> Manage Bank Accounts</span>
-                <i class="fas fa-chevron-right" style="color: var(--text-gray);"></i>
+            <h4 class="section-title">Finance</h4>
+            <a href="bank-details.html" class="card info-card-link">
+                <span class="info-label" style="color: white; font-weight: 600;">
+                    <i class="fas fa-university"></i> Bank Settings
+                </span>
+                <i class="fas fa-chevron-right" style="color: var(--primary-gold);"></i>
             </a>
 
-            <!-- Security -->
-            <h4 class="section-title">Security</h4>
-            <div class="info-card">
+            <h4 class="section-title">Privacy & Security</h4>
+            <div class="card">
                 <div class="info-row">
-                    <span class="info-label"><i class="fas fa-shield-alt"></i> 2FA Authentication</span>
-                    <span class="info-value" style="color: var(--accent-green)">Enabled</span>
+                    <span class="info-label"><i class="fas fa-shield-alt"></i> 2FA Status</span>
+                    <span class="info-value" style="color: #00ff88">Secured</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label"><i class="fas fa-bell"></i> Notifications</span>
-                    <span class="info-value">Push & Email</span>
+                    <span class="info-label"><i class="fas fa-bell"></i> Alerts</span>
+                    <span class="info-value">Active</span>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <!-- Bottom Nav -->
     <nav class="bottom-nav">
-        <a href="dashboard.html" class="nav-btn">
-            <i class="fas fa-house"></i>
-            Home
-        </a>
-        <a href="articles.html" class="nav-btn">
-            <i class="fas fa-newspaper"></i>
-            Article
-        </a>
-        <a href="history.html" class="nav-btn">
-            <i class="fas fa-history"></i>
-            History
-        </a>
-        <a href="profile.html" class="nav-btn active">
-            <i class="fas fa-user"></i>
-            Profile
-        </a>
+        <a href="dashboard.html" class="nav-btn"><i class="fas fa-house"></i>Home</a>
+        <a href="articles.html" class="nav-btn"><i class="fas fa-newspaper"></i>News</a>
+        <a href="history.html" class="nav-btn"><i class="fas fa-history"></i>History</a>
+        <a href="profile.html" class="nav-btn active"><i class="fas fa-user"></i>Profile</a>
     </nav>
 
     <script>
-        // Sidebar Logic (copied from withdraw.html/dashboard.js logic)
+        // Sidebar & Menu
         const hamburgerBtn = document.getElementById('hamburgerBtn');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
@@ -269,50 +331,59 @@
 
         function toggleSidebar() {
             sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
+            overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
         }
 
-        if(hamburgerBtn) hamburgerBtn.addEventListener('click', toggleSidebar);
-        if(closeSidebarBtn) closeSidebarBtn.addEventListener('click', toggleSidebar);
-        if(overlay) overlay.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-        });
+        hamburgerBtn.onclick = toggleSidebar;
+        closeSidebarBtn.onclick = toggleSidebar;
+        overlay.onclick = toggleSidebar;
+
+        // Image Upload Logic
+        const imageUpload = document.getElementById('imageUpload');
+        const profileImage = document.getElementById('profileImage');
+
+        imageUpload.onchange = function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImage.src = e.target.result;
+                    // You could save this to localStorage here
+                    localStorage.setItem('userAvatar', e.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // Load Avatar if saved
+        window.onload = () => {
+            const savedAvatar = localStorage.getItem('userAvatar');
+            if(savedAvatar) profileImage.src = savedAvatar;
+        }
 
         // User Data Logic
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('token');
-            if (!token) return; // auth-guard handles redirect
+            if (!token) return;
 
             try {
-                // Fetch User Info
+                // Fetch User Info (Example API)
                 const res = await fetch('/api/auth/me', { 
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 
                 if (res.ok) {
                     const data = await res.json();
-                    
-                    // Populate Fields
                     document.getElementById('userNameDisplay').textContent = data.username || 'User';
-                    document.getElementById('fullNameDisplay').textContent = data.fullName || data.username || 'User'; 
-                    document.getElementById('emailDisplay').textContent = data.email || '...';
-                    document.getElementById('phoneDisplay').textContent = data.phone || '...';
-                    // Display Referral Code as ID if available, otherwise fallback
-                    const displayId = data.referralCode || data.id || '...';
-                    document.getElementById('idDisplay').textContent = displayId;
-                    
-                    // Update Package Display if exists
-                     if(document.getElementById('packageDisplay')) {
-                        document.getElementById('packageDisplay').textContent = data.packageType || 'Free';
-                     }
+                    document.getElementById('fullNameDisplay').textContent = data.fullName || data.username; 
+                    document.getElementById('emailDisplay').textContent = data.email;
+                    document.getElementById('phoneDisplay').textContent = data.phone;
+                    document.getElementById('idDisplay').textContent = data.referralCode || data.id;
                 }
             } catch (e) {
-                console.error("Error loading profile:", e);
+                console.error("Error loading profile data");
             }
         });
-
-        // Removed saveBankDetails function as it is no longer used
     </script>
 </body>
 </html>
