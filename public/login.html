@@ -3,58 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - CASHX</title>
+    <title>Login - PROTEGE</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <link rel="stylesheet" href="css/login.css">
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --text-white: #ffffff;
+            --input-bg: #151515;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- Vertical Navigation Menu --- */
+        .nav-container {
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            margin-bottom: 20px;
+            align-self: center;
+        }
+
+        .hamburger-menu {
+            cursor: pointer;
+            display: inline-block;
+            padding: 5px;
+        }
+
+        .hamburger-line {
+            background-color: var(--primary-gold);
+            height: 3px;
+            width: 28px;
+            margin: 5px 0;
+            border-radius: 2px;
+        }
+
+        .nav-dropdown {
+            background: #111;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 8px 0;
+            display: none;
+            position: absolute;
+            width: 200px;
+            left: 0;
+            top: 45px;
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+        }
+
+        .nav-dropdown a {
+            color: var(--text-white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #222;
+        }
+
+        .nav-dropdown a:last-child { border-bottom: none; }
+
+        .nav-dropdown a i {
+            margin-right: 12px;
+            color: var(--primary-gold);
+            width: 20px;
+            text-align: center;
+        }
+
+        /* --- Logo Section (No Shape) --- */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo-box img {
+            width: 90px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .welcome-text {
+            color: var(--primary-gold);
+            font-size: 1.6rem;
+            margin-top: 15px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .welcome-subtext {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* --- Login Card --- */
+        .login-card {
+            background-color: var(--card-bg);
+            width: 90%;
+            max-width: 400px;
+            padding: 30px 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9);
+            box-sizing: border-box;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group .label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            color: var(--primary-gold);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-gold);
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            background: var(--input-bg);
+            border: 1px solid #222;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary-gold);
+            outline: none;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.1);
+        }
+
+        /* --- Password Specific --- */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-gold);
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: right;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #aaa;
+            text-decoration: none;
+        }
+
+        .forgot-password:hover {
+            color: var(--primary-gold);
+        }
+
+        /* --- Login Button --- */
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 8px;
+            background: var(--gradient-gold);
+            background-size: 200% auto;
+            color: black;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.4s;
+        }
+
+        .login-btn:hover {
+            background-position: right center;
+            box-shadow: 0 0 15px var(--gold-glow);
+        }
+
+        .signup-text {
+            text-align: center;
+            font-size: 0.85rem;
+            margin-top: 25px;
+            color: #888;
+        }
+
+        .signup-text a {
+            color: var(--primary-gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+    </style>
 </head>
 <body>
 
-    <!-- Navigation Menu -->
     <div class="nav-container">
-        <div class="hamburger-menu" id="hamburgerMenu">
+        <div class="hamburger-menu" onclick="const d = document.getElementById('navDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'">
             <div class="hamburger-line"></div>
             <div class="hamburger-line"></div>
             <div class="hamburger-line"></div>
         </div>
         
         <div class="nav-dropdown" id="navDropdown">
-            <a href="index.html">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
-            </a>
-            <a href="merchants.html">
-                <i class="fas fa-ticket-alt"></i>
-                <span>Buy Coupon Code</span>
-            </a>
-            <a href="reviews.html">
-                <i class="fas fa-star"></i>
-                <span>Check Reviews</span>
-            </a>
+            <a href="index.html"><i class="fas fa-home"></i> <span>Home</span></a>
+            <a href="merchants.html"><i class="fas fa-ticket-alt"></i> <span>Buy Coupon Code</span></a>
+            <a href="reviews.html"><i class="fas fa-star"></i> <span>Check Reviews</span></a>
         </div>
     </div>
 
     <div class="logo-container">
         <div class="logo-box">
-            <img src="https://i.ibb.co/ZzNFQbRx/918-CFC59-9989-4-D61-8605-1-BFDAADADD57.jpg" alt="CASHX Logo">
-            <div class="logo-badge">
-                <i class="fas fa-check"></i>
-            </div>
+            <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="CASHX Logo">
         </div>
         <h1 class="welcome-text">Welcome Back</h1>
-        <p class="welcome-subtext">Sign in to your CASHX account</p>
+        <p class="welcome-subtext">Sign in to your Protege account</p>
     </div>
 
     <div class="login-card">
         <form id="loginForm">
             <div class="form-group">
                 <span class="label">
-                    <i class="fas fa-user-circle"></i> ID
+                    <i class="fas fa-user-circle"></i> ID / Username
                 </span>
                 <div class="input-with-icon">
                     <i class="fas fa-user input-icon"></i>
-                    <input type="text" id="loginId" placeholder="Username or Email Address" required>
+                    <input type="text" id="loginId" placeholder="Username or Email" required>
                 </div>
             </div>
 
@@ -85,7 +298,18 @@
 
     </div>
 
-    <script src="js/login.js"></script>
+    <script>
+        // Toggle Password Visibility
+        const toggleEye = document.getElementById('toggleEye');
+        const passwordInput = document.getElementById('password');
+
+        toggleEye.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
 
 </body>
 </html>
