@@ -241,57 +241,48 @@
             <div class="platform-info">
                 <div class="platform-icon"><i class="fab fa-tiktok"></i></div>
                 <div class="platform-meta">
-                    <h3>TikTok Live Stream</h3>
-                    <p>Earn Diamonds from virtual gifts.</p>
+                    <h3>TikTok Profile</h3>
+                    <p>Connect your main TikTok profile to earn from tasks.</p>
                 </div>
             </div>
-            <div class="progress-container">
-                <div class="progress-label"><span>Eligibility</span> <span>70%</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width: 70%;"></div></div>
-            </div>
-            <button class="btn-action">Link TikTok Account</button>
+            <input id="tiktokUrlInput" type="url" placeholder="Paste your TikTok profile link" style="width:100%; margin-top:10px; padding:10px; border-radius:8px; border:1px solid #222; background:#050505; color:#fff; font-size:0.75rem;">
+            <button class="btn-action" id="tiktokConnectBtn">Verify & connect</button>
         </div>
 
         <div class="monetize-card">
             <div class="platform-info">
                 <div class="platform-icon"><i class="fab fa-telegram"></i></div>
                 <div class="platform-meta">
-                    <h3>Telegram Ads</h3>
-                    <p>Monetize your Status & Channel views.</p>
+                    <h3>Telegram Username</h3>
+                    <p>Link your Telegram username for campaign tasks.</p>
                 </div>
             </div>
-            <div class="progress-container">
-                <div class="progress-label"><span>Eligibility</span> <span>45%</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width: 45%;"></div></div>
-            </div>
-            <button class="btn-action">Setup Bot Integration</button>
+            <input id="telegramUsernameInput" type="text" placeholder="@username" style="width:100%; margin-top:10px; padding:10px; border-radius:8px; border:1px solid #222; background:#050505; color:#fff; font-size:0.75rem;">
+            <button class="btn-action" id="telegramConnectBtn">Verify & connect</button>
         </div>
 
         <div class="monetize-card">
             <div class="platform-info">
                 <div class="platform-icon"><i class="fab fa-whatsapp"></i></div>
                 <div class="platform-meta">
-                    <h3>WhatsApp Status</h3>
-                    <p>Paid per 1,000 status views.</p>
+                    <h3>WhatsApp Number</h3>
+                    <p>Add your WhatsApp number for status campaigns.</p>
                 </div>
             </div>
-            <div class="status-badge">Requires 200+ Constant Views</div>
-            <button class="btn-action">Submit View Screenshot</button>
+            <input id="whatsappNumberInput" type="tel" placeholder="WhatsApp number with country code e.g. 2349133..." style="width:100%; margin-top:10px; padding:10px; border-radius:8px; border:1px solid #222; background:#050505; color:#fff; font-size:0.75rem;">
+            <button class="btn-action" id="whatsappConnectBtn">Verify & connect</button>
         </div>
 
         <div class="monetize-card">
             <div class="platform-info">
                 <div class="platform-icon"><i class="fab fa-facebook"></i></div>
                 <div class="platform-meta">
-                    <h3>Facebook Meta</h3>
-                    <p>In-stream ads & Star rewards.</p>
+                    <h3>Facebook Page</h3>
+                    <p>Submit your main Facebook page/profile link for campaigns.</p>
                 </div>
             </div>
-            <div class="progress-container">
-                <div class="progress-label"><span>Followers</span> <span>10%</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width: 10%;"></div></div>
-            </div>
-            <button class="btn-action">Check Page Eligibility</button>
+            <input id="facebookUrlInput" type="url" placeholder="Paste your Facebook page/profile link" style="width:100%; margin-top:10px; padding:10px; border-radius:8px; border:1px solid #222; background:#050505; color:#fff; font-size:0.75rem;">
+            <button class="btn-action" id="facebookConnectBtn">Verify & connect</button>
         </div>
 
         <div class="monetize-card" style="border-style: dashed; border-color: #333;">
@@ -405,12 +396,303 @@
             }
         }
 
+        async function connectTiktok() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const input = document.getElementById('tiktokUrlInput');
+            const btn = document.getElementById('tiktokConnectBtn');
+            if (!input || !btn) return;
+
+            const url = input.value.trim();
+            if (!url) {
+                alert('Please paste your TikTok profile link.');
+                return;
+            }
+
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Verifying...';
+
+            try {
+                const res = await fetch('/api/auth/social/tiktok', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ url })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    if (data.alreadyLinked) {
+                        alert('TikTok profile already added on your account.');
+                    } else {
+                        alert(`TikTok connected. You earned ₦${data.reward}.`);
+                        await loadMonetizationConnections();
+                    }
+                } else {
+                    alert(data.message || 'Unable to verify TikTok profile.');
+                }
+            } catch (e) {
+                alert('Network error while verifying TikTok profile.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        async function connectTelegram() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const input = document.getElementById('telegramUsernameInput');
+            const btn = document.getElementById('telegramConnectBtn');
+            if (!input || !btn) return;
+
+            let username = input.value.trim();
+            if (!username) {
+                alert('Please enter your Telegram username.');
+                return;
+            }
+
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Verifying...';
+
+            try {
+                const res = await fetch('/api/auth/social/telegram', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ username })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    if (data.alreadyLinked) {
+                        alert('Telegram username already added on your account.');
+                    } else {
+                        alert(`Telegram connected. You earned ₦${data.reward}.`);
+                        await loadMonetizationConnections();
+                    }
+                } else {
+                    alert(data.message || 'Unable to verify Telegram username.');
+                }
+            } catch (e) {
+                alert('Network error while verifying Telegram username.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        async function connectWhatsApp() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const input = document.getElementById('whatsappNumberInput');
+            const btn = document.getElementById('whatsappConnectBtn');
+            if (!input || !btn) return;
+
+            const phone = input.value.trim();
+            if (!phone) {
+                alert('Please enter your WhatsApp number with country code.');
+                return;
+            }
+
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Verifying...';
+
+            try {
+                const res = await fetch('/api/auth/social/whatsapp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ phone })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    if (data.alreadyLinked) {
+                        alert('WhatsApp number already added on your account.');
+                    } else {
+                        alert(`WhatsApp connected. You earned ₦${data.reward}.`);
+                        await loadMonetizationConnections();
+                    }
+                } else {
+                    alert(data.message || 'Unable to verify WhatsApp number.');
+                }
+            } catch (e) {
+                alert('Network error while verifying WhatsApp number.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        async function connectFacebook() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const input = document.getElementById('facebookUrlInput');
+            const btn = document.getElementById('facebookConnectBtn');
+            if (!input || !btn) return;
+
+            const url = input.value.trim();
+            if (!url) {
+                alert('Please paste your Facebook page/profile link.');
+                return;
+            }
+
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Verifying...';
+
+            try {
+                const res = await fetch('/api/auth/social/facebook', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ url })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    if (data.alreadyLinked) {
+                        alert('Facebook link already added on your account.');
+                    } else {
+                        alert(`Facebook connected. You earned ₦${data.reward}.`);
+                        await loadMonetizationConnections();
+                    }
+                } else {
+                    alert(data.message || 'Unable to save Facebook link.');
+                }
+            } catch (e) {
+                alert('Network error while saving Facebook link.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        function applySocialConnectedState(user) {
+            if (!user) return;
+
+            const tiktokInput = document.getElementById('tiktokUrlInput');
+            const tiktokBtn = document.getElementById('tiktokConnectBtn');
+            if (tiktokBtn) {
+                if (user.tiktokProfileUrl) {
+                    if (tiktokInput) tiktokInput.style.display = 'none';
+                    tiktokBtn.textContent = 'Connected';
+                    tiktokBtn.disabled = true;
+                    tiktokBtn.style.opacity = '0.6';
+                } else {
+                    if (tiktokInput) tiktokInput.style.display = '';
+                    tiktokBtn.textContent = 'Verify & connect';
+                    tiktokBtn.disabled = false;
+                    tiktokBtn.style.opacity = '1';
+                }
+            }
+
+            const telegramInput = document.getElementById('telegramUsernameInput');
+            const telegramBtn = document.getElementById('telegramConnectBtn');
+            if (telegramBtn) {
+                if (user.telegramUsername) {
+                    if (telegramInput) telegramInput.style.display = 'none';
+                    telegramBtn.textContent = 'Connected';
+                    telegramBtn.disabled = true;
+                    telegramBtn.style.opacity = '0.6';
+                } else {
+                    if (telegramInput) telegramInput.style.display = '';
+                    telegramBtn.textContent = 'Verify & connect';
+                    telegramBtn.disabled = false;
+                    telegramBtn.style.opacity = '1';
+                }
+            }
+
+            const whatsappInput = document.getElementById('whatsappNumberInput');
+            const whatsappBtn = document.getElementById('whatsappConnectBtn');
+            if (whatsappBtn) {
+                if (user.whatsappNumber) {
+                    if (whatsappInput) whatsappInput.style.display = 'none';
+                    whatsappBtn.textContent = 'Connected';
+                    whatsappBtn.disabled = true;
+                    whatsappBtn.style.opacity = '0.6';
+                } else {
+                    if (whatsappInput) whatsappInput.style.display = '';
+                    whatsappBtn.textContent = 'Verify & connect';
+                    whatsappBtn.disabled = false;
+                    whatsappBtn.style.opacity = '1';
+                }
+            }
+
+            const facebookInput = document.getElementById('facebookUrlInput');
+            const facebookBtn = document.getElementById('facebookConnectBtn');
+            if (facebookBtn) {
+                if (user.facebookProfileUrl) {
+                    if (facebookInput) facebookInput.style.display = 'none';
+                    facebookBtn.textContent = 'Connected';
+                    facebookBtn.disabled = true;
+                    facebookBtn.style.opacity = '0.6';
+                } else {
+                    if (facebookInput) facebookInput.style.display = '';
+                    facebookBtn.textContent = 'Verify & connect';
+                    facebookBtn.disabled = false;
+                    facebookBtn.style.opacity = '1';
+                }
+            }
+        }
+
+        async function loadMonetizationConnections() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const res = await fetch('/api/auth/monetization', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!res.ok) return;
+                const data = await res.json();
+                applySocialConnectedState(data);
+            } catch (e) {
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const btn = document.getElementById('checkinBtn');
             if (btn) {
                 btn.addEventListener('click', doCheckin);
             }
             loadStreak();
+
+            const tiktokBtn = document.getElementById('tiktokConnectBtn');
+            if (tiktokBtn) {
+                tiktokBtn.addEventListener('click', connectTiktok);
+            }
+
+            const telegramBtn = document.getElementById('telegramConnectBtn');
+            if (telegramBtn) {
+                telegramBtn.addEventListener('click', connectTelegram);
+            }
+
+            const whatsappBtn = document.getElementById('whatsappConnectBtn');
+            if (whatsappBtn) {
+                whatsappBtn.addEventListener('click', connectWhatsApp);
+            }
+
+            const facebookBtn = document.getElementById('facebookConnectBtn');
+            if (facebookBtn) {
+                facebookBtn.addEventListener('click', connectFacebook);
+            }
+
+            loadMonetizationConnections();
         });
     </script>
 </body>

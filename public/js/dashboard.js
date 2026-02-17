@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (planEl) {
         const plan = user.packageType || 'Standard';
         const ref = user.referrer || 'Admin';
-        planEl.innerHTML = `Plan: <span class="plus-tag">${plan}</span> • ${ref} Ref`;
+        planEl.innerHTML = `Plan: <span class="plus-tag">${plan}</span> • Referred by ${ref}`;
     }
 
     const revenueEl = document.getElementById('revenueAmount');

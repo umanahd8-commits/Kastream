@@ -88,6 +88,22 @@ const UserSchema = new mongoose.Schema({
         paypalName: String,
         paypalEmail: String
     }],
+    tiktokProfileUrl: {
+        type: String,
+        default: null
+    },
+    telegramUsername: {
+        type: String,
+        default: null
+    },
+    whatsappNumber: {
+        type: String,
+        default: null
+    },
+    facebookProfileUrl: {
+        type: String,
+        default: null
+    },
     streakCurrent: {
         type: Number,
         default: 0

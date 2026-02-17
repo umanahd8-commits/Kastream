@@ -55,6 +55,30 @@ async function getLagosDateInfo() {
     }
 }
 
+function checkRemoteUrl(url) {
+    return new Promise((resolve, reject) => {
+        const req = https.request(
+            url,
+            {
+                method: 'GET',
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Accept-Encoding': 'identity'
+                }
+            },
+            res => {
+                const status = res.statusCode || 0;
+                const location = res.headers.location || '';
+                res.resume();
+                resolve({ status, location });
+            }
+        );
+
+        req.on('error', reject);
+        req.end();
+    });
+}
+
 // Register Route
 router.post('/register', async (req, res) => {
     try {
@@ -188,7 +212,11 @@ router.get('/me', verifyToken, async (req, res) => {
             taskBalance: user.taskBalance || 0,
             availableTasks: user.availableTasks || 0,
             country: user.country,
-            role: user.role || 'user'
+            role: user.role || 'user',
+            tiktokProfileUrl: user.tiktokProfileUrl || null,
+            telegramUsername: user.telegramUsername || null,
+            whatsappNumber: user.whatsappNumber || null,
+            facebookProfileUrl: user.facebookProfileUrl || null
         });
     } catch (error) {
         console.error(error);
@@ -236,6 +264,27 @@ router.get('/withdraw-info', verifyToken, async (req, res) => {
             taskBalance: user.taskBalance || 0,
             country: user.country,
             bankAccounts: user.bankAccounts || []
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Monetization connections (Protected)
+router.get('/monetization', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({
+            tiktokProfileUrl: user.tiktokProfileUrl || null,
+            telegramUsername: user.telegramUsername || null,
+            whatsappNumber: user.whatsappNumber || null,
+            facebookProfileUrl: user.facebookProfileUrl || null
         });
     } catch (error) {
         console.error(error);
@@ -377,6 +426,182 @@ router.post('/streak/checkin', verifyToken, async (req, res) => {
                 daysInMonth
             },
             balance: user.balance,
+            taskBalance: user.taskBalance
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/social/tiktok', verifyToken, async (req, res) => {
+    try {
+        const { url } = req.body;
+        if (!url || typeof url !== 'string') {
+            return res.status(400).json({ message: 'TikTok profile link is required' });
+        }
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.tiktokProfileUrl) {
+            return res.json({
+                message: 'TikTok profile already added',
+                alreadyLinked: true,
+                reward: 0,
+                taskBalance: user.taskBalance || 0
+            });
+        }
+
+        const { status } = await checkRemoteUrl(url);
+        if (status !== 200) {
+            return res.status(400).json({ message: 'TikTok profile link does not look valid', status });
+        }
+
+        user.tiktokProfileUrl = url;
+        const reward = 150;
+        user.taskBalance = (user.taskBalance || 0) + reward;
+        await user.save();
+
+        res.json({
+            message: 'TikTok profile added successfully',
+            alreadyLinked: false,
+            reward,
+            taskBalance: user.taskBalance
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/social/telegram', verifyToken, async (req, res) => {
+    try {
+        let { username } = req.body;
+        if (!username || typeof username !== 'string') {
+            return res.status(400).json({ message: 'Telegram username is required' });
+        }
+
+        username = username.trim();
+        if (username.startsWith('@')) {
+            username = username.slice(1);
+        }
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.telegramUsername) {
+            return res.json({
+                message: 'Telegram username already added',
+                alreadyLinked: true,
+                reward: 0,
+                taskBalance: user.taskBalance || 0
+            });
+        }
+
+        const url = `https://t.me/${encodeURIComponent(username)}`;
+        const { status } = await checkRemoteUrl(url);
+        if (status !== 200) {
+            return res.status(400).json({ message: 'Telegram username does not look valid', status });
+        }
+
+        user.telegramUsername = username;
+        const reward = 150;
+        user.taskBalance = (user.taskBalance || 0) + reward;
+        await user.save();
+
+        res.json({
+            message: 'Telegram username added successfully',
+            alreadyLinked: false,
+            reward,
+            taskBalance: user.taskBalance
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/social/whatsapp', verifyToken, async (req, res) => {
+    try {
+        let { phone } = req.body;
+        if (!phone || typeof phone !== 'string') {
+            return res.status(400).json({ message: 'WhatsApp phone number is required' });
+        }
+
+        phone = phone.trim().replace(/[^0-9]/g, '');
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.whatsappNumber) {
+            return res.json({
+                message: 'WhatsApp number already added',
+                alreadyLinked: true,
+                reward: 0,
+                taskBalance: user.taskBalance || 0
+            });
+        }
+
+        const url = `https://wa.me/${phone}`;
+        const { status } = await checkRemoteUrl(url);
+        if (status !== 200 && status !== 302) {
+            return res.status(400).json({ message: 'WhatsApp number does not look valid', status });
+        }
+
+        user.whatsappNumber = phone;
+        const reward = 150;
+        user.taskBalance = (user.taskBalance || 0) + reward;
+        await user.save();
+
+        res.json({
+            message: 'WhatsApp number added successfully',
+            alreadyLinked: false,
+            reward,
+            taskBalance: user.taskBalance
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/social/facebook', verifyToken, async (req, res) => {
+    try {
+        const { url } = req.body;
+        if (!url || typeof url !== 'string') {
+            return res.status(400).json({ message: 'Facebook page/profile link is required' });
+        }
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.facebookProfileUrl) {
+            return res.json({
+                message: 'Facebook link already added',
+                alreadyLinked: true,
+                reward: 0,
+                taskBalance: user.taskBalance || 0
+            });
+        }
+
+        user.facebookProfileUrl = url;
+        const reward = 150;
+        user.taskBalance = (user.taskBalance || 0) + reward;
+        await user.save();
+
+        res.json({
+            message: 'Facebook link added successfully',
+            alreadyLinked: false,
+            reward,
             taskBalance: user.taskBalance
         });
     } catch (error) {
