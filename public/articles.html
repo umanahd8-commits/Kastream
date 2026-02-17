@@ -3,85 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Articles - CASHX</title>
+    <title>News & Articles | CASHX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --text-white: #ffffff;
+            --text-gray: #888888;
+            --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        :root {
-            --primary-bg: #0f172a;
-            --card-bg: #1e293b;
-            --text-light: #f8fafc;
-            --text-gray: #94a3b8;
-            --accent-blue: #3b82f6;
+            font-family: 'Montserrat', sans-serif;
         }
 
         body {
-            background-color: var(--primary-bg);
-            color: var(--text-light);
+            background-color: var(--bg-black);
+            color: var(--text-white);
             min-height: 100vh;
-            padding-bottom: 80px;
-        }
-
-        .header {
-            background-color: var(--card-bg);
-            padding: 1rem;
             display: flex;
-            align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .back-btn {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 1.2rem;
-            margin-right: 1rem;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
         }
 
-        .page-title {
-            font-size: 1.2rem;
+        /* --- Container Responsiveness --- */
+        .phone-wrapper {
+            width: 90%; 
+            max-width: 420px;
+            background: var(--bg-black);
+            min-height: 100vh;
+            padding-bottom: 100px;
+            position: relative;
+        }
+
+        /* --- Header --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .header-logo {
+            width: 45px;
+            height: auto;
+            margin-left: 10px;
+        }
+
+        .nav-trigger {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--primary-gold);
+            cursor: pointer;
+        }
+
+        /* --- Sidebar (Solid & Bright) --- */
+        .sidebar {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: #111111;
+            z-index: 2000;
+            transition: 0.4s ease;
+            border-right: 2px solid var(--primary-gold);
+            padding: 25px;
+        }
+
+        .sidebar.active { left: 0; }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-gold);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #222;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            color: #ffffff;
+            text-decoration: none;
+            border-bottom: 1px solid #1a1a1a;
             font-weight: 600;
         }
 
-        .container {
-            padding: 1rem;
-            max-width: 800px;
-            margin: 0 auto;
+        .sidebar-item i { color: var(--primary-gold); margin-right: 15px; width: 25px; text-align: center; }
+
+        /* --- Profile Circle --- */
+        .profile-img-container {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-gold);
+            overflow: hidden;
+            background: #111;
+            cursor: pointer;
+        }
+
+        .profile-img-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- Article Styles --- */
+        .section-title {
+            color: var(--primary-gold);
+            margin: 10px 0 20px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
         }
 
         .article-card {
             background-color: var(--card-bg);
-            border-radius: 12px;
+            border-radius: 15px;
             overflow: hidden;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-
-        .article-card:hover {
-            transform: translateY(-2px);
+            margin-bottom: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            transition: transform 0.3s;
         }
 
         .article-image {
             width: 100%;
-            height: 180px;
-            background-color: #334155;
+            height: 160px;
             object-fit: cover;
+            border-bottom: 2px solid var(--primary-gold);
         }
 
         .article-content {
@@ -89,139 +150,161 @@
         }
 
         .article-tag {
-            background-color: rgba(59, 130, 246, 0.1);
-            color: var(--accent-blue);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary-gold);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
             display: inline-block;
         }
 
         .article-title {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 8px;
+            color: white;
             line-height: 1.4;
         }
 
         .article-excerpt {
             color: var(--text-gray);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             line-height: 1.6;
-            margin-bottom: 1rem;
+            margin-bottom: 15px;
         }
 
         .read-more {
-            color: var(--accent-blue);
+            color: var(--primary-gold);
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-weight: 700;
+            font-size: 0.85rem;
             display: inline-flex;
             align-items: center;
-        }
-
-        .read-more i {
-            margin-left: 5px;
-            font-size: 0.8rem;
-        }
-
-        /* Bottom Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: var(--card-bg);
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 10px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            z-index: 1000;
-        }
-
-        .nav-btn {
-            color: var(--text-gray);
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 0.75rem;
             gap: 5px;
         }
 
-        .nav-btn.active {
-            color: var(--accent-blue);
+        /* --- Bottom Nav --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 90%;
+            max-width: 420px;
+            background: #050505;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            z-index: 900;
         }
 
-        .nav-btn i {
-            font-size: 1.2rem;
+        .nav-btn { text-decoration: none; color: #444; font-size: 0.65rem; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .nav-btn.active { color: var(--primary-gold); }
+        .nav-btn i { font-size: 1.3rem; }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1500;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <a href="dashboard.html" class="back-btn">
-            <i class="fas fa-arrow-left"></i>
-        </a>
-        <div class="page-title">News & Articles</div>
+    <div class="overlay" id="overlay"></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3 style="letter-spacing: 2px;">MENU</h3>
+            <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
+        </div>
+      <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>
+        <a href="loans.html" class="sidebar-item"><i class="fas fa-university"></i> Loans/scholarship</a>
+        <a href="ads.html" class="sidebar-item"><i class="fas fa-tv"></i> ADs</a>
+        <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a>
+        <a href="coupon.html" class="sidebar-item"><i class="fas fa-key"></i> Coupon</a>
+        <a href="#" class="sidebar-item" style="color: var(--accent-red);"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
-    <div class="container">
-        
-        <div class="article-card">
-            <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Finance" class="article-image">
-            <div class="article-content">
-                <span class="article-tag">Finance</span>
-                <h3 class="article-title">How to Maximize Your Earnings on CASHX</h3>
-                <p class="article-excerpt">Discover the top strategies used by our highest earners to multiply their daily income through strategic task management.</p>
-                <a href="#" class="read-more">Read Article <i class="fas fa-arrow-right"></i></a>
+    <div class="phone-wrapper">
+        <header class="header">
+            <div class="nav-trigger" id="hamburgerBtn">
+                <i class="fas fa-bars fa-lg"></i>
+                <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo" class="header-logo">
             </div>
+            <div class="header-icons">
+                 <div class="profile-img-container" onclick="location.href='profile.html'">
+                    <img id="headerAvatar" src="https://via.placeholder.com/150/111111/D4AF37?text=U" alt="User">
+                </div>
+            </div>
+        </header>
+
+        <div id="main-content">
+            <h4 class="section-title">Latest Updates</h4>
+            
+            <div class="article-card">
+                <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Finance" class="article-image">
+                <div class="article-content">
+                    <span class="article-tag">Finance</span>
+                    <h3 class="article-title">How to Maximize Your Earnings on Protege</h3>
+                    <p class="article-excerpt">Discover the top strategies used by our highest earners to multiply their daily income.</p>
+                    <a href="#" class="read-more">Read Full Article <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="article-card">
+                <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Crypto" class="article-image">
+                <div class="article-content">
+                    <span class="article-tag">Updates</span>
+                    <h3 class="article-title">New Payment Methods Added</h3>
+                    <p class="article-excerpt">We have expanded our withdrawal options to include USDT for seamless global transactions.</p>
+                    <a href="#" class="read-more">Read Full Article <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="article-card">
+                <img src="https://images.unsplash.com/photo-1565514020176-db8b7a676146?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Referral" class="article-image">
+                <div class="article-content">
+                    <span class="article-tag">Community</span>
+                    <h3 class="article-title">Monthly Referral Contest</h3>
+                    <p class="article-excerpt">Join our monthly leaderboard challenge. Win a share of the $5,000 prize pool.</p>
+                    <a href="#" class="read-more">Read Full Article <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
         </div>
 
-        <div class="article-card">
-            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Crypto" class="article-image">
-            <div class="article-content">
-                <span class="article-tag">Updates</span>
-                <h3 class="article-title">New Payment Methods Added for International Users</h3>
-                <p class="article-excerpt">We have expanded our withdrawal options to include USDT and other major cryptocurrencies for seamless global transactions.</p>
-                <a href="#" class="read-more">Read Article <i class="fas fa-arrow-right"></i></a>
-            </div>
-        </div>
-
-        <div class="article-card">
-            <img src="https://images.unsplash.com/photo-1565514020176-db8b7a676146?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Referral" class="article-image">
-            <div class="article-content">
-                <span class="article-tag">Community</span>
-                <h3 class="article-title">Referral Contest: Win Big This Month!</h3>
-                <p class="article-excerpt">Join our monthly referral leaderboard challenge. The top 10 referrers will share a prize pool of $5,000.</p>
-                <a href="#" class="read-more">Read Article <i class="fas fa-arrow-right"></i></a>
-            </div>
-        </div>
-
+        <nav class="bottom-nav">
+            <a href="dashboard.html" class="nav-btn"><i class="fas fa-house"></i>Home</a>
+            <a href="articles.html" class="nav-btn active"><i class="fas fa-newspaper"></i>News</a>
+            <a href="history.html" class="nav-btn"><i class="fas fa-history"></i>History</a>
+            <a href="profile.html" class="nav-btn"><i class="fas fa-user"></i>Profile</a>
+        </nav>
     </div>
 
-    <nav class="bottom-nav">
-        <a href="dashboard.html" class="nav-btn">
-            <i class="fas fa-house"></i>
-            Home
-        </a>
-        <a href="articles.html" class="nav-btn active">
-            <i class="fas fa-newspaper"></i>
-            Article
-        </a>
-        <a href="history.html" class="nav-btn">
-            <i class="fas fa-history"></i>
-            History
-        </a>
-        <a href="profile.html" class="nav-btn">
-            <i class="fas fa-user"></i>
-            Profile
-        </a>
-    </nav>
+    <script>
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
 
-    <script src="js/auth-guard.js"></script>
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
+        }
+
+        hamburgerBtn.onclick = toggleSidebar;
+        closeSidebarBtn.onclick = toggleSidebar;
+        overlay.onclick = toggleSidebar;
+
+        // Load Saved Avatar
+        const savedAvatar = localStorage.getItem('userAvatar');
+        if(savedAvatar) document.getElementById('headerAvatar').src = savedAvatar;
+    </script>
 </body>
 </html>
