@@ -3,161 +3,407 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CASHX Dashboard | Pro</title>
+    <title>Protege Dashboard | Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --text-white: #ffffff;
+            --text-gray: #888888;
+            --gold-glow: rgba(212, 175, 55, 0.3);
+            --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* --- Container --- */
+        .phone-wrapper {
+            width: 90%; 
+            max-width: 420px;
+            background: var(--bg-black);
+            min-height: 100vh;
+            padding-bottom: 100px;
+            position: relative;
+        }
+
+        /* --- Header --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .header-logo {
+            width: 45px;
+            height: auto;
+            display: block;
+        }
+
+        .nav-trigger {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--primary-gold);
+            cursor: pointer;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            color: var(--primary-gold);
+        }
+
+        /* --- User Profile Image Circle --- */
+        .profile-img-container {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-gold);
+            overflow: hidden;
+            position: relative;
+            background: #111;
+            cursor: pointer;
+        }
+
+        .profile-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- Sidebar (FIXED BRIGHTNESS) --- */
+        .sidebar {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: #111111; /* Dark but solid, no transparency */
+            z-index: 2000;
+            transition: 0.4s ease;
+            border-right: 2px solid var(--primary-gold);
+            padding: 25px;
+            box-shadow: 20px 0 50px rgba(0,0,0,0.9);
+        }
+
+        .sidebar.active { left: 0; }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-gold);
+            margin-bottom: 35px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #222;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            color: #ffffff; /* Bright white text */
+            text-decoration: none;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .sidebar-item i { 
+            color: var(--primary-gold); 
+            margin-right: 15px; 
+            width: 25px; 
+            font-size: 1.2rem;
+            text-align: center; 
+        }
+
+        .sidebar-item:hover { 
+            background: #1a1a1a;
+            color: var(--primary-gold); 
+        }
+
+        /* --- Main Cards --- */
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 15px;
+        }
+
+        .profile-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #151515 100%);
+        }
+
+        .avatar-lg-circle {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-gold);
+            overflow: hidden;
+            background: #000;
+        }
+
+        .avatar-lg-circle img { width: 100%; height: 100%; object-fit: cover; }
+
+        .profile-info h2 { font-size: 1.1rem; color: var(--primary-gold); }
+        .profile-info p { font-size: 0.75rem; color: #888; margin-top: 4px; }
+
+        /* --- Referral Link --- */
+        .referral-section {
+            background: #080808;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px dashed var(--primary-gold);
+            margin-bottom: 20px;
+        }
+
+        .label { font-size: 0.7rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; }
+
+        .referral-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #000;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 8px;
+            border: 1px solid #222;
+        }
+
+        code { color: var(--bright-gold); font-size: 0.8rem; }
+        .copy-btn {
+            background: var(--primary-gold);
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* --- Stats Grid --- */
+        .revenue-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .amt { font-size: 1.2rem; font-weight: 700; color: var(--primary-gold); margin-top: 5px; }
+
+        /* --- Quick Actions --- */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .action-item i {
+            width: 48px;
+            height: 48px;
+            background: var(--card-bg);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-gold);
+            margin-bottom: 8px;
+        }
+
+        .action-item span { font-size: 0.6rem; color: #888; text-transform: uppercase; }
+
+        /* --- Button --- */
+        .btn-engage {
+            width: 100%;
+            padding: 15px;
+            background: var(--gradient-gold);
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            color: black;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        /* --- Bottom Nav --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 90%;
+            max-width: 420px;
+            background: #050505;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            z-index: 900;
+        }
+
+        .nav-btn { text-decoration: none; color: #444; font-size: 0.65rem; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .nav-btn.active { color: var(--primary-gold); }
+        .nav-btn i { font-size: 1.3rem; }
+
+        /* --- Overlay --- */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1500;
+        }
+    </style>
 </head>
 <body>
 
     <div class="overlay" id="overlay"></div>
 
-    <!-- Notification Modal -->
-    <div class="overlay notification-modal" id="notificationModal">
-        <div class="notification-content">
-            <div class="notification-header">
-                <h3>Notifications</h3>
-                <i class="fas fa-times" id="closeNotificationModal" style="cursor: pointer;"></i>
-            </div>
-            <div id="notificationList" class="notification-list">
-                <div class="notification-item" style="text-align: center; color: var(--text-gray);">Loading...</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Profile Dropdown (Hidden but kept for script compatibility if needed, or we can update script) -->
-    <div id="dropdownMenu" style="display: none;"></div>
-
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-        <h3>Menu</h3>
-        <i class="fas fa-times" id="closeSidebarBtn" style="cursor:pointer"></i>
-    </div>
-    <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
-    <a href="withdraw.html" class="sidebar-item"><i class="fas fa-share-nodes"></i> Withdraw</a>
-    <a href="ads.html" class="sidebar-item"><i class="fas fa-broadcast-tower"></i> ADs</a>
-    <a href="coupon.html" class="sidebar-item"><i class="fas fa-lock"></i> Coupon</a>
-    <a href="#" id="logoutBtn" class="sidebar-item" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i> Logout</a>
-</div>
-
-<div class="phone-wrapper">
-    <header class="header">
-        <div class="nav-trigger" id="hamburgerBtn">
-            <i class="fas fa-bars fa-lg"></i>
-            <span style="font-size: 1.2rem; font-weight: 700;">Dashboard</span>
+            <h3 style="letter-spacing: 2px;">MENU</h3>
+            <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
         </div>
-        <div class="header-icons">
-            <i class="far fa-bell fa-lg" id="notificationBtn"></i>
-            <i class="far fa-sun fa-lg"></i>
-            <a href="profile.html" class="avatar-sm" id="navProfileLink">BI</a>
-        </div>
-    </header>
-
-    <div id="main-content">
-        <div class="card profile-card">
-            <div class="avatar-lg" id="profileImg">BI</div>
-            <div class="profile-info">
-                <h2 id="welcomeMsg">Hello User</h2>
-                <p>Current Plan: <span class="plus-tag" id="packageDisplay">...</span> Upline: <span id="referrerDisplay">...</span></p>
-            </div>
-        </div>
-
-        <div class="referral-section">
-            <p class="label">Your Referral Link</p>
-            <div class="referral-link">
-                <code id="referralCode">Loading...</code>
-                <button class="copy-btn" onclick="copyReferralLink()">Copy</button>
-            </div>
-            <p style="font-size: 0.7rem; color: var(--text-gray); margin-top: 10px;">
-                Earn 10% commission on every referral's earnings!
-            </p>
-        </div>
-
-        <div class="revenue-row">
-            <a  class="card white-card">
-                <p class="label">Personal Revenue</p>
-                <p class="amt" id="balanceDisplay">...</p>
-            </a>
-            <a class="card dark-card">
-                <p class="label">Task Earnings</p>
-                <p class="amt" id="taskBalanceDisplay">...</p>
-            </a>
-        </div>
-
-        <div class="action-grid">
-            <a href="withdraw.html" class="action-item">
-                <i class="fas fa-university"></i>
-                <span>Payments</span>
-            </a>
-            <a href="articles.html" class="action-item">
-                <i class="fas fa-file-alt"></i>
-                <span>Articles</span>
-            </a>
-            <a href="monetization.html" class="action-item">
-                <i class="fas fa-snapchat"></i>
-                <span>Streaks</span>
-            </a>
-            <a href="games.html" class="action-item">
-                <img src="data:image/webp;base64,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" width="20" style="margin: 0 auto 5px; display:block;">
-                <span>Play Candy</span>
-            </a>
-        </div>
-
-        <div class="stats-row">
-            <a  class="card earnings-card">
-                <p class="label" style="color:white">Total Earnings</p>
-                <p class="amt" id="totalEarningsDisplay">...</p>
-            </a>
-            <a class="card roa-card">
-                <p class="label" style="color:white">Total Daily Earnings</p>
-                <p class="amt" id="dailyEarningsDisplay">...</p>
-            </a>
-        </div>
-
-        <div class="ad-section">
-            <p class="label">Assigned Ad: <strong>Tiktok</strong></p>
-            <button class="btn-engage" onclick="engageAd()">Engage Task</button>
-        </div>
+        <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>
+        <a href="ads.html" class="sidebar-item"><i class="fas fa-tv"></i> ADs</a>
+        <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a>
+        <a href="coupon.html" class="sidebar-item"><i class="fas fa-key"></i> Coupon</a>
+        <a href="loans.html" class="sidebar-item"><i class="fas fa-university"></i> Loans/scholarship</a>
+        <a href="#" class="sidebar-item" style="color: #ff4d4d; border-top: 2px solid #222;"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
-    <nav class="bottom-nav">
-        <a href="dashboard.html" class="nav-btn active">
-            <i class="fas fa-house"></i>
-            Home
-        </a>
-        <a href="articles.html" class="nav-btn">
-            <i class="fas fa-newspaper"></i>
-            Article
-        </a>
-        <a href="history.html" class="nav-btn">
-            <i class="fas fa-history"></i>
-            History
-        </a>
-        <a href="profile.html" class="nav-btn">
-            <i class="fas fa-user"></i>
-            Profile
-        </a>
-    </nav>
-</div>
+    <div class="phone-wrapper">
+        <header class="header">
+            <div class="nav-trigger" id="hamburgerBtn">
+                <i class="fas fa-bars fa-lg"></i>
+                <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo" class="header-logo" style="margin-left: 10px;">
+            </div>
+            <div class="header-icons">
+                <i class="far fa-bell fa-lg" style="cursor: pointer;"></i>
+                <div class="profile-img-container" onclick="document.getElementById('imageUpload').click()">
+                    <img id="userAvatar" src="https://via.placeholder.com/150/111111/D4AF37?text=User" alt="User">
+                    <input type="file" id="imageUpload" hidden accept="image/*">
+                </div>
+            </div>
+        </header>
 
-<script>
-    function copyReferralLink() {
-        const referralCode = document.getElementById('referralCode').textContent;
-        navigator.clipboard.writeText(referralCode)
-            .then(() => {
-                alert('Referral link copied to clipboard!');
-            })
-            .catch(err => {
-                console.error('Failed to copy: ', err);
-                alert('Failed to copy link. Please copy manually.');
-            });
-    }
+        <div id="main-content">
+            <div class="card profile-card">
+                <div class="avatar-lg-circle">
+                    <img id="displayAvatar" src="https://via.placeholder.com/150/111111/D4AF37?text=User" alt="Profile">
+                </div>
+                <div class="profile-info">
+                    <h2>Hello User</h2>
+                    <p>Plan: <span class="plus-tag">Elite</span> • Admin Ref</p>
+                </div>
+            </div>
 
-    function engageAd() {
-        alert("Redirecting to Tiktok task... Please complete and return to claim your reward.");
-        window.open("https://t.me/+EQRII_xxYE05MJAO", "_blank");
-    }
-</script>
-<script src="js/dashboard.js"></script>
+            <div class="referral-section">
+                <p class="label">My Referral Link</p>
+                <div class="referral-link">
+                    <code>cashx.pro/ref/user123</code>
+                    <button class="copy-btn">Copy</button>
+                </div>
+            </div>
+
+            <div class="revenue-row">
+                <div class="card">
+                    <p class="label">Revenue</p>
+                    <p class="amt">$500.00</p>
+                </div>
+                <div class="card">
+                    <p class="label">Task Pay</p>
+                    <p class="amt">$120.00</p>
+                </div>
+            </div>
+
+            <div class="action-grid">
+                <a href="withdraw.html" class="action-item"><i class="fas fa-university"></i><span>withdraw</span></a>
+                <a href="articles.html" class="action-item"><i class="fas fa-newspaper"></i><span>Articles</span></a>
+                <a href="monetization.html" class="action-item"><i class="fas fa-bolt"></i><span>Streak</span></a>
+                <a href="games.html" class="action-item"><i class="fas fa-gamepad"></i><span>Game</span></a>
+            </div>
+
+            <button class="btn-engage">Perform Daily Task</button>
+        </div>
+
+        <nav class="bottom-nav">
+            <a href="dashboard.html" class="nav-btn active"><i class="fas fa-house"></i>Home</a>
+            <a href="articles.html" class="nav-btn"><i class="fas fa-newspaper"></i>News</a>
+            <a href="history.html" class="nav-btn"><i class="fas fa-history"></i>History</a>
+            <a href="profile.html" class="nav-btn"><i class="fas fa-user"></i>Profile</a>
+        </nav>
+    </div>
+
+    <script>
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+        const overlay = document.getElementById('overlay');
+
+        hamburgerBtn.onclick = () => {
+            sidebar.classList.add('active');
+            overlay.style.display = 'block';
+        };
+
+        const closeMenu = () => {
+            sidebar.classList.remove('active');
+            overlay.style.display = 'none';
+        };
+
+        closeSidebarBtn.onclick = closeMenu;
+        overlay.onclick = closeMenu;
+
+        // Image Upload Logic
+        const imageUpload = document.getElementById('imageUpload');
+        const userAvatar = document.getElementById('userAvatar');
+        const displayAvatar = document.getElementById('displayAvatar');
+
+        imageUpload.onchange = function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    userAvatar.src = e.target.result;
+                    displayAvatar.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        };
+    </script>
 </body>
 </html>
