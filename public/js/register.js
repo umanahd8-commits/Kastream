@@ -1,3 +1,117 @@
+async function validateCouponCode() {
+    const couponInput = document.getElementById('couponCode');
+    const packageTypeInput = document.getElementById('packageType');
+    const packageDisplayInput = document.getElementById('packageDisplay');
+    const statusEl = document.getElementById('couponStatus');
+
+    if (!couponInput) return false;
+
+    const raw = couponInput.value.trim();
+
+    if (!raw) {
+        if (packageTypeInput) packageTypeInput.value = '';
+        if (packageDisplayInput) packageDisplayInput.value = '';
+        if (statusEl) {
+            statusEl.textContent = 'Enter your coupon to validate your plan.';
+        }
+        return false;
+    }
+
+    try {
+        if (statusEl) {
+            statusEl.textContent = 'Checking coupon...';
+        }
+
+        const response = await fetch('/api/auth/coupon/validate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ couponCode: raw })
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (response.status === 200 && data && data.valid) {
+            const planName = data.planName || data.packageType || '';
+            const amount = typeof data.amount === 'number' ? data.amount : null;
+
+            if (packageTypeInput) {
+                packageTypeInput.value = data.packageType || data.planName || '';
+            }
+
+            if (packageDisplayInput) {
+                if (planName && amount != null) {
+                    packageDisplayInput.value = planName + ' (₦' + Number(amount).toLocaleString('en-NG') + ')';
+                } else {
+                    packageDisplayInput.value = planName || '';
+                }
+            }
+
+            if (statusEl) {
+                statusEl.textContent = 'Coupon valid. Plan applied: ' + (planName || '');
+            }
+
+            return true;
+        }
+
+        if (packageTypeInput) packageTypeInput.value = '';
+        if (packageDisplayInput) packageDisplayInput.value = '';
+        if (statusEl) {
+            statusEl.textContent = (data && data.message) || 'Invalid or used coupon code.';
+        }
+
+        return false;
+    } catch (error) {
+        console.error('Error validating coupon:', error);
+        if (statusEl) {
+            statusEl.textContent = 'Unable to verify coupon right now.';
+        }
+        return false;
+    }
+}
+
+let successRedirectTimer = null;
+
+function showSuccessModal() {
+    const modal = document.getElementById('successModal');
+    const countdownEl = document.getElementById('modalCountdown');
+    const goToLoginBtn = document.getElementById('goToLoginBtn');
+
+    if (!modal || !countdownEl || !goToLoginBtn) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    modal.style.display = 'flex';
+
+    let remaining = 5;
+    countdownEl.textContent = String(remaining);
+
+    if (successRedirectTimer) {
+        clearInterval(successRedirectTimer);
+    }
+
+    successRedirectTimer = setInterval(() => {
+        remaining -= 1;
+        if (remaining <= 0) {
+            clearInterval(successRedirectTimer);
+            successRedirectTimer = null;
+            window.location.href = 'login.html';
+            return;
+        }
+        countdownEl.textContent = String(remaining);
+    }, 1000);
+
+    goToLoginBtn.onclick = () => {
+        if (successRedirectTimer) {
+            clearInterval(successRedirectTimer);
+            successRedirectTimer = null;
+        }
+        window.location.href = 'login.html';
+    };
+}
+
 // Form Submission
 const registerForm = document.getElementById('registerForm');
 
@@ -6,6 +120,15 @@ registerForm.addEventListener('submit', async (e) => {
     
     const submitBtn = registerForm.querySelector('button[type="submit"]');
     const originalBtnText = submitBtn.innerHTML;
+
+    const couponValid = await validateCouponCode();
+    const couponCodeValue = document.getElementById('couponCode').value.trim();
+    const packageTypeValue = document.getElementById('packageType').value;
+
+    if (!couponCodeValue || !packageTypeValue || !couponValid) {
+        alert('Please enter a valid coupon code to continue.');
+        return;
+    }
     
     // Gather data
     const formData = {
@@ -16,8 +139,8 @@ registerForm.addEventListener('submit', async (e) => {
         country: document.getElementById('country').value,
         password: document.getElementById('password').value,
         phone: document.getElementById('phone').value,
-        couponCode: document.getElementById('couponCode').value,
-        packageType: document.getElementById('packageType').value,
+        couponCode: couponCodeValue,
+        packageType: packageTypeValue,
         terms: document.getElementById('terms').checked
     };
 
@@ -42,13 +165,8 @@ registerForm.addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            // Success
-            alert('Registration successful! Redirecting to login...');
-            // Store token if needed, or just redirect
-            // localStorage.setItem('token', data.token);
-            window.location.href = 'login.html';
+            showSuccessModal();
         } else {
-            // Error
             alert(data.message || 'Registration failed');
         }
     } catch (error) {
@@ -77,12 +195,30 @@ if (togglePassword && password) {
 const inputs = document.querySelectorAll('input, select');
 inputs.forEach(input => {
     input.addEventListener('focus', function() {
-        this.parentElement.parentElement.classList.add('focused');
+        if (this.parentElement && this.parentElement.parentElement) {
+            this.parentElement.parentElement.classList.add('focused');
+        }
     });
     input.addEventListener('blur', function() {
-        this.parentElement.parentElement.classList.remove('focused');
+        if (this.parentElement && this.parentElement.parentElement) {
+            this.parentElement.parentElement.classList.remove('focused');
+        }
     });
 });
+
+const couponInput = document.getElementById('couponCode');
+if (couponInput) {
+    couponInput.addEventListener('blur', () => {
+        validateCouponCode();
+    });
+}
+
+const couponCheckBtn = document.getElementById('couponCheckBtn');
+if (couponCheckBtn) {
+    couponCheckBtn.addEventListener('click', () => {
+        validateCouponCode();
+    });
+}
 
 // Hamburger menu functionality
 const hamburgerMenu = document.getElementById('hamburgerMenu');

@@ -266,7 +266,8 @@
                 </div>
                 <h2 id="userNameDisplay" style="margin-bottom: 8px;">Loading...</h2>
                 <div class="status-badge">
-                    <i class="fas fa-crown" style="margin-right: 5px;"></i> PREMIUM MEMBER
+                    <i class="fas fa-crown" style="margin-right: 5px;"></i>
+                    <span id="planBadgeText">Member</span>
                 </div>
             </div>
 
@@ -404,6 +405,12 @@
                     document.getElementById('emailDisplay').textContent = data.email;
                     document.getElementById('phoneDisplay').textContent = data.phone;
                     document.getElementById('idDisplay').textContent = data.referralCode || data.id;
+
+                    const planBadgeEl = document.getElementById('planBadgeText');
+                    if (planBadgeEl) {
+                        const rawPlan = (data.packageType || '').toString().trim();
+                        planBadgeEl.textContent = rawPlan ? `${rawPlan} member` : 'Member';
+                    }
 
                     if (data.avatarUrl) {
                         profileImage.src = data.avatarUrl;

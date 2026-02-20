@@ -207,8 +207,7 @@ router.post('/register', async (req, res) => {
     try {
         const { fullName, email, username, referrer, country, password, phone, couponCode, packageType, terms } = req.body;
 
-        // Validation
-        if (!fullName || !email || !username || !password || !phone || !packageType) {
+        if (!fullName || !email || !username || !password || !phone || !couponCode || !packageType) {
             return res.status(400).json({ message: 'Please fill in all required fields' });
         }
 
@@ -216,13 +215,28 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ message: 'You must accept the Terms & Conditions' });
         }
 
-        // Check if user exists
         const userExists = await User.findOne({ $or: [{ email }, { username }] });
         if (userExists) {
             return res.status(400).json({ message: 'User already exists' });
         }
 
-        // Hash password
+        const normalizedCoupon = String(couponCode || '').trim().toUpperCase();
+        if (!normalizedCoupon) {
+            return res.status(400).json({ message: 'Coupon code is required' });
+        }
+
+        const coupon = await Coupon.findOne({ code: normalizedCoupon });
+        if (!coupon || coupon.used) {
+            return res.status(400).json({ message: 'Invalid or used coupon code' });
+        }
+
+        const requestedPackage = String(packageType || '').trim().toLowerCase();
+        const couponPackage = String(coupon.planName || '').trim().toLowerCase();
+
+        if (!requestedPackage || requestedPackage !== couponPackage) {
+            return res.status(400).json({ message: 'Package type does not match coupon plan' });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const rawPrefix = process.env.USER_ID_PREFIX || 'PROTE';
@@ -239,18 +253,22 @@ router.post('/register', async (req, res) => {
             country,
             password: hashedPassword,
             phone,
-            couponCode,
-            packageType,
-            referralCode: username // Use username as referral code to ensure uniqueness
+            couponCode: normalizedCoupon,
+            packageType: coupon.planName,
+            referralCode: username
         });
 
         await newUser.save();
 
-        // Generate Token
+        coupon.used = true;
+        coupon.usedBy = username;
+        coupon.usedAt = new Date();
+        await coupon.save();
+
         const token = jwt.sign({ id: newUser.id, username: newUser.username }, SECRET_KEY, { expiresIn: JWT_EXPIRES_IN });
 
-        res.status(201).json({ 
-            message: 'User registered successfully', 
+        res.status(201).json({
+            message: 'User registered successfully',
             token,
             user: {
                 id: newUser.userId || newUser.id,
@@ -260,6 +278,36 @@ router.post('/register', async (req, res) => {
                 fullName: newUser.fullName,
                 country: newUser.country
             }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/coupon/validate', async (req, res) => {
+    try {
+        const { couponCode } = req.body || {};
+        const raw = typeof couponCode === 'string' ? couponCode.trim() : '';
+
+        if (!raw) {
+            return res.status(400).json({ message: 'Coupon code is required' });
+        }
+
+        const code = raw.toUpperCase();
+        const coupon = await Coupon.findOne({ code });
+
+        if (!coupon || coupon.used) {
+            return res.status(201).json({ valid: false, message: 'Invalid or used token' });
+        }
+
+        return res.status(200).json({
+            valid: true,
+            couponCode: coupon.code,
+            planId: coupon.planId,
+            planName: coupon.planName,
+            packageType: coupon.planName,
+            amount: coupon.amount
         });
     } catch (error) {
         console.error(error);

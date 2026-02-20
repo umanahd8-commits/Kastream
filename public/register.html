@@ -180,6 +180,19 @@
             text-decoration: underline;
         }
 
+        .coupon-check-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--primary-gold);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0;
+        }
+
         /* --- Register Button --- */
         .btn-signup {
             width: 100%;
@@ -202,6 +215,58 @@
         .footer-text a { color: var(--primary-gold); text-decoration: none; }
 
         .terms-container { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; margin: 15px 0; }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .modal-card {
+            background: #111;
+            border-radius: 14px;
+            padding: 20px 18px;
+            width: 90%;
+            max-width: 360px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin-bottom: 8px;
+        }
+
+        .modal-text {
+            font-size: 0.85rem;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+
+        .modal-countdown {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-bottom: 18px;
+        }
+
+        .modal-btn {
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(45deg, var(--dark-gold), var(--bright-gold));
+            color: #000;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -298,11 +363,8 @@
                 <label><i class="fas fa-box"></i> Package Type</label>
                 <div class="input-with-icon">
                     <i class="fas fa-layer-group input-icon"></i>
-                    <select id="packageType" required>
-                        <option value="basic" selected>Basic Package</option>
-                        <option value="standard">Standard Package</option>
-                        <option value="premium">Premium Package</option>
-                    </select>
+                    <input type="text" id="packageDisplay" placeholder="Will be set by your coupon" readonly>
+                    <input type="hidden" id="packageType">
                 </div>
             </div>
 
@@ -310,8 +372,14 @@
                 <label><i class="fas fa-tag"></i> Coupon Code</label>
                 <div class="input-with-icon">
                     <i class="fas fa-ticket-alt input-icon"></i>
-                    <input type="text" id="couponCode" placeholder="Enter Coupon Code">
+                    <input type="text" id="couponCode" placeholder="Enter Coupon Code" required>
+                    <button type="button" class="coupon-check-btn" id="couponCheckBtn" title="Validate coupon">
+                        <i class="fas fa-check"></i>
+                    </button>
                 </div>
+                <span class="coupon-link-text" id="couponStatus">
+                    Enter your coupon to validate your plan.
+                </span>
                 <span class="coupon-link-text">
                     Don't have a coupon code? <a href="merchants.html">Get one here</a>
                 </span>
@@ -328,6 +396,17 @@
         <p class="footer-text">
             Already registered? <a href="login.html">Sign In</a>
         </p>
+    </div>
+
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-card">
+            <div class="modal-title">Registration successful</div>
+            <div class="modal-text">Welcome to Protege.</div>
+            <div class="modal-countdown">
+                Redirecting to login in <span id="modalCountdown">5</span> seconds...
+            </div>
+            <button class="modal-btn" id="goToLoginBtn">Go to login</button>
+        </div>
     </div>
 
     <script src="js/register.js"></script>
