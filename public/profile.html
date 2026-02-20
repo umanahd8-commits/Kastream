@@ -322,7 +322,6 @@
         <a href="profile.html" class="nav-btn active"><i class="fas fa-user"></i>Profile</a>
     </nav>
 
-    <script>
     <script src="js/auth-guard.js"></script>
     <script>
         // Sidebar & Menu
@@ -350,26 +349,50 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     profileImage.src = e.target.result;
-                    // You could save this to localStorage here
                     localStorage.setItem('userAvatar', e.target.result);
                 }
                 reader.readAsDataURL(file);
+                uploadProfileImage(file);
             }
         };
 
-        // Load Avatar if saved
         window.onload = () => {
             const savedAvatar = localStorage.getItem('userAvatar');
             if(savedAvatar) profileImage.src = savedAvatar;
         }
 
-        // User Data Logic
+        async function uploadProfileImage(file) {
+            const token = localStorage.getItem('token');
+            if (!token || !file) return;
+
+            const formData = new FormData();
+            formData.append('avatar', file);
+
+            try {
+                const res = await fetch('/api/auth/profile/avatar', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                const data = await res.json().catch(() => ({}));
+
+                if (res.ok && data.avatarUrl) {
+                    profileImage.src = data.avatarUrl;
+                    localStorage.setItem('userAvatar', data.avatarUrl);
+                }
+            } catch (e) {
+                console.error('Error uploading avatar');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('token');
             if (!token) return;
 
             try {
-                // Fetch User Info (Example API)
                 const res = await fetch('/api/auth/me', { 
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -381,6 +404,16 @@
                     document.getElementById('emailDisplay').textContent = data.email;
                     document.getElementById('phoneDisplay').textContent = data.phone;
                     document.getElementById('idDisplay').textContent = data.referralCode || data.id;
+
+                    if (data.avatarUrl) {
+                        profileImage.src = data.avatarUrl;
+                        localStorage.setItem('userAvatar', data.avatarUrl);
+                    } else {
+                        const savedAvatar = localStorage.getItem('userAvatar');
+                        if (savedAvatar) {
+                            profileImage.src = savedAvatar;
+                        }
+                    }
                 }
             } catch (e) {
                 console.error("Error loading profile data");

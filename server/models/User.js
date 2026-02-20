@@ -116,6 +116,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    avatarUrl: {
+        type: String,
+        default: null
+    },
     streakCurrent: {
         type: Number,
         default: 0

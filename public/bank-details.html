@@ -307,7 +307,7 @@
                    </div> 
                    <div class="form-group"> 
                      <label class="form-label">Account Number</label> 
-                     <input type="number" id="accountNumber" class="form-input" placeholder="10 Digits" required> 
+                     <input type="tel" id="accountNumber" class="form-input" placeholder="10 Digits" maxlength="10" inputmode="numeric" required> 
                    </div> 
                  </div> 
              
@@ -338,6 +338,7 @@
                  </div> 
              
                  <button type="submit" class="save-btn" id="saveBtn">Link Account</button> 
+                 <p id="bankError" style="margin-top:8px; font-size:0.75rem; color:#ff4d4f; text-align:center; display:none;"></p>
                </form> 
              </div>
 
@@ -399,7 +400,13 @@
             if (el) el.required = isRequired;
         }
 
-        // Logic for backend remains as provided
+        function showBankError(message) {
+            const el = document.getElementById('bankError');
+            if (!el) return;
+            el.textContent = message || '';
+            el.style.display = message ? 'block' : 'none';
+        }
+
         document.addEventListener('DOMContentLoaded', loadBankAccounts);
 
         async function loadBankAccounts() {
@@ -418,25 +425,39 @@
 
         function renderBankList(accounts) {
             const listEl = document.getElementById('bankList');
-            if (accounts.length === 0) {
+            if (!Array.isArray(accounts) || accounts.length === 0) {
                 listEl.innerHTML = '<p style="text-align:center; color:#555; font-size: 0.8rem;">No accounts linked.</p>';
                 return;
             }
             listEl.innerHTML = accounts.map(acc => {
-                let icon = 'fa-university';
-                let title = acc.bankName || 'Payout';
-                let subtitle = acc.accountNumber || acc.walletAddress || acc.paypalEmail;
-                if (acc.type === 'usdt') icon = 'fa-coins';
-                if (acc.type === 'paypal') icon = 'fa-paypal';
+                let iconClass = 'fas fa-university';
+                let typeLabel = (acc.type || 'payout').toUpperCase();
+                let subtitle = acc.accountNumber || acc.walletAddress || acc.paypalEmail || '';
+
+                if (acc.type === 'usdt') {
+                    iconClass = 'fas fa-coins';
+                    if (acc.walletAddress) {
+                        const addr = acc.walletAddress;
+                        if (addr.length > 18) {
+                            subtitle = addr.slice(0, 10) + '...' + addr.slice(-4);
+                        } else {
+                            subtitle = addr;
+                        }
+                    }
+                }
+
+                if (acc.type === 'paypal') {
+                    iconClass = 'fab fa-paypal';
+                }
 
                 return `
                 <div class="bank-item">
                     <div style="display:flex; align-items:center; gap:12px;">
                         <div style="background:rgba(212,175,55,0.1); width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
-                            <i class="fas ${icon}" style="color:var(--primary-gold); font-size:0.9rem;"></i>
+                            <i class="${iconClass}" style="color:var(--primary-gold); font-size:0.9rem;"></i>
                         </div>
                         <div class="bank-info">
-                            <h4>${title}</h4>
+                            <h4>${typeLabel}</h4>
                             <p>${subtitle}</p>
                         </div>
                     </div>
@@ -445,10 +466,135 @@
             }).join('');
         }
 
-        // Add Bank Function (Simplified for Preview)
         async function addBankAccount() {
-            alert('Sending data to server...');
-            // Actual API logic from original code persists here
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const saveBtn = document.getElementById('saveBtn');
+            const form = document.getElementById('addBankForm');
+            const type = document.getElementById('accountType').value || 'bank';
+
+            showBankError('');
+
+            const originalText = saveBtn.textContent;
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Linking...';
+
+            const payload = { type };
+
+            if (type === 'bank') {
+                const bankName = document.getElementById('bankName').value.trim();
+                const accountName = document.getElementById('accountName').value.trim();
+                const accountNumberRaw = document.getElementById('accountNumber').value.trim();
+                const digits = accountNumberRaw.replace(/[^0-9]/g, '');
+
+                if (!bankName || !accountName || !digits) {
+                    showBankError('Fill in all bank fields.');
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = originalText;
+                    return;
+                }
+
+                if (!/^[0-9]{10}$/.test(digits)) {
+                    showBankError('Account number must be 10 digits.');
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = originalText;
+                    return;
+                }
+
+                payload.bankName = bankName;
+                payload.accountName = accountName;
+                payload.accountNumber = digits;
+            } else if (type === 'usdt') {
+                const network = document.getElementById('usdtNetwork').value;
+                const walletAddress = document.getElementById('walletAddress').value.trim();
+
+                if (!network || !walletAddress) {
+                    showBankError('Enter USDT network and wallet address.');
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = originalText;
+                    return;
+                }
+
+                payload.network = network;
+                payload.walletAddress = walletAddress;
+            } else if (type === 'paypal') {
+                const paypalName = document.getElementById('paypalName').value.trim();
+                const paypalEmail = document.getElementById('paypalEmail').value.trim();
+
+                if (!paypalName || !paypalEmail) {
+                    showBankError('Enter PayPal name and email.');
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = originalText;
+                    return;
+                }
+
+                payload.paypalName = paypalName;
+                payload.paypalEmail = paypalEmail;
+            } else {
+                showBankError('Select a valid payout method.');
+                saveBtn.disabled = false;
+                saveBtn.textContent = originalText;
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/auth/bank-accounts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json().catch(() => ({}));
+
+                if (!res.ok) {
+                    showBankError(data.message || 'Unable to link account.');
+                    return;
+                }
+
+                if (form) {
+                    form.reset();
+                    document.getElementById('accountType').value = type;
+                }
+
+                if (data.bankAccounts) {
+                    renderBankList(data.bankAccounts);
+                } else {
+                    await loadBankAccounts();
+                }
+            } catch (e) {
+                showBankError('Network error. Please try again.');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = originalText;
+            }
+        }
+
+        async function deleteAccount(id) {
+            const token = localStorage.getItem('token');
+            if (!token || !id) return;
+
+            try {
+                const res = await fetch(`/api/auth/bank-accounts/${encodeURIComponent(id)}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await res.json().catch(() => ({}));
+
+                if (res.ok && data.bankAccounts) {
+                    renderBankList(data.bankAccounts);
+                } else if (!res.ok) {
+                    showBankError(data.message || 'Unable to delete account.');
+                }
+            } catch (e) {
+                showBankError('Network error. Please try again.');
+            }
         }
     </script>
 </body>

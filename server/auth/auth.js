@@ -3,7 +3,20 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const https = require('https');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
 const User = require('../models/User');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
+    api_key: process.env.CLOUDINARY_API_KEY || '',
+    api_secret: process.env.CLOUDINARY_API_SECRET || ''
+});
+
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 5 * 1024 * 1024 }
+});
 
 const SECRET_KEY = 'your-secret-key'; // In production, use environment variable
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '2m';
@@ -345,7 +358,8 @@ router.get('/me', verifyToken, async (req, res) => {
             tiktokProfileUrl: user.tiktokProfileUrl || null,
             telegramUsername: user.telegramUsername || null,
             whatsappNumber: user.whatsappNumber || null,
-            facebookProfileUrl: user.facebookProfileUrl || null
+            facebookProfileUrl: user.facebookProfileUrl || null,
+            avatarUrl: user.avatarUrl || null
         });
     } catch (error) {
         console.error(error);
@@ -903,6 +917,49 @@ router.post('/social/facebook', verifyToken, async (req, res) => {
     }
 });
 
+router.post('/profile/avatar', verifyToken, upload.single('avatar'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        if (!req.file.mimetype || !req.file.mimetype.startsWith('image/')) {
+            return res.status(400).json({ message: 'Only image uploads are allowed' });
+        }
+
+        if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+            return res.status(500).json({ message: 'Image upload service is not configured' });
+        }
+
+        const uploadResult = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                { folder: 'cashx_avatars' },
+                (error, result) => {
+                    if (error) return reject(error);
+                    resolve(result);
+                }
+            );
+            stream.end(req.file.buffer);
+        });
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        user.avatarUrl = uploadResult.secure_url || uploadResult.url || user.avatarUrl;
+        await user.save();
+
+        res.json({
+            message: 'Avatar updated',
+            avatarUrl: user.avatarUrl
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Add Bank/Payment Account
 router.post('/bank-accounts', verifyToken, async (req, res) => {
     try {
@@ -915,14 +972,17 @@ router.post('/bank-accounts', verifyToken, async (req, res) => {
 
         const newAccount = { type };
 
-        // Type-specific validation
         if (type === 'bank') {
             if (!bankName || !accountName || !accountNumber) {
                 return res.status(400).json({ message: 'All bank fields are required' });
             }
-            newAccount.bankName = bankName;
-            newAccount.accountName = accountName;
-            newAccount.accountNumber = accountNumber;
+            const cleanedNumber = String(accountNumber).trim().replace(/[^0-9]/g, '');
+            if (!/^[0-9]{10}$/.test(cleanedNumber)) {
+                return res.status(400).json({ message: 'Account number must be 10 digits' });
+            }
+            newAccount.bankName = bankName.trim();
+            newAccount.accountName = accountName.trim();
+            newAccount.accountNumber = cleanedNumber;
         } else if (type === 'usdt') {
             if (!network || !walletAddress) {
                 return res.status(400).json({ message: 'Network and wallet address are required' });
