@@ -259,36 +259,114 @@
         const savedAvatar = localStorage.getItem('userAvatar');
         if(savedAvatar) document.getElementById('headerAvatar').src = savedAvatar;
 
-        // History Logic
-        document.addEventListener('DOMContentLoaded', () => {
+        function formatTransactionLabel(tx) {
+            const t = tx.type || '';
+            const source = tx.source || '';
+            if (t === 'checkin') return 'Daily Check-in';
+            if (t === 'game') return 'Game Earning';
+            if (t === 'task') {
+                if (source === 'tiktok') return 'TikTok Monetization';
+                if (source === 'telegram') return 'Telegram Monetization';
+                if (source === 'whatsapp') return 'WhatsApp Monetization';
+                if (source === 'facebook') return 'Facebook Monetization';
+                return 'Task Earning';
+            }
+            if (t === 'withdrawal') return 'Withdrawal';
+            if (t === 'referral') return 'Referral Commission';
+            if (t === 'article') return 'Article Earning';
+            return 'Activity';
+        }
+
+        function formatTransactionIcon(tx) {
+            const t = tx.type || '';
+            const source = tx.source || '';
+            if (t === 'checkin') return 'fa-calendar-day';
+            if (t === 'game') return 'fa-gamepad';
+            if (t === 'task') {
+                if (source === 'tiktok') return 'fa-tiktok';
+                if (source === 'telegram') return 'fa-telegram';
+                if (source === 'whatsapp') return 'fa-whatsapp';
+                if (source === 'facebook') return 'fa-facebook-f';
+                return 'fa-check-circle';
+            }
+            if (t === 'withdrawal') return 'fa-wallet';
+            if (t === 'referral') return 'fa-users';
+            if (t === 'article') return 'fa-newspaper';
+            return 'fa-coins';
+        }
+
+        function formatTransactionDate(createdAt) {
+            if (!createdAt) return '';
+            const d = new Date(createdAt);
+            if (Number.isNaN(d.getTime())) return '';
+            return d.toLocaleString('en-NG', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
             const historyList = document.getElementById('historyList');
-            
-            // Simulation logic
-            const records = [
-                { title: 'Referral Bonus', type: 'credit', icon: 'fa-users', amount: 25.00, date: 'Feb 16, 2026' },
-                { title: 'Withdrawal', type: 'debit', icon: 'fa-wallet', amount: 50.00, date: 'Feb 14, 2026' },
-                { title: 'Task Earnings', type: 'credit', icon: 'fa-check-circle', amount: 12.50, date: 'Feb 12, 2026' },
-                { title: 'Daily Login', type: 'credit', icon: 'fa-calendar-day', amount: 1.00, date: 'Feb 12, 2026' }
-            ];
-            
-            setTimeout(() => {
-                historyList.innerHTML = records.map(record => `
-                    <div class="history-item">
-                        <div style="display: flex; align-items: center;">
-                            <div class="history-icon ${record.type === 'credit' ? 'icon-credit' : 'icon-debit'}">
-                                <i class="fas ${record.icon}"></i>
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                historyList.innerHTML = '<p style="text-align:center; color:var(--text-gray); font-size:0.8rem; margin-top:1.5rem;">Log in again to view your history.</p>';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/auth/history', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!res.ok) {
+                    historyList.innerHTML = '<p style="text-align:center; color:var(--text-gray); font-size:0.8rem; margin-top:1.5rem;">Unable to load history.</p>';
+                    return;
+                }
+
+                const data = await res.json();
+                const txs = Array.isArray(data.transactions) ? data.transactions : [];
+
+                if (txs.length === 0) {
+                    historyList.innerHTML = '<p style="text-align:center; color:var(--text-gray); font-size:0.8rem; margin-top:1.5rem;">No money activities yet.</p>';
+                    return;
+                }
+
+                historyList.innerHTML = txs.map(tx => {
+                    const direction = tx.direction === 'debit' ? 'debit' : 'credit';
+                    const iconClass = formatTransactionIcon(tx);
+                    const label = formatTransactionLabel(tx);
+                    const dateLabel = formatTransactionDate(tx.createdAt);
+                    const amount = typeof tx.amount === 'number' ? tx.amount : 0;
+                    const sign = direction === 'credit' ? '+' : '-';
+                    const currency = tx.currency || '₦';
+                    const symbol = currency === 'NGN' || currency === '₦' ? '₦' : currency;
+
+                    return `
+                        <div class="history-item">
+                            <div style="display: flex; align-items: center;">
+                                <div class="history-icon ${direction === 'credit' ? 'icon-credit' : 'icon-debit'}">
+                                    <i class="fas ${iconClass}"></i>
+                                </div>
+                                <div class="history-details">
+                                    <div class="history-title">${label}</div>
+                                    <div class="history-date">${dateLabel}</div>
+                                </div>
                             </div>
-                            <div class="history-details">
-                                <div class="history-title">${record.title}</div>
-                                <div class="history-date">${record.date}</div>
+                            <div class="history-amount ${direction === 'credit' ? 'amount-credit' : 'amount-debit'}">
+                                ${sign}${symbol}${amount.toFixed(2)}
                             </div>
                         </div>
-                        <div class="history-amount ${record.type === 'credit' ? 'amount-credit' : 'amount-debit'}">
-                            ${record.type === 'credit' ? '+' : '-'}$${record.amount.toFixed(2)}
-                        </div>
-                    </div>
-                `).join('');
-            }, 800);
+                    `;
+                }).join('');
+            } catch (e) {
+                historyList.innerHTML = '<p style="text-align:center; color:var(--text-gray); font-size:0.8rem; margin-top:1.5rem;">Network error loading history.</p>';
+            }
         });
     </script>
 </body>

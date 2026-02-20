@@ -529,6 +529,15 @@ router.post('/game/finish', verifyToken, async (req, res) => {
             user.gameTotalEarnedToday = (user.gameTotalEarnedToday || 0) + reward;
             user.taskBalance = (user.taskBalance || 0) + reward;
             user.dailyEarnings = (user.dailyEarnings || 0) + reward;
+            user.transactions = user.transactions || [];
+            user.transactions.push({
+                type: 'game',
+                amount: reward,
+                currency: 'NGN',
+                direction: 'credit',
+                source: 'game',
+                description: 'Game earning'
+            });
             await user.save();
         }
 
@@ -658,6 +667,32 @@ router.get('/streak', verifyToken, async (req, res) => {
     }
 });
 
+router.get('/history', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const items = Array.isArray(user.transactions) ? user.transactions.slice() : [];
+        items.sort((a, b) => {
+            const da = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+            const db = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+            return db - da;
+        });
+
+        const limit = 200;
+        const trimmed = items.slice(0, limit);
+
+        res.json({
+            transactions: trimmed
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 router.post('/streak/checkin', verifyToken, async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
@@ -717,7 +752,15 @@ router.post('/streak/checkin', verifyToken, async (req, res) => {
         user.streakDaysThisMonth = (user.streakDaysThisMonth || 0) + 1;
         user.streakTotalEarnedThisMonth = (user.streakTotalEarnedThisMonth || 0) + todayReward;
         user.taskBalance = (user.taskBalance || 0) + todayReward;
-
+        user.transactions = user.transactions || [];
+        user.transactions.push({
+            type: 'checkin',
+            amount: todayReward,
+            currency: 'NGN',
+            direction: 'credit',
+            source: 'streak',
+            description: 'Daily check-in reward'
+        });
         await user.save();
 
         res.json({
@@ -770,6 +813,15 @@ router.post('/social/tiktok', verifyToken, async (req, res) => {
         user.tiktokProfileUrl = url;
         const reward = 150;
         user.taskBalance = (user.taskBalance || 0) + reward;
+        user.transactions = user.transactions || [];
+        user.transactions.push({
+            type: 'task',
+            amount: reward,
+            currency: 'NGN',
+            direction: 'credit',
+            source: 'tiktok',
+            description: 'TikTok monetization earning'
+        });
         await user.save();
 
         res.json({
@@ -819,6 +871,15 @@ router.post('/social/telegram', verifyToken, async (req, res) => {
         user.telegramUsername = username;
         const reward = 150;
         user.taskBalance = (user.taskBalance || 0) + reward;
+        user.transactions = user.transactions || [];
+        user.transactions.push({
+            type: 'task',
+            amount: reward,
+            currency: 'NGN',
+            direction: 'credit',
+            source: 'telegram',
+            description: 'Telegram monetization earning'
+        });
         await user.save();
 
         res.json({
@@ -865,6 +926,15 @@ router.post('/social/whatsapp', verifyToken, async (req, res) => {
         user.whatsappNumber = phone;
         const reward = 150;
         user.taskBalance = (user.taskBalance || 0) + reward;
+        user.transactions = user.transactions || [];
+        user.transactions.push({
+            type: 'task',
+            amount: reward,
+            currency: 'NGN',
+            direction: 'credit',
+            source: 'whatsapp',
+            description: 'WhatsApp monetization earning'
+        });
         await user.save();
 
         res.json({
@@ -903,6 +973,15 @@ router.post('/social/facebook', verifyToken, async (req, res) => {
         user.facebookProfileUrl = url;
         const reward = 150;
         user.taskBalance = (user.taskBalance || 0) + reward;
+        user.transactions = user.transactions || [];
+        user.transactions.push({
+            type: 'task',
+            amount: reward,
+            currency: 'NGN',
+            direction: 'credit',
+            source: 'facebook',
+            description: 'Facebook monetization earning'
+        });
         await user.save();
 
         res.json({

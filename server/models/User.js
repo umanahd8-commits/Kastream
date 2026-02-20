@@ -120,6 +120,36 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    transactions: [{
+        type: {
+            type: String,
+            enum: ['checkin', 'article', 'withdrawal', 'referral', 'game', 'task'],
+            required: true
+        },
+        amount: {
+            type: Number,
+            required: true
+        },
+        currency: {
+            type: String,
+            default: 'NGN'
+        },
+        direction: {
+            type: String,
+            enum: ['credit', 'debit'],
+            required: true
+        },
+        source: {
+            type: String
+        },
+        description: {
+            type: String
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now
+        }
+    }],
     streakCurrent: {
         type: Number,
         default: 0
