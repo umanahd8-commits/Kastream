@@ -181,11 +181,66 @@
 
         .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1500; }
 
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2500;
+        }
+
+        .modal-box {
+            width: 85%;
+            max-width: 380px;
+            background: #050505;
+            border-radius: 18px;
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            padding: 20px 18px 18px;
+            text-align: center;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin-bottom: 8px;
+        }
+
+        .modal-message {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+            margin-bottom: 16px;
+        }
+
+        .modal-close-btn {
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: none;
+            background: var(--gradient-gold);
+            color: #000;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
     </style>
 </head>
 <body>
 
     <div class="overlay" id="mainOverlay" onclick="toggleSidebar()"></div>
+
+    <div class="modal-overlay" id="monetizationModal">
+        <div class="modal-box">
+            <div class="modal-title" id="monetizationModalTitle"></div>
+            <div class="modal-message" id="monetizationModalMessage"></div>
+            <button class="modal-close-btn" onclick="closeMonetizationModal()">Close</button>
+        </div>
+    </div>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -307,6 +362,22 @@
             ov.style.display = sb.classList.contains('active') ? 'block' : 'none';
         }
 
+        function openMonetizationModal(title, message) {
+            const overlay = document.getElementById('monetizationModal');
+            const titleEl = document.getElementById('monetizationModalTitle');
+            const msgEl = document.getElementById('monetizationModalMessage');
+            if (!overlay || !titleEl || !msgEl) return;
+            titleEl.textContent = title || '';
+            msgEl.textContent = message || '';
+            overlay.style.display = 'flex';
+        }
+
+        function closeMonetizationModal() {
+            const overlay = document.getElementById('monetizationModal');
+            if (!overlay) return;
+            overlay.style.display = 'none';
+        }
+
         async function loadStreak() {
             const token = localStorage.getItem('token');
             if (!token) return;
@@ -372,9 +443,9 @@
                     }
                 });
                 if (res.ok) {
-                    const data = await res.json();
-                    if (!data.alreadyCheckedIn) {
-                        alert(`Check-in successful! You earned ₦${data.todayReward} today.`);
+                        const data = await res.json();
+                        if (!data.alreadyCheckedIn) {
+                            openMonetizationModal('Check-in successful', `You earned ₦${data.todayReward} today.`);
                         const userStr = localStorage.getItem('user');
                         if (userStr) {
                             try {
@@ -406,7 +477,7 @@
 
             const url = input.value.trim();
             if (!url) {
-                alert('Please paste your TikTok profile link.');
+                openMonetizationModal('Missing TikTok link', 'Please paste your TikTok profile link.');
                 return;
             }
 
@@ -426,16 +497,16 @@
                 const data = await res.json();
                 if (res.ok) {
                     if (data.alreadyLinked) {
-                        alert('TikTok profile already added on your account.');
+                        openMonetizationModal('Already connected', 'TikTok profile already added on your account.');
                     } else {
-                        alert(`TikTok connected. You earned ₦${data.reward}.`);
+                        openMonetizationModal('TikTok connected', `You earned ₦${data.reward}.`);
                         await loadMonetizationConnections();
                     }
                 } else {
-                    alert(data.message || 'Unable to verify TikTok profile.');
+                    openMonetizationModal('TikTok error', data.message || 'Unable to verify TikTok profile.');
                 }
             } catch (e) {
-                alert('Network error while verifying TikTok profile.');
+                openMonetizationModal('Network error', 'Network error while verifying TikTok profile.');
             } finally {
                 btn.disabled = false;
                 btn.textContent = originalText;
@@ -452,7 +523,7 @@
 
             let username = input.value.trim();
             if (!username) {
-                alert('Please enter your Telegram username.');
+                openMonetizationModal('Missing Telegram username', 'Please enter your Telegram username.');
                 return;
             }
 
@@ -472,16 +543,16 @@
                 const data = await res.json();
                 if (res.ok) {
                     if (data.alreadyLinked) {
-                        alert('Telegram username already added on your account.');
+                        openMonetizationModal('Already connected', 'Telegram username already added on your account.');
                     } else {
-                        alert(`Telegram connected. You earned ₦${data.reward}.`);
+                        openMonetizationModal('Telegram connected', `You earned ₦${data.reward}.`);
                         await loadMonetizationConnections();
                     }
                 } else {
-                    alert(data.message || 'Unable to verify Telegram username.');
+                    openMonetizationModal('Telegram error', data.message || 'Unable to verify Telegram username.');
                 }
             } catch (e) {
-                alert('Network error while verifying Telegram username.');
+                openMonetizationModal('Network error', 'Network error while verifying Telegram username.');
             } finally {
                 btn.disabled = false;
                 btn.textContent = originalText;
@@ -498,7 +569,7 @@
 
             const phone = input.value.trim();
             if (!phone) {
-                alert('Please enter your WhatsApp number with country code.');
+                openMonetizationModal('Missing WhatsApp number', 'Please enter your WhatsApp number with country code.');
                 return;
             }
 
@@ -518,16 +589,16 @@
                 const data = await res.json();
                 if (res.ok) {
                     if (data.alreadyLinked) {
-                        alert('WhatsApp number already added on your account.');
+                        openMonetizationModal('Already connected', 'WhatsApp number already added on your account.');
                     } else {
-                        alert(`WhatsApp connected. You earned ₦${data.reward}.`);
+                        openMonetizationModal('WhatsApp connected', `You earned ₦${data.reward}.`);
                         await loadMonetizationConnections();
                     }
                 } else {
-                    alert(data.message || 'Unable to verify WhatsApp number.');
+                    openMonetizationModal('WhatsApp error', data.message || 'Unable to verify WhatsApp number.');
                 }
             } catch (e) {
-                alert('Network error while verifying WhatsApp number.');
+                openMonetizationModal('Network error', 'Network error while verifying WhatsApp number.');
             } finally {
                 btn.disabled = false;
                 btn.textContent = originalText;
@@ -544,7 +615,7 @@
 
             const url = input.value.trim();
             if (!url) {
-                alert('Please paste your Facebook page/profile link.');
+                openMonetizationModal('Missing Facebook link', 'Please paste your Facebook page/profile link.');
                 return;
             }
 
@@ -564,16 +635,16 @@
                 const data = await res.json();
                 if (res.ok) {
                     if (data.alreadyLinked) {
-                        alert('Facebook link already added on your account.');
+                        openMonetizationModal('Already connected', 'Facebook link already added on your account.');
                     } else {
-                        alert(`Facebook connected. You earned ₦${data.reward}.`);
+                        openMonetizationModal('Facebook connected', `You earned ₦${data.reward}.`);
                         await loadMonetizationConnections();
                     }
                 } else {
-                    alert(data.message || 'Unable to save Facebook link.');
+                    openMonetizationModal('Facebook error', data.message || 'Unable to save Facebook link.');
                 }
             } catch (e) {
-                alert('Network error while saving Facebook link.');
+                openMonetizationModal('Network error', 'Network error while saving Facebook link.');
             } finally {
                 btn.disabled = false;
                 btn.textContent = originalText;
