@@ -6,6 +6,7 @@ const https = require('https');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const User = require('../models/User');
+const Coupon = require('../models/Coupon');
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
@@ -18,7 +19,7 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 }
 });
 
-const SECRET_KEY = 'your-secret-key'; // In production, use environment variable
+const SECRET_KEY = 'your-secret-key';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '2m';
 
 const GAME_CONFIG = {
@@ -30,6 +31,58 @@ const GAME_CONFIG = {
     boardWidth: 8,
     candyTypes: 5
 };
+
+function getPlanConfig() {
+    const namesRaw = process.env.PLAN_NAMES || '';
+    const pricesRaw = process.env.PLAN_PRICES || '';
+    const countRaw = process.env.PLAN_COUNT;
+
+    const names = namesRaw
+        .split(',')
+        .map(value => value.trim())
+        .filter(value => value.length > 0);
+
+    const prices = pricesRaw
+        .split(',')
+        .map(value => value.trim())
+        .filter(value => value.length > 0)
+        .map(value => Number(value) || 0);
+
+    let count = names.length;
+    if (typeof countRaw === 'string' && countRaw.trim()) {
+        const parsed = parseInt(countRaw, 10);
+        if (parsed > 0) {
+            count = Math.min(parsed, names.length, prices.length || names.length);
+        }
+    }
+
+    if (!count || count < 1 || !names.length || !prices.length) {
+        return [
+            { id: 'starter', number: 1, name: 'Starter', price: 3000 },
+            { id: 'lite', number: 2, name: 'Lite', price: 6000 },
+            { id: 'pro', number: 3, name: 'Pro', price: 9000 },
+            { id: 'elite', number: 4, name: 'Elite', price: 12000 }
+        ];
+    }
+
+    const plans = [];
+    for (let index = 0; index < count && index < names.length && index < prices.length; index++) {
+        const name = names[index];
+        const price = prices[index] || 0;
+        let id = name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+        if (!id) {
+            id = 'plan_' + (index + 1);
+        }
+        plans.push({
+            id,
+            number: index + 1,
+            name,
+            price
+        });
+    }
+
+    return plans;
+}
 
 function fetchJson(url) {
     return new Promise((resolve, reject) => {
@@ -581,6 +634,114 @@ router.get('/admin/overview', verifyToken, requireAdmin, async (req, res) => {
             totalUsers,
             totalBalance: agg.totalBalance || 0,
             totalTaskBalance: agg.totalTaskBalance || 0
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.get('/admin/plans', verifyToken, requireAdmin, (req, res) => {
+    try {
+        const plans = getPlanConfig();
+        res.json({ plans });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+function generateCouponCode() {
+    const segment = () => Math.random().toString(36).substring(2, 6).toUpperCase();
+    return 'PROT-' + segment() + '-' + segment();
+}
+
+router.post('/admin/coupons/generate', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const { planId, count } = req.body || {};
+
+        if (!planId) {
+            return res.status(400).json({ message: 'planId is required' });
+        }
+
+        let total = parseInt(count, 10);
+        if (!total || total < 1) total = 1;
+        if (total > 500) total = 500;
+
+        const plans = getPlanConfig();
+        const plan = plans.find(p => p.id === planId);
+        if (!plan) {
+            return res.status(400).json({ message: 'Invalid plan' });
+        }
+
+        const coupons = [];
+        for (let index = 0; index < total; index++) {
+            const code = generateCouponCode();
+            coupons.push({
+                code,
+                planId: plan.id,
+                planName: plan.name,
+                amount: plan.price,
+                used: false
+            });
+        }
+
+        const created = await Coupon.insertMany(coupons, { ordered: false });
+
+        res.json({
+            message: 'Coupons generated',
+            count: created.length
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.get('/admin/coupons', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const pageRaw = req.query.page;
+        const limitRaw = req.query.limit;
+        const searchRaw = req.query.search || '';
+
+        let page = parseInt(pageRaw, 10);
+        if (!page || page < 1) page = 1;
+
+        let limit = parseInt(limitRaw, 10);
+        if (!limit || limit < 1 || limit > 100) limit = 10;
+
+        const search = searchRaw.trim();
+        const filter = {};
+
+        if (search) {
+            const regex = new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+            filter.$or = [{ code: regex }, { usedBy: regex }, { planName: regex }];
+        }
+
+        const [totalCount, coupons] = await Promise.all([
+            Coupon.countDocuments(filter),
+            Coupon.find(filter)
+                .sort({ createdAt: -1 })
+                .skip((page - 1) * limit)
+                .limit(limit)
+        ]);
+
+        const mapped = coupons.map(c => ({
+            id: c.id,
+            code: c.code,
+            planName: c.planName,
+            amount: c.amount,
+            used: !!c.used,
+            usedBy: c.usedBy || null,
+            createdAt: c.createdAt,
+            usedAt: c.usedAt
+        }));
+
+        res.json({
+            totalCount,
+            page,
+            pageSize: limit,
+            coupons: mapped
         });
     } catch (error) {
         console.error(error);

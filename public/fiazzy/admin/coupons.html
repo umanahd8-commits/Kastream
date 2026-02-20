@@ -139,6 +139,167 @@
             color: var(--text-muted);
         }
 
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .form-row select,
+        .form-row input {
+            padding: 8px 10px;
+            border-radius: 999px;
+            border: 1px solid #333;
+            background: #050505;
+            color: #f5f5f5;
+            font-size: 0.8rem;
+        }
+
+        .form-row select {
+            min-width: 180px;
+            flex: 1;
+        }
+
+        .form-row input {
+            width: 90px;
+        }
+
+        .generate-btn {
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(212,175,55,0.6);
+            background: transparent;
+            color: var(--primary-gold);
+            font-size: 0.78rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hint {
+            margin-top: 6px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .search-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 180px;
+            padding: 8px 10px;
+            border-radius: 999px;
+            border: 1px solid #333;
+            background: #050505;
+            color: #f5f5f5;
+            font-size: 0.8rem;
+        }
+
+        .search-input::placeholder {
+            color: #555;
+        }
+
+        .search-btn {
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(212,175,55,0.6);
+            background: transparent;
+            color: var(--primary-gold);
+            font-size: 0.78rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+
+        th, td {
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        th {
+            text-align: left;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        td {
+            color: #e0e0e0;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .empty-state {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 18px 0 6px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+        }
+
+        .badge-used {
+            background: rgba(255,77,79,0.15);
+            color: var(--accent-red);
+        }
+
+        .badge-unused {
+            background: rgba(0,201,111,0.15);
+            color: var(--accent-green);
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .pagination-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .page-btn {
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid #333;
+            background: transparent;
+            color: #f5f5f5;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .page-btn[disabled] {
+            opacity: 0.4;
+            cursor: default;
+        }
+
         .sidebar-overlay {
             position: fixed;
             inset: 0;
@@ -289,15 +450,355 @@
         <div class="section-title">Coupons</div>
 
         <div class="card">
-            <div class="card-title">Coupons management</div>
+            <div class="card-title">Generate coupons</div>
             <div class="card-sub">
-                This page will handle coupon creation, activation and tracking for vendors.
+                Select a plan and quantity to generate vendor coupons.
+            </div>
+            <div class="form-row">
+                <select id="planSelect">
+                    <option value="">Loading plans...</option>
+                </select>
+                <input id="countInput" type="number" min="1" max="500" value="10">
+                <button class="generate-btn" id="generateBtn">
+                    <i class="fas fa-bolt"></i>
+                    <span>Generate</span>
+                </button>
+            </div>
+            <div class="hint" id="planHint"></div>
+            <div class="hint" id="generateHint"></div>
+        </div>
+
+        <div class="section-title">Coupons list</div>
+
+        <div class="card">
+            <div class="card-title">All coupons</div>
+            <div class="card-sub">
+                Search by code, plan or used by. Showing latest first.
+            </div>
+
+            <div class="search-row">
+                <input type="text" id="couponSearchInput" class="search-input" placeholder="Search by code, plan or used by">
+                <button class="search-btn" id="couponSearchBtn">
+                    <i class="fas fa-search"></i>
+                    <span>Search</span>
+                </button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Code</th>
+                        <th>Plan</th>
+                        <th class="right">Amount</th>
+                        <th>Validity</th>
+                        <th>Created</th>
+                        <th>Used by</th>
+                    </tr>
+                </thead>
+                <tbody id="couponTableBody">
+                    <tr>
+                        <td colspan="7" class="empty-state">No coupons loaded yet.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <div id="couponPageInfo">Page 1</div>
+                <div class="pagination-buttons">
+                    <button class="page-btn" id="couponPrevBtn" disabled>Previous</button>
+                    <button class="page-btn" id="couponNextBtn" disabled>Next</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="sidebar.js"></script>
     <script>
+        let couponState = {
+            page: 1,
+            pageSize: 10,
+            totalCount: 0,
+            search: ''
+        };
+
+        function formatCurrency(value) {
+            const n = Number(value) || 0;
+            return '₦' + n.toLocaleString('en-NG');
+        }
+
+        function formatDate(value) {
+            if (!value) return '-';
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return '-';
+            return date.toLocaleString();
+        }
+
+        async function loadPlans() {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const select = document.getElementById('planSelect');
+            const hint = document.getElementById('planHint');
+
+            try {
+                const res = await fetch('/api/auth/admin/plans', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                if (!res.ok) {
+                    if (res.status === 400 || res.status === 401 || res.status === 403) {
+                        applyLogout();
+                        return;
+                    }
+                    throw new Error('Failed to load plans');
+                }
+
+                const data = await res.json();
+                const plans = Array.isArray(data.plans) ? data.plans : [];
+
+                if (!plans.length) {
+                    select.innerHTML = '<option value="">No plans configured</option>';
+                    if (hint) {
+                        hint.textContent = 'No plans found. Check server configuration.';
+                    }
+                    return;
+                }
+
+                select.innerHTML = plans.map(p => {
+                    const label = p.name + ' (' + formatCurrency(p.price) + ')';
+                    return '<option value="' + p.id + '">' + label + '</option>';
+                }).join('');
+
+                if (hint) {
+                    hint.textContent = 'Plans are configurable from environment variables.';
+                }
+            } catch (error) {
+                if (select) {
+                    select.innerHTML = '<option value="">Unable to load plans</option>';
+                }
+                if (hint) {
+                    hint.textContent = 'Could not load plans. Please try again.';
+                }
+            }
+        }
+
+        async function generateCoupons() {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const select = document.getElementById('planSelect');
+            const countInput = document.getElementById('countInput');
+            const hint = document.getElementById('generateHint');
+
+            const planId = select ? select.value : '';
+            let count = countInput ? parseInt(countInput.value, 10) : 0;
+
+            if (!planId) {
+                if (hint) hint.textContent = 'Select a plan before generating.';
+                return;
+            }
+
+            if (!count || count < 1) count = 1;
+            if (count > 500) count = 500;
+
+            if (countInput) {
+                countInput.value = String(count);
+            }
+
+            if (hint) {
+                hint.textContent = 'Generating coupons...';
+            }
+
+            try {
+                const res = await fetch('/api/auth/admin/coupons/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ planId, count })
+                });
+
+                if (!res.ok) {
+                    if (res.status === 400 || res.status === 401 || res.status === 403) {
+                        applyLogout();
+                        return;
+                    }
+                    const data = await res.json().catch(() => null);
+                    const message = data && data.message ? data.message : 'Failed to generate coupons';
+                    if (hint) {
+                        hint.textContent = message;
+                    }
+                    return;
+                }
+
+                const data = await res.json();
+                if (hint) {
+                    const created = data && typeof data.count === 'number' ? data.count : count;
+                    hint.textContent = 'Generated ' + created + ' coupon(s).';
+                }
+                couponState.page = 1;
+                await loadCoupons(1);
+            } catch (error) {
+                if (hint) {
+                    hint.textContent = 'Unable to generate coupons. Please try again.';
+                }
+            }
+        }
+
+        async function loadCoupons(page) {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const tbody = document.getElementById('couponTableBody');
+            const pageToLoad = page && page > 0 ? page : couponState.page || 1;
+            const searchValue = couponState.search || '';
+
+            const params = new URLSearchParams();
+            params.set('page', String(pageToLoad));
+            params.set('limit', String(couponState.pageSize));
+            if (searchValue) params.set('search', searchValue);
+
+            if (tbody) {
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Loading coupons...</td></tr>';
+            }
+
+            try {
+                const res = await fetch('/api/auth/admin/coupons?' + params.toString(), {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                if (!res.ok) {
+                    if (res.status === 400 || res.status === 401 || res.status === 403) {
+                        applyLogout();
+                        return;
+                    }
+                    throw new Error('Failed to load coupons');
+                }
+
+                const data = await res.json();
+                couponState.page = data.page || pageToLoad;
+                couponState.pageSize = data.pageSize || couponState.pageSize;
+                couponState.totalCount = data.totalCount || 0;
+
+                const coupons = Array.isArray(data.coupons) ? data.coupons : [];
+
+                if (tbody) {
+                    if (!coupons.length) {
+                        tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No coupons found for this filter.</td></tr>';
+                    } else {
+                        tbody.innerHTML = coupons.map((c, index) => {
+                            const sn = (couponState.page - 1) * couponState.pageSize + index + 1;
+                            const amountLabel = formatCurrency(c.amount);
+                            const createdLabel = formatDate(c.createdAt);
+                            const used = !!c.used;
+                            const validity = used
+                                ? '<span class="badge badge-used">Used</span>'
+                                : '<span class="badge badge-unused">Unused</span>';
+                            const usedBy = c.usedBy || '-';
+                            return (
+                                '<tr>' +
+                                '<td>' + sn + '</td>' +
+                                '<td>' + (c.code || '') + '</td>' +
+                                '<td>' + (c.planName || '') + '</td>' +
+                                '<td class="right">' + amountLabel + '</td>' +
+                                '<td>' + validity + '</td>' +
+                                '<td>' + createdLabel + '</td>' +
+                                '<td>' + usedBy + '</td>' +
+                                '</tr>'
+                            );
+                        }).join('');
+                    }
+                }
+
+                const pageInfo = document.getElementById('couponPageInfo');
+                if (pageInfo) {
+                    const total = couponState.totalCount;
+                    const startIndex = total === 0 ? 0 : (couponState.page - 1) * couponState.pageSize + 1;
+                    const endIndex = Math.min(couponState.page * couponState.pageSize, total);
+                    pageInfo.textContent = 'Page ' + couponState.page + ' • Showing ' + startIndex + '–' + endIndex + ' of ' + total;
+                }
+
+                const prevBtn = document.getElementById('couponPrevBtn');
+                const nextBtn = document.getElementById('couponNextBtn');
+                if (prevBtn) {
+                    prevBtn.disabled = couponState.page <= 1;
+                }
+                if (nextBtn) {
+                    const totalPages = couponState.totalCount === 0 ? 1 : Math.ceil(couponState.totalCount / couponState.pageSize);
+                    nextBtn.disabled = couponState.page >= totalPages;
+                }
+            } catch (error) {
+                if (tbody) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Unable to load coupons.</td></tr>';
+                }
+            }
+        }
+
+        function initCouponsPage() {
+            const searchInput = document.getElementById('couponSearchInput');
+            const searchBtn = document.getElementById('couponSearchBtn');
+            const prevBtn = document.getElementById('couponPrevBtn');
+            const nextBtn = document.getElementById('couponNextBtn');
+            const generateBtn = document.getElementById('generateBtn');
+
+            if (searchInput) {
+                searchInput.addEventListener('keydown', e => {
+                    if (e.key === 'Enter') {
+                        couponState.search = searchInput.value.trim();
+                        couponState.page = 1;
+                        loadCoupons(1);
+                    }
+                });
+            }
+
+            if (searchBtn) {
+                searchBtn.onclick = () => {
+                    if (!searchInput) return;
+                    couponState.search = searchInput.value.trim();
+                    couponState.page = 1;
+                    loadCoupons(1);
+                };
+            }
+
+            if (prevBtn) {
+                prevBtn.onclick = () => {
+                    if (couponState.page > 1) {
+                        loadCoupons(couponState.page - 1);
+                    }
+                };
+            }
+
+            if (nextBtn) {
+                nextBtn.onclick = () => {
+                    const totalPages = couponState.totalCount === 0 ? 1 : Math.ceil(couponState.totalCount / couponState.pageSize);
+                    if (couponState.page < totalPages) {
+                        loadCoupons(couponState.page + 1);
+                    }
+                };
+            }
+
+            if (generateBtn) {
+                generateBtn.onclick = () => {
+                    generateCoupons();
+                };
+            }
+        }
+
         document.getElementById('adminLogoutBtn').onclick = () => {
             applyLogout();
         };
@@ -306,6 +807,9 @@
             if (!guardAdminAccess()) return;
             initAdminHeader();
             initSidebarNav();
+            loadPlans();
+            loadCoupons(1);
+            initCouponsPage();
         };
     </script>
 </body>
