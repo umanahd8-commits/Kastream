@@ -172,9 +172,10 @@ router.post('/register', async (req, res) => {
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Generate custom userId
+        const rawPrefix = process.env.USER_ID_PREFIX || 'PROTE';
+        const safePrefix = String(rawPrefix || '').trim() || 'PROTE';
         const randomDigits = Math.floor(100000 + Math.random() * 900000);
-        const userId = `CASHX${randomDigits}`;
+        const userId = `${safePrefix}${randomDigits}`;
 
         const newUser = new User({
             fullName,
@@ -580,6 +581,59 @@ router.get('/admin/overview', verifyToken, requireAdmin, async (req, res) => {
             totalUsers,
             totalBalance: agg.totalBalance || 0,
             totalTaskBalance: agg.totalTaskBalance || 0
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.get('/admin/users', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const pageRaw = req.query.page;
+        const limitRaw = req.query.limit;
+        const search = (req.query.search || '').trim();
+
+        let page = parseInt(pageRaw, 10);
+        if (!page || page < 1) page = 1;
+
+        let limit = parseInt(limitRaw, 10);
+        if (!limit || limit < 1 || limit > 100) limit = 20;
+
+        const filter = {};
+
+        if (search) {
+            const regex = new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+            filter.$or = [
+                { username: regex },
+                { email: regex },
+                { userId: regex }
+            ];
+        }
+
+        const [totalUsers, filteredCount, users] = await Promise.all([
+            User.countDocuments({}),
+            User.countDocuments(filter),
+            User.find(filter)
+                .sort({ createdAt: -1 })
+                .skip((page - 1) * limit)
+                .limit(limit)
+        ]);
+
+        const mapped = users.map(u => ({
+            id: u.userId || String(u._id),
+            username: u.username,
+            plan: u.packageType || null,
+            role: u.role || 'user',
+            balance: u.balance || 0
+        }));
+
+        res.json({
+            totalUsers,
+            filteredCount,
+            page,
+            pageSize: limit,
+            users: mapped
         });
     } catch (error) {
         console.error(error);

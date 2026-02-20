@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | Protege</title>
+    <title>Admin Users | Protege</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -115,7 +115,7 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: 1fr;
             gap: 14px;
         }
 
@@ -152,43 +152,12 @@
             font-size: 0.9rem;
         }
 
-        .card-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .card-sub {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .muted {
-            color: var(--text-muted);
-        }
-
-        .pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 8px;
-            border-radius: 999px;
-            background: rgba(0, 201, 111, 0.08);
-            color: var(--accent-green);
-            font-size: 0.7rem;
-            margin-top: 4px;
-        }
-
         .section-title {
-            margin: 22px 0 10px;
+            margin: 10px 0 10px;
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.07em;
             color: var(--text-muted);
-        }
-
-        .table-card {
-            margin-top: 10px;
         }
 
         table {
@@ -280,6 +249,10 @@
             font-size: 0.8rem;
             text-decoration: none;
             cursor: pointer;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
         }
 
         .sidebar-item i {
@@ -304,7 +277,7 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            margin-top: 22px;
+            margin-top: 4px;
             margin-bottom: 10px;
         }
 
@@ -387,7 +360,7 @@
             </button>
         </div>
         <div class="sidebar-nav">
-            <a href="dashboard.html" class="sidebar-item active">
+            <a href="dashboard.html" class="sidebar-item">
                 <i class="fas fa-gauge"></i>
                 <span>Dashboard</span>
             </a>
@@ -395,7 +368,7 @@
                 <i class="fas fa-ticket-alt"></i>
                 <span>Coupons</span>
             </a>
-            <a href="users.html" class="sidebar-item">
+            <a href="users.html" class="sidebar-item active">
                 <i class="fas fa-users"></i>
                 <span>Users</span>
             </a>
@@ -442,78 +415,83 @@
             </div>
         </div>
 
-        <div>
-            <div class="grid">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Registered users</div>
-                        <div class="card-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                    </div>
-                    <div class="card-value" id="statTotalUsers">0</div>
-                    <div class="card-sub muted">Total accounts in the system</div>
-                </div>
+        <div class="section-title">Users</div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Main wallet balance</div>
-                        <div class="card-icon">
-                            <i class="fas fa-wallet"></i>
-                        </div>
-                    </div>
-                    <div class="card-value" id="statTotalBalance">₦0</div>
-                    <div class="card-sub muted">Sum of all user balances</div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Task wallet balance</div>
-                        <div class="card-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                    </div>
-                    <div class="card-value" id="statTotalTaskBalance">₦0</div>
-                    <div class="card-sub muted">Sum of all task balances</div>
-                </div>
+        <div class="users-header">
+            <div class="users-count" id="usersTotalCount">Total users: 0</div>
+            <div class="users-controls">
+                <input type="text" id="userSearchInput" class="search-input" placeholder="Search by username, email or ID">
+                <button class="search-btn" id="userSearchBtn">
+                    <i class="fas fa-search"></i>
+                    <span>Search</span>
+                </button>
             </div>
+        </div>
 
-            <div class="section-title">System snapshot</div>
-
-            <div class="card table-card">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Metric</th>
-                            <th class="right">Value</th>
-                        </tr>
-                    </thead>
-                    <tbody id="overviewTableBody">
-                        <tr>
-                            <td colspan="2" class="empty-state">Loading overview...</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="card table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Username</th>
+                        <th>Plan</th>
+                        <th>Role</th>
+                        <th class="right">Main balance</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <tr>
+                        <td colspan="5" class="empty-state">No users loaded yet.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination">
+                <div id="userPageInfo">Page 1</div>
+                <div class="pagination-buttons">
+                    <button class="page-btn" id="userPrevBtn" disabled>Previous</button>
+                    <button class="page-btn" id="userNextBtn" disabled>Next</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="sidebar.js"></script>
     <script>
+        let adminUsersState = {
+            page: 1,
+            search: '',
+            totalUsers: 0,
+            filteredCount: 0,
+            pageSize: 20
+        };
+
         function formatCurrency(value) {
             const n = Number(value) || 0;
             return '₦' + n.toLocaleString('en-NG');
         }
 
-        async function fetchOverview() {
+        async function loadUsers(page) {
             const token = localStorage.getItem('adminToken');
             if (!token) {
                 window.location.href = 'login.html';
                 return;
             }
 
+            const pageToLoad = page && page > 0 ? page : adminUsersState.page || 1;
+            const searchValue = adminUsersState.search || '';
+
+            const params = new URLSearchParams();
+            params.set('page', String(pageToLoad));
+            params.set('limit', String(adminUsersState.pageSize));
+            if (searchValue) params.set('search', searchValue);
+
+            const tbody = document.getElementById('userTableBody');
+            if (tbody) {
+                tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Loading users...</td></tr>';
+            }
+
             try {
-                const res = await fetch('/api/auth/admin/overview', {
+                const res = await fetch('/api/auth/admin/users?' + params.toString(), {
                     headers: {
                         'Authorization': 'Bearer ' + token
                     }
@@ -524,38 +502,107 @@
                         applyLogout();
                         return;
                     }
-                    throw new Error('Failed to load overview');
+                    throw new Error('Failed to load users');
                 }
 
                 const data = await res.json();
 
-                document.getElementById('statTotalUsers').textContent = data.totalUsers ?? 0;
-                document.getElementById('statTotalBalance').textContent = formatCurrency(data.totalBalance);
-                document.getElementById('statTotalTaskBalance').textContent = formatCurrency(data.totalTaskBalance);
+                adminUsersState.page = data.page || pageToLoad;
+                adminUsersState.pageSize = data.pageSize || adminUsersState.pageSize;
+                adminUsersState.filteredCount = data.filteredCount ?? 0;
+                adminUsersState.totalUsers = data.totalUsers ?? adminUsersState.totalUsers;
 
-                const tbody = document.getElementById('overviewTableBody');
-                tbody.innerHTML = '';
+                const usersTotalCountEl = document.getElementById('usersTotalCount');
+                if (usersTotalCountEl) {
+                    usersTotalCountEl.textContent = 'Total users: ' + adminUsersState.totalUsers;
+                }
 
-                const rows = [
-                    { label: 'Registered users', value: String(data.totalUsers ?? 0) },
-                    { label: 'Total main wallet balance', value: formatCurrency(data.totalBalance) },
-                    { label: 'Total task wallet balance', value: formatCurrency(data.totalTaskBalance) }
-                ];
+                if (tbody) {
+                    const users = Array.isArray(data.users) ? data.users : [];
+                    if (users.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No users found for this filter.</td></tr>';
+                    } else {
+                        tbody.innerHTML = users.map((u, index) => {
+                            const sn = index + 1;
+                            const mainBalance = formatCurrency(u.balance);
+                            const planLabel = u.plan || 'N/A';
+                            return (
+                                '<tr>' +
+                                '<td>' + sn + '</td>' +
+                                '<td>' + (u.username || '') + '</td>' +
+                                '<td>' + planLabel + '</td>' +
+                                '<td>' + (u.role || 'user') + '</td>' +
+                                '<td class="right">' + mainBalance + '</td>' +
+                                '</tr>'
+                            );
+                        }).join('');
+                    }
+                }
 
-                rows.forEach(row => {
-                    const tr = document.createElement('tr');
-                    const tdLabel = document.createElement('td');
-                    tdLabel.textContent = row.label;
-                    const tdValue = document.createElement('td');
-                    tdValue.textContent = row.value;
-                    tdValue.className = 'right';
-                    tr.appendChild(tdLabel);
-                    tr.appendChild(tdValue);
-                    tbody.appendChild(tr);
-                });
+                const pageInfo = document.getElementById('userPageInfo');
+                if (pageInfo) {
+                    const total = adminUsersState.filteredCount;
+                    const startIndex = total === 0 ? 0 : (adminUsersState.page - 1) * adminUsersState.pageSize + 1;
+                    const endIndex = Math.min(adminUsersState.page * adminUsersState.pageSize, total);
+                    pageInfo.textContent = 'Page ' + adminUsersState.page + ' • Showing ' + startIndex + '–' + endIndex + ' of ' + total;
+                }
+
+                const prevBtn = document.getElementById('userPrevBtn');
+                const nextBtn = document.getElementById('userNextBtn');
+                if (prevBtn) {
+                    prevBtn.disabled = adminUsersState.page <= 1;
+                }
+                if (nextBtn) {
+                    const totalPages = adminUsersState.filteredCount === 0 ? 1 : Math.ceil(adminUsersState.filteredCount / adminUsersState.pageSize);
+                    nextBtn.disabled = adminUsersState.page >= totalPages;
+                }
             } catch (err) {
-                const tbody = document.getElementById('overviewTableBody');
-                tbody.innerHTML = '<tr><td colspan="2" class="empty-state">Unable to load overview.</td></tr>';
+                if (tbody) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Unable to load users.</td></tr>';
+                }
+            }
+        }
+
+        function initUsersSection() {
+            const searchInput = document.getElementById('userSearchInput');
+            const searchBtn = document.getElementById('userSearchBtn');
+            const prevBtn = document.getElementById('userPrevBtn');
+            const nextBtn = document.getElementById('userNextBtn');
+
+            if (searchInput) {
+                searchInput.addEventListener('keydown', e => {
+                    if (e.key === 'Enter') {
+                        adminUsersState.search = searchInput.value.trim();
+                        adminUsersState.page = 1;
+                        loadUsers(1);
+                    }
+                });
+            }
+
+            if (searchBtn) {
+                searchBtn.onclick = () => {
+                    if (!searchInput) return;
+                    adminUsersState.search = searchInput.value.trim();
+                    adminUsersState.page = 1;
+                    loadUsers(1);
+                };
+            }
+
+            if (prevBtn) {
+                prevBtn.onclick = () => {
+                    if (adminUsersState.page > 1) {
+                        loadUsers(adminUsersState.page - 1);
+                    }
+                };
+            }
+
+            if (nextBtn) {
+                nextBtn.onclick = () => {
+                    const totalPages = adminUsersState.filteredCount === 0 ? 1 : Math.ceil(adminUsersState.filteredCount / adminUsersState.pageSize);
+                    if (adminUsersState.page < totalPages) {
+                        loadUsers(adminUsersState.page + 1);
+                    }
+                };
             }
         }
 
@@ -567,7 +614,8 @@
             if (!guardAdminAccess()) return;
             initAdminHeader();
             initSidebarNav();
-            fetchOverview();
+            initUsersSection();
+            loadUsers(1);
         };
     </script>
 </body>
