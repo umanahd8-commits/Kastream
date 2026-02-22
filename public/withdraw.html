@@ -35,7 +35,6 @@
             justify-content: center;
         }
 
-        /* --- Container Responsiveness --- */
         .phone-wrapper {
             width: 90%; 
             max-width: 420px;
@@ -45,7 +44,6 @@
             position: relative;
         }
 
-        /* --- Header --- */
         .header {
             display: flex;
             justify-content: space-between;
@@ -69,7 +67,6 @@
             cursor: pointer;
         }
 
-        /* --- Sidebar (Solid & Bright Menu) --- */
         .sidebar {
             position: fixed;
             left: -100%;
@@ -108,7 +105,6 @@
         .sidebar-item i { color: var(--primary-gold); margin-right: 15px; width: 25px; text-align: center; }
         .sidebar-item.active { background: rgba(212, 175, 55, 0.1); color: var(--primary-gold); }
 
-        /* --- Profile Circle --- */
         .profile-img-container {
             width: 40px;
             height: 40px;
@@ -120,7 +116,6 @@
         }
         .profile-img-container img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* --- Withdraw Content --- */
         .section-title {
             color: var(--primary-gold);
             margin: 25px 0 12px;
@@ -226,18 +221,290 @@
         .nav-btn i { font-size: 1.3rem; }
 
         .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1500; align-items: center; justify-content: center; }
+
+        /* ===== SECOND CODE STYLES (Payout Preview & Receipt) ===== */
+        :root {
+            --gold: #FFD700;
+            --green: #22c55e;
+            --red: #ef4444;
+            --border: #333333;
+            --text-muted: #a0a0a0;
+        }
+
+        #payout-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.92);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+        #payout-overlay.active { display: flex; }
+
+        .payout-card {
+            background-color: #111111;
+            width: 85%;
+            max-width: 380px;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #333333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            box-sizing: border-box;
+        }
+
+        .payout-hidden { display: none !important; }
+
+        .payout-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .payout-card h1 { font-size: 22px; margin: 0; font-weight: 500; color: #ffffff; }
+        .payout-card h2 { font-size: 26px; margin: 5px 0 0 0; color: #ffffff; font-weight: 600; }
+        .payout-timestamp { font-size: 12px; color: #a0a0a0; margin-top: 8px; }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-wrapper img {
+            width: 36px;
+            height: auto;
+        }
+
+        .payout-card hr { border: 0; border-top: 1px solid #333333; margin: 20px 0; }
+
+        .payout-card label { display: block; color: #a0a0a0; font-size: 13px; margin-bottom: 5px; }
+        .payout-card p { margin: 0; font-size: 15px; font-weight: 500; color: #ffffff; }
+
+        .payout-amount-section { margin-bottom: 20px; }
+        .payout-amount { font-size: 32px; font-weight: bold; margin-top: 5px; }
+        .highlight-gold { color: #FFD700; }
+        .highlight-green { color: #22c55e; }
+
+        .payout-row { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .payout-text-right { text-align: right; }
+
+        .warning-box { margin-top: 30px; margin-bottom: 20px; }
+        .warning-box h3 { margin: 0 0 5px 0; font-size: 14px; color: #FFD700; }
+        .warning-box p { font-size: 13px; color: #a0a0a0; line-height: 1.5; font-weight: normal; }
+
+        .details-list { display: flex; flex-direction: column; gap: 20px; margin-bottom: 20px; }
+
+        .payout-button-group { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
+
+        .payout-btn {
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: opacity 0.2s;
+        }
+        .payout-btn:hover { opacity: 0.8; }
+        .btn-confirm-p { background-color: #22c55e; color: #000000; }
+        .btn-cancel-p { background-color: #ef4444; color: #ffffff; }
+        .btn-download-p { background-color: #FFD700; color: #000000; }
+        .btn-white-p { background-color: #ffffff; color: #000000; }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 380px;
+            display: flex;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 4000;
+        }
+        .toast {
+            background-color: #22c55e;
+            color: #000000;
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(34,197,94,0.3);
+            pointer-events: auto;
+            font-size: 14px;
+            font-weight: 600;
+            box-sizing: border-box;
+        }
+        .toast-content { display: flex; align-items: center; gap: 10px; }
+        .toast-icon {
+            background: #000;
+            color: #22c55e;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .close-toast { background: none; border: none; color: #000; font-size: 20px; cursor: pointer; font-weight: bold; }
+
+        @media print {
+            body { background-color: white; color: black; }
+            .payout-card { background-color: white; box-shadow: none; border: 1px solid #ccc; width: 100%; }
+            .payout-button-group, .toast-container { display: none !important; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="overlay" id="mainOverlay"></div>
+    <!-- Toast Notification -->
+    <div class="toast-container payout-hidden" id="toast-container">
+        <div class="toast">
+            <div class="toast-content">
+                <span class="toast-icon">✓</span>
+                <span>Withdrawal placed successfully</span>
+            </div>
+            <button class="close-toast" id="close-toast-btn">×</button>
+        </div>
+    </div>
+
+    <!-- Payout Overlay (Preview + Receipt) -->
+    <div id="payout-overlay">
+        <!-- Preview Card -->
+        <div id="preview-card" class="payout-card">
+            <div class="payout-card-header">
+                <div>
+                    <h1>Withdrawal</h1>
+                    <h2>Preview</h2>
+                </div>
+                <div class="logo-wrapper">
+                    <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="CASHX Logo">
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="payout-amount-section">
+                <label>Amount</label>
+                <div class="payout-amount highlight-gold" id="preview-amount">₦0.00</div>
+            </div>
+
+            <div class="payout-row">
+                <div>
+                    <label>Wallet</label>
+                    <p id="preview-wallet">-</p>
+                </div>
+                <div class="payout-text-right">
+                    <label>Method</label>
+                    <p id="preview-method">-</p>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="payout-row">
+                <div>
+                    <label>Fee (2%)</label>
+                    <p id="preview-fee">-</p>
+                </div>
+                <div class="payout-text-right">
+                    <label>Net Total</label>
+                    <p id="preview-total" style="color: var(--accent-green);">-</p>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="warning-box">
+                <h3>Important!</h3>
+                <p>Please confirm the withdrawal details before completing, as this cannot be reversed.</p>
+            </div>
+
+            <div class="payout-button-group">
+                <button id="confirm-payout-btn" class="payout-btn btn-confirm-p">
+                    <span>✓</span> Confirm
+                </button>
+                <button id="cancel-payout-btn" class="payout-btn btn-cancel-p">
+                    <span>×</span> Cancel
+                </button>
+            </div>
+        </div>
+
+        <!-- Receipt Card -->
+        <div id="receipt-card" class="payout-card payout-hidden">
+            <div class="payout-card-header">
+                <div>
+                    <h1>Withdrawal</h1>
+                    <h2>Receipt</h2>
+                    <p class="payout-timestamp" id="receipt-timestamp"></p>
+                </div>
+                <div class="logo-wrapper">
+                    <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="CASHX Logo">
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="payout-amount-section">
+                <label>Amount</label>
+                <div class="payout-amount highlight-green" id="receipt-amount">₦0.00</div>
+            </div>
+
+            <div class="payout-row">
+                <div>
+                    <label>Transaction ID</label>
+                    <p id="receipt-ref">-</p>
+                </div>
+                <div class="payout-text-right">
+                    <label>Transaction Type</label>
+                    <p id="receipt-type">-</p>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="details-list">
+                <div class="detail-item">
+                    <label>Wallet</label>
+                    <p id="receipt-wallet">-</p>
+                </div>
+                <div class="detail-item">
+                    <label>Method</label>
+                    <p id="receipt-method">-</p>
+                </div>
+            </div>
+
+            <div class="payout-button-group">
+                <button id="download-btn" class="payout-btn btn-download-p">
+                    <span>↓</span> Download
+                </button>
+                <button id="close-receipt-btn" class="payout-btn btn-white-p">
+                    <span>×</span> Close
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3 style="letter-spacing: 2px;">MENU</h3>
             <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
         </div>
-      <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
         <a href="coupon.html" class="sidebar-item"><i class="fas fa-key"></i> Coupon</a>
         <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a>
         <a href="teams.html" class="sidebar-item"><i class="fas fa-users"></i> Teams</a>
@@ -298,7 +565,7 @@
             </div>
             <p id="minWithdrawalDisplay" style="color:var(--text-gray); font-size:0.75rem; text-align: right; font-weight: 600;">Minimum: ₦1,000.00</p>
 
-            <button class="withdraw-btn" onclick="openConfirm()">Request Payout</button>
+            <button class="withdraw-btn" onclick="openPayoutPreview()">Request Payout</button>
             
             <div style="margin-top:35px">
                 <h4 class="section-title">Recent Payouts</h4>
@@ -306,44 +573,6 @@
                     <p style="color:#444; text-align:center; padding: 30px; background: #050505; border-radius: 15px; font-size: 0.8rem; border: 1px dashed #1a1a1a;">No transaction history found.</p>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <div id="confirmModal" class="overlay">
-        <div class="modal-box">
-            <h3 style="color:var(--primary-gold); margin-bottom:10px;">Verify Transaction</h3>
-            <p style="font-size: 0.8rem; color: var(--text-gray);">Please review your request</p>
-            <div class="confirm-details">
-                <div class="confirm-row"><strong>Method:</strong> <span id="dispMethod">Bank</span></div>
-                <div class="confirm-row"><strong>Wallet:</strong> <span id="dispWallet">Commission</span></div>
-                <div class="confirm-row"><strong>Amount:</strong> <span id="dispAmt">0.00</span></div>
-                <div class="confirm-row"><strong>Fee (2%):</strong> <span id="dispFee">0.00</span></div>
-                <div style="border-top:1px solid #222; margin:10px 0;"></div>
-                <div class="confirm-row" style="font-weight:bold; font-size:1rem; color:var(--accent-green);">
-                    <span>Net Total:</span> <span id="dispTotal">0.00</span>
-                </div>
-            </div>
-            <div style="display:flex; gap:10px">
-                <button style="flex:1; padding:12px; border-radius:10px; background:#1a1a1a; color:white; border:none; cursor:pointer; font-weight:700;" onclick="closeModals()">Cancel</button>
-                <button style="flex:1; padding:12px; border-radius:10px; background:var(--gradient-gold); color:black; border:none; cursor:pointer; font-weight:800;" onclick="showReceipt()">Confirm</button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="receiptModal" class="overlay">
-        <div class="modal-box">
-            <div style="width:50px; height:50px; background:rgba(0, 255, 136, 0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 15px">
-                <i class="fas fa-paper-plane" style="font-size:20px; color:var(--accent-green)"></i>
-            </div>
-            <h3 style="color:white;">Request Sent</h3>
-            <p style="color:var(--text-gray); font-size:0.8rem; margin: 10px 0 20px;">Your withdrawal is being processed.</p>
-            
-            <div style="background:#000; padding:15px; border-radius:10px; margin-bottom:20px; text-align:left; border: 1px solid #1a1a1a;">
-                <p style="margin-bottom:8px; font-size: 0.8rem;"><strong style="color:var(--text-gray)">Ref:</strong> <span id="transId" style="float:right; color:var(--primary-gold)">...</span></p>
-                <p style="font-size: 0.8rem;"><strong style="color:var(--text-gray)">Amount:</strong> <span id="recAmt" style="float:right">...</span></p>
-            </div>
-            
-            <button style="width:100%; padding:15px; background:#111; border:1px solid #222; color:white; border-radius:10px; cursor:pointer; font-weight:700;" onclick="finishTransaction()">Done</button>
         </div>
     </div>
 
@@ -382,37 +611,78 @@
             document.getElementById('minWithdrawalDisplay').textContent = (val === 'Direct Bank') ? 'Minimum: ₦1,000.00' : 'Minimum: $10.00';
         }
 
-        function openConfirm() {
+        function openPayoutPreview() {
             const amt = parseFloat(document.getElementById('amtInput').value);
-            if(!amt || amt <= 0) return alert("Enter a valid amount");
-            
-            document.getElementById('dispMethod').innerText = currentMethod;
-            document.getElementById('dispWallet').innerText = document.getElementById('selectedWallet').value;
-            
+            if (!amt || amt <= 0) return alert("Enter a valid amount");
+
             const symbol = (currentMethod === 'Direct Bank') ? '₦' : '$';
-            document.getElementById('dispAmt').innerText = symbol + amt.toLocaleString();
-            
             const fee = amt * 0.02;
-            document.getElementById('dispFee').innerText = symbol + fee.toLocaleString();
-            document.getElementById('dispTotal').innerText = symbol + (amt - fee).toLocaleString();
-            
-            document.getElementById('confirmModal').style.display = 'flex';
+            const total = amt - fee;
+            const wallet = document.getElementById('selectedWallet').value;
+
+            // Populate preview card
+            document.getElementById('preview-amount').textContent = symbol + amt.toLocaleString();
+            document.getElementById('preview-wallet').textContent = wallet;
+            document.getElementById('preview-method').textContent = currentMethod;
+            document.getElementById('preview-fee').textContent = symbol + fee.toLocaleString();
+            document.getElementById('preview-total').textContent = symbol + total.toLocaleString();
+
+            // Show overlay
+            document.getElementById('payout-overlay').classList.add('active');
+            document.getElementById('preview-card').classList.remove('payout-hidden');
+            document.getElementById('receipt-card').classList.add('payout-hidden');
         }
 
-        function closeModals() {
-            document.querySelectorAll('.overlay').forEach(m => m.style.display = 'none');
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const confirmBtn = document.getElementById('confirm-payout-btn');
+            const cancelBtn = document.getElementById('cancel-payout-btn');
+            const downloadBtn = document.getElementById('download-btn');
+            const closeReceiptBtn = document.getElementById('close-receipt-btn');
+            const closeToastBtn = document.getElementById('close-toast-btn');
+            const toastContainer = document.getElementById('toast-container');
 
-        function showReceipt() {
-            const amt = document.getElementById('amtInput').value;
-            const symbol = (currentMethod === 'Direct Bank') ? '₦' : '$';
-            document.getElementById('confirmModal').style.display = 'none';
-            document.getElementById('recAmt').innerText = symbol + amt;
-            document.getElementById('transId').textContent = 'CHX-' + Math.floor(Math.random() * 900000);
-            document.getElementById('receiptModal').style.display = 'flex';
-        }
-        
-        function finishTransaction() { window.location.reload(); }
+            confirmBtn.addEventListener('click', () => {
+                const amt = document.getElementById('amtInput').value;
+                const symbol = (currentMethod === 'Direct Bank') ? '₦' : '$';
+                const wallet = document.getElementById('selectedWallet').value;
+                const ref = 'CHX-' + Math.floor(Math.random() * 900000);
+
+                // Populate receipt
+                document.getElementById('receipt-amount').textContent = symbol + parseFloat(amt).toLocaleString();
+                document.getElementById('receipt-ref').textContent = '#' + ref;
+                document.getElementById('receipt-type').textContent = wallet + ' Withdrawal';
+                document.getElementById('receipt-wallet').textContent = wallet;
+                document.getElementById('receipt-method').textContent = currentMethod;
+
+                // Timestamp
+                const now = new Date();
+                document.getElementById('receipt-timestamp').textContent = now.toLocaleString();
+
+                // Switch cards
+                document.getElementById('preview-card').classList.add('payout-hidden');
+                document.getElementById('receipt-card').classList.remove('payout-hidden');
+
+                // Show toast
+                toastContainer.classList.remove('payout-hidden');
+                setTimeout(() => toastContainer.classList.add('payout-hidden'), 4000);
+            });
+
+            cancelBtn.addEventListener('click', () => {
+                document.getElementById('payout-overlay').classList.remove('active');
+            });
+
+            closeToastBtn.addEventListener('click', () => {
+                toastContainer.classList.add('payout-hidden');
+            });
+
+            downloadBtn.addEventListener('click', () => {
+                window.print();
+            });
+
+            closeReceiptBtn.addEventListener('click', () => {
+                location.reload();
+            });
+        });
     </script>
 </body>
 </html>
