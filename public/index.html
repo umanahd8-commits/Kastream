@@ -1,157 +1,621 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11489992379"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-11489992379');
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PROTEGE - About Section</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        /* --- Core Variables & Reset --- */
         :root {
-            --primary-color: #D4AF37; /* Metallic Gold */
-            --bg-color: #000000;      /* True Black */
-            --text-color-light: #ffffff;
-            --accent-glow: rgba(212, 175, 55, 0.6);
+            --primary-black: #0a0a0a;
+            --secondary-black: #1a1a1a;
+            --accent-gold: #D4AF37; 
+            --gold-gradient: linear-gradient(180deg, #FFD700 0%, #D4AF37 50%, #B8860B 100%);
+            --text-white: #ffffff;
+            --error-red: #ff4d4d;
         }
 
-        body {
+        body, html {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
             font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color-light);
+            background-color: var(--primary-black);
+            color: var(--text-white);
             overflow-x: hidden;
         }
 
-        /* --- Animations --- */
-        @keyframes goldGlow {
-            0% { text-shadow: 0 0 10px rgba(212, 175, 55, 0.4); }
-            50% { text-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 0 0 30px rgba(212, 175, 55, 0.4); }
-            100% { text-shadow: 0 0 10px rgba(212, 175, 55, 0.4); }
+        /* --- Clickable Assets (Global Link) --- */
+        img, 
+        .feature-card,
+        .about-image-wrapper {
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        img:hover,
+        .feature-card:hover {
+            opacity: 0.95;
+        }
+
+        /* --- Buttons --- */
+        .btn-glow {
+            background-color: var(--accent-gold);
+            color: var(--primary-black);
+            border: none;
+            border-radius: 50px;
+            padding: 10px 32px;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            transition: all 0.3s ease;
+            text-transform: capitalize;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-glow:hover {
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+            transform: translateY(-2px);
+            color: var(--primary-black);
+            background-color: #f1c40f;
+        }
+
+        .btn-outline-custom {
+            background-color: transparent;
+            border: 2px solid var(--accent-gold);
+            color: var(--accent-gold);
+            border-radius: 50px;
+            padding: 10px 32px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-transform: capitalize;
+            text-decoration: none;
+        }
+
+        .btn-outline-custom:hover {
+            background-color: rgba(212, 175, 55, 0.1);
+            color: #ffffff;
+        }
+
+        .btn-sm-glow {
+            padding: 8px 20px;
+            font-size: 0.85rem;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            border-radius: 50px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-sm-glow:hover {
+            background: var(--accent-gold);
+            color: var(--primary-black);
         }
 
         /* --- Navbar --- */
         .navbar {
-            transition: background-color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
-            padding: 1rem 0;
-            z-index: 1030;
-        }
-        
-        .navbar-scrolled {
-            background-color: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding-top: 20px;
+            padding-bottom: 20px;
+            z-index: 1000;
+            transition: all 0.3s ease-in-out;
+            background-color: transparent; 
         }
 
         .navbar-brand img {
-            height: 35px;
+            height: 30px; 
         }
 
-        .navbar-nav .nav-link {
-            color: var(--text-color-light);
-            font-weight: 500;
-            margin: 0 1rem;
-            transition: color 0.3s;
+        .nav-link {
+            color: #ffffff !important;
+            font-weight: 400;
+            margin: 0 10px;
+            font-size: 0.95rem;
+            transition: opacity 0.3s;
         }
 
-        .navbar-nav .nav-link:hover,
-        .navbar-nav .nav-link.active {
-            color: var(--primary-color);
-            text-shadow: 0 0 8px var(--accent-glow);
+        .nav-link:hover {
+            color: var(--accent-gold) !important;
         }
 
-        .btn-join-us {
-            background: linear-gradient(45deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
-            color: #000 !important;
-            font-weight: 700;
-            padding: 0.6rem 1.8rem;
-            border-radius: 5px;
+        .navbar-toggler {
             border: none;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-            background-size: 200% auto;
-        }
-
-        .btn-join-us:hover {
-            background-position: right center;
-            box-shadow: 0 0 15px var(--accent-glow);
-            transform: translateY(-2px);
+            color: white;
+            padding-right: 0;
         }
         
-        .navbar-toggler {
-            border: 1px solid var(--primary-color);
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28212, 175, 55, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        .navbar-glass {
+            background-color: rgba(10, 10, 10, 0.95) !important;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding-top: 10px !important;
+            padding-bottom: 10px !important;
+        }
+
+        /* --- Hero Section --- */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--primary-black);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            padding-top: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 5;
+            padding-top: 80px; 
+        }
+
+        .hero-title-logo {
+            height: 60px;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .hero-desc {
+            font-size: 12pt !important;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            max-width: 450px;
+            color: #ccc;
         }
 
         /* --- About Section --- */
-        section {
-            padding: 80px 0;
-        }
-
         .about-section {
-            margin-bottom: 80px;
+            position: relative;
+            padding: 80px 0;
+            background: radial-gradient(circle at 70% 30%, #1a1a1a 0%, #000000 70%);
+            overflow: hidden;
+            z-index: 2; 
         }
 
-        .about-heading {
-            font-size: 2.8rem;
+        .about-header h2 {
+            font-size: 3.5rem;
             font-weight: 700;
-            margin-bottom: 2rem;
-            line-height: 1.2;
-            text-align: center;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+        
+        .about-header .brand-text {
+            color: var(--accent-gold); 
         }
 
-        .about-heading span {
-            color: var(--primary-color);
-            animation: goldGlow 3s infinite ease-in-out;
+        .about-lead {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #e0e0e0;
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        .about-pill-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        .about-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50px;
+            padding: 14px 24px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            width: fit-content;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            color: #ffffff;
+        }
+
+        .about-pill:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--accent-gold);
+            transform: translateX(10px);
+        }
+
+        .about-pill::before {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: var(--accent-gold);
+            border-radius: 50%;
+            margin-right: 15px;
+            box-shadow: 0 0 10px var(--accent-gold);
+        }
+
+        .about-cta {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent-gold);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .about-image-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        /* --- Features Section --- */
+        .features-section {
+            padding: 80px 0 100px 0;
+            background: var(--primary-black);
+            position: relative;
         }
 
         .section-title {
-            color: var(--primary-color);
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: 10px;
         }
 
-        .about-image {
-            width: 100%;
-            max-width: 800px;
-            margin: 30px auto;
-            border-radius: 15px;
+        .section-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .highlight {
+            color: var(--accent-gold);
+        }
+
+        /* Feature Card */
+        .feature-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 24px;
             overflow: hidden;
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(212, 175, 55, 0.1);
+            transition: transform 0.4s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            height: 100%;
         }
 
-        .about-image img {
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-gold);
+            background: rgba(212, 175, 55, 0.05);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+
+        .feature-img-box {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-img-box img {
             width: 100%;
             height: auto;
             display: block;
-            transition: transform 0.5s;
+            transition: transform 0.5s ease;
+            filter: grayscale(20%);
         }
 
-        .about-image:hover img {
+        .feature-card:hover .feature-img-box img {
             transform: scale(1.03);
+            filter: grayscale(0%);
         }
 
-        .about-text {
-            color: rgba(255, 255, 255, 0.9);
-            line-height: 1.9;
+        .feature-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .feature-desc {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        /* --- FAQ Section --- */
+        .faq-section {
+            padding: 100px 0;
+            background-color: var(--primary-black);
+        }
+
+        .accordion-item {
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .accordion-button {
+            background-color: transparent;
+            color: #fff;
+            font-weight: 600;
             font-size: 1.1rem;
-            max-width: 850px;
-            margin: 0 auto;
-            text-align: center;
+            padding: 20px 0;
+            box-shadow: none !important;
         }
 
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {
-            .about-heading { font-size: 2.2rem; }
-            .section-title { font-size: 1.8rem; }
-            .navbar-nav { background: #111; padding: 20px; margin-top: 10px; border-radius: 10px; border: 1px solid var(--primary-color); }
+        .accordion-button:not(.collapsed) {
+            background-color: transparent;
+            color: var(--accent-gold);
+        }
+
+        .accordion-button::after {
+            filter: invert(1) brightness(0.5) sepia(1) hue-rotate(10deg) saturate(5);
+        }
+
+        .accordion-body {
+            color: rgba(255, 255, 255, 0.7);
+            padding-left: 0;
+            padding-right: 0;
+            padding-bottom: 25px;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: #000;
+            padding: 80px 0 30px 0;
+            color: #fff;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .footer-brand {
+            margin-bottom: 20px;
+        }
+        
+        .footer-desc {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .footer h5 {
+            color: var(--accent-gold);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-gold);
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-radius: 50%;
+            margin-right: 10px;
+            transition: all 0.3s;
+            text-decoration: none;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .social-icons a:hover {
+            background: var(--accent-gold);
+            color: var(--primary-black);
+            border-color: var(--accent-gold);
+        }
+
+        .copyright {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+        }
+        
+        /* Mobile Sticky Button */
+        .mobile-sticky-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px); 
+            width: 90%;
+            max-width: 400px;
+            background-color: var(--accent-gold);
+            color: var(--primary-black);
+            text-align: center;
+            padding: 15px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+            z-index: 1050;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.27);
+        }
+
+        .mobile-sticky-btn.visible {
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .mobile-sticky-btn:hover {
+            background-color: #f1c40f;
+            color: var(--primary-black);
+        }
+
+        /* Desktop Specifics */
+        @media (min-width: 992px) {
+            .hero-section {
+                background-image: url('assets/desktop-background.jpg');
+            }
+
+            .hero-img-desktop {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: auto;
+                max-width: 55vw; 
+                max-height: 90vh;
+                z-index: 1;
+                pointer-events: none;
+            }
+
+            .hero-content {
+                text-align: left;
+            }
+            
+            .button-group {
+                display: flex;
+                gap: 20px;
+            }
+        }
+
+        /* Mobile Specifics */
+        @media (max-width: 991.98px) {
+            .hero-section {
+                background-image: url('assets/mobile-background.jpg');
+                flex-direction: column;
+                justify-content: flex-start; 
+                padding-bottom: 0;
+                height: auto;
+            }
+
+            .hero-section .container {
+                flex: 0 0 auto; 
+                width: 100%;
+                padding-top: 20px;
+                padding-bottom: 40px;
+                z-index: 10; 
+            }
+
+            .navbar-collapse {
+                background: rgba(10, 10, 10, 0.98);
+                backdrop-filter: blur(20px);
+                margin-top: 15px;
+                padding: 20px;
+                border-radius: 15px;
+                border: 1px solid rgba(212, 175, 55, 0.3);
+            }
+
+            .hero-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                width: 100%;
+                margin-top: 20px; 
+            }
+
+            .hero-title-logo {
+                margin: 0 auto 20px auto;
+            }
+
+            .hero-desc {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .button-group {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .hero-img-mobile {
+                position: relative;
+                display: block;
+                width: 100%;
+                max-width: 450px; 
+                height: auto;
+                margin: auto auto 0 auto;
+                z-index: 1;
+                pointer-events: none;
+            }
+
+            .about-header h2 {
+                font-size: 2.5rem;
+                text-align: center;
+            }
+            .about-lead {
+                text-align: center;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .about-pill-container {
+                align-items: center;
+            }
+            .about-cta {
+                justify-content: center;
+                margin-bottom: 30px;
+            }
         }
     </style>
 </head>
@@ -163,26 +627,57 @@
                 <img src="https://i.ibb.co/v4d7x9s6/1000032952-removebg-preview.png" alt="PROTEGE Logo">
             </a>
 
-            <div class="d-flex align-items-center">
-                <a href="register.html" class="btn btn-join-us d-lg-none me-2">Join US</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="fa-solid fa-bars" style="color: #D4AF37;"></span>
+            <div class="d-flex align-items-center gap-3 d-lg-none ms-auto">
+                <a href="register.html" class="btn btn-glow px-4 py-2" style="font-size: 0.9rem;">Register</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
-            
+
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
-                    <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="#about-section">About</a></li>
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="#heroSection">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="merchants.html">Merchants</a></li>
+                    <li class="nav-item d-lg-none"><a class="nav-link" href="login.html">Login</a></li>
                 </ul>
-                <a href="register.html" class="btn btn-join-us ms-lg-3 d-none d-lg-block">Join US</a>
+                <div class="d-none d-lg-flex gap-2">
+                    <a href="login.html" class="btn btn-outline-custom">Login</a>
+                    <a href="register.html" class="btn btn-glow">Signup</a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <main style="padding-top: 100px;">
-        <section id="about-section">
+    <div id="landingPage">
+
+        <section class="hero-section" id="heroSection">
+            <img src="https://i.ibb.co/8nH1K89R/IMG-20260221-013709.png" class="hero-img-desktop d-none d-lg-block" alt="Man on phone" data-aos="fade-left" data-aos-delay="200">
+            
+            <div class="container h-100">
+                <div class="row h-100 align-items-center">
+                    <div class="col-lg-6 col-12">
+                        <div class="hero-content" data-aos="fade-up">
+                            <img src="https://i.ibb.co/8nH1K89R/IMG-20260221-013709.png" class="hero-title-logo" alt="Protege">
+                            
+                            <p class="hero-desc">
+                                engage, grow, and build influence online through smart participation and collaboration.
+                            </p>
+                            
+                            <div class="button-group">
+                                <a href="register.html" class="btn btn-glow">Signup</a>
+                                <a href="#about" class="btn btn-outline-custom">Learn-more</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <img src="https://i.ibb.co/GQHkphht/1000034134-removebg-preview.png" class="hero-img-mobile d-lg-none" alt="Man on phone">
+        </section>
+
+        <section class="about-section" id="about">
             <div class="container">
                 
                 <div class="about-section">
@@ -196,40 +691,148 @@
                     </div>
                 </div>
 
-                <div class="about-section">
-                    <h3 class="section-title">Walk-and-Earn Technology</h3>
-                    <div class="about-image">
-                        <img src="https://i.ibb.co/8gRJ4Lsm/IMG-20260214-WA0003.jpg" alt="Walk and Earn">
+                <div class="row g-4 justify-content-center">
+                    
+                    <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="100">
+                        <div class="feature-card">
+                            <div class="feature-img-box">
+                                <img src="https://i.ibb.co/jPZG6WDc/IMG-20260221-WA0009.jpg" alt="Protege Casino">
+                            </div>
+                            <div class="feature-content">
+                                <h3 class="feature-title">Protege Prediction Game</h3>
+                                <p class="feature-desc">Test your foresight on global events. Participate in daily prediction challenges and win rewards.</p>
+                                <a href="register.html" class="btn-sm-glow mt-auto align-self-start">Start Playing</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="150">
+                        <div class="feature-card">
+                            <div class="feature-img-box">
+                                <img src="https://i.ibb.co/tpJMfTsC/IMG-20260221-WA0006.jpg" alt="Snap & Earn">
+                            </div>
+                            <div class="feature-content">
+                                <h3 class="feature-title">Snap & Share</h3>
+                                <p class="feature-desc">Snap it, Upload it, Share it. Rewards for top creators and quality content uploads.</p>
+                                <a href="register.html" class="btn-sm-glow mt-auto align-self-start">Upload Now</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="200">
+                        <div class="feature-card">
+                            <div class="feature-img-box">
+                                <img src="https://i.ibb.co/Ps3SpCSC/IMG-20260221-WA0007.jpg" alt="Telegram Monetization">
+                            </div>
+                            <div class="feature-content">
+                                <h3 class="feature-title">Telegram Engagement</h3>
+                                <p class="feature-desc">Own a Telegram account? Grow your community. Rewards for active engagement and reach.</p>
+                                <a href="register.html" class="btn-sm-glow mt-auto align-self-start">Engage Now</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="250">
+                        <div class="feature-card">
+                            <div class="feature-img-box">
+                                <img src="https://i.ibb.co/27sc2x4G/IMG-20260221-WA0005.jpg" alt="Telegram Live">
+                            </div>
+                            <div class="feature-content">
+                                <h3 class="feature-title">Telegram Live</h3>
+                                <p class="feature-desc">Go live on Telegram with Protege. Stream to your audience and receive engagement bonuses.</p>
+                                <a href="register.html" class="btn-sm-glow mt-auto align-self-start">Go Live</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="300">
+                        <div class="feature-card">
+                            <div class="feature-img-box">
+                                <img src="https://i.ibb.co/xSjFnQmV/IMG-20260221-WA0002.jpg" alt="TikTok Challenges">
+                            </div>
+                            <div class="feature-content">
+                                <h3 class="feature-title">TikTok Challenges</h3>
+                                <p class="feature-desc">Post Protege videos, go viral, and win community prizes. Your creativity has value.</p>
+                                <a href="register.html" class="btn-sm-glow mt-auto align-self-start">Join Challenge</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="about-text">
                         <p>Turn your sweat into cash on Protege. With our groundbreaking walk-and-earn technology, your movement turns into momentum, and your momentum turns into real rewards. Every step counts.</p>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <div class="about-section">
-                    <h3 class="section-title">Digital Real Estate</h3>
-                    <div class="about-image">
-                        <img src="https://i.ibb.co/zhR14q70/IMG-20260214-WA0000.jpg" alt="Digital Real Estate">
+        <section class="faq-section" id="faqs">
+            <div class="container">
+                <div class="row justify-content-center mb-5">
+                    <div class="col-lg-8 text-center" data-aos="fade-up">
+                        <h2 class="section-title">Frequently Asked <span class="highlight">Questions</span></h2>
+                        <p class="section-subtitle">Common questions about the platform and how to get started.</p>
                     </div>
                     <div class="about-text">
                         <p>Protege Digital Real Estate. Welcome to a new era of ownership. Buy valuable virtual properties, build your portfolio, and sell for profit as their value grows. Own the future.</p>
                     </div>
                 </div>
-
             </div>
         </section>
-    </main>
 
+        <footer class="footer">
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="col-lg-5 mb-4 mb-lg-0">
+                        <a href="#" class="d-inline-block footer-brand">
+                            <img src="https://i.ibb.co/8nH1K89R/IMG-20260221-013709.png" alt="Protege" style="height: 30px;">
+                        </a>
+                        <p class="footer-desc">
+                            Protege empowers you to monetize your social influence and creativity. Join thousands of users earning daily through smart engagement.
+                        </p>
+                        
+         <a href="register.html" id="mobileStickyBtn" class="mobile-sticky-btn d-lg-none">
+            Signup Now
+        </a>
+
+    </div> 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="module" src="firebase-init.js"></script>
+    <script type="module" src="app.js"></script>
     <script>
-        window.addEventListener('scroll', function() {
-            const nav = document.getElementById('mainNav');
-            if (window.scrollY > 50) {
-                nav.classList.add('navbar-scrolled');
-            } else {
-                nav.classList.remove('navbar-scrolled');
+        $(document).ready(function() {
+            // Initialize AOS Animation
+            AOS.init({
+                duration: 800,
+                once: true,
+                mirror: false
+            });
+
+            // Navbar Glassmorphism
+            function checkScroll() {
+                var scroll = $(window).scrollTop();
+                if (scroll > 10) {
+                    $('#mainNav').addClass('navbar-glass');
+                } else {
+                    $('#mainNav').removeClass('navbar-glass');
+                }
+            }
+            $(window).scroll(checkScroll);
+            checkScroll();
+
+            // Mobile Sticky Button Scroll Logic
+            const heroSection = document.getElementById('heroSection');
+            const stickyBtnEl = document.getElementById('mobileStickyBtn');
+            
+            if (heroSection && stickyBtnEl) {
+                window.addEventListener('scroll', function() {
+                    const heroBottom = heroSection.getBoundingClientRect().bottom;
+                    if (heroBottom < 0) {
+                        stickyBtnEl.classList.add('visible');
+                    } else {
+                        stickyBtnEl.classList.remove('visible');
+                    }
+                });
             }
         });
     </script>
