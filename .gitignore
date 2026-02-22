@@ -10,7 +10,9 @@ bin-release/
 /node_modules
 .env
 server/.env
-
+favourdev.pem
+Kastream.zip
+Kastream2.zip
 
 
 # Executables

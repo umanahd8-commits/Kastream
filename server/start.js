@@ -79,19 +79,12 @@ function startDev() {
 
 // Always prefer production ports on Linux; dev only if explicitly requested
 if (process.platform === "win32" || process.env.FORCE_DEV === "1") {
+  // Local development
   startDev();
 } else {
-  // Always start HTTP :80 (required for certbot renew)
-  startHttpRedirect();
-
-  // Start HTTPS if cert files exist + readable
-  try {
-    if (fs.existsSync(SSL_KEY) && fs.existsSync(SSL_CERT)) {
-      startHttps();
-    } else {
-      console.log("⚠️ SSL cert files missing; HTTPS not started yet.");
-    }
-  } catch (e) {
-    console.log("⚠️ SSL cert files not readable; HTTPS not started yet:", e.code || e.message);
-  }
+  // Production (behind Nginx reverse proxy)
+  const port = Number(process.env.PORT || 3000);
+  app.listen(port, "0.0.0.0", () => {
+    console.log(`✅ Production mode (proxy) listening on :${port}`);
+  });
 }

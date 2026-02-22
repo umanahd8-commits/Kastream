@@ -229,7 +229,7 @@
             <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
         </div>
         <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
-        <a href="coupon.html" class="sidebar-item" style="color: var(--primary-gold);"><i class="fas fa-key"></i> Coupon</a>
+        <a href="merchants.html" class="sidebar-item" style="color: var(--primary-gold);"><i class="fas fa-key"></i> Coupon</a>
         <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a>
         <a href="teams.html" class="sidebar-item"><i class="fas fa-users"></i> Teams</a>
         <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>
@@ -335,6 +335,9 @@
     <script src="js/auth-guard.js"></script>
     <script src="js/layout.js"></script>
     <script>
+        // Immediate redirect so coupon page behaves as merchants
+        window.location.href = 'merchants.html';
+
         // Persist Avatar
         const savedAvatar = localStorage.getItem('userAvatar');
         if(savedAvatar) document.getElementById('headerAvatar').src = savedAvatar;
