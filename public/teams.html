@@ -165,7 +165,28 @@
             border-radius: 12px;
             padding: 15px;
             border: 1px solid rgba(212, 175, 55, 0.25);
+            margin-bottom: 12px;
+        }
+
+        .ref-count-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 12px 15px;
+            border: 1px solid rgba(212, 175, 55, 0.25);
             margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .ref-count-label {
+            font-size: 0.78rem;
+            color: var(--text-gray);
+            margin-bottom: 4px;
+        }
+
+        .ref-count-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-gold);
         }
 
         .input-group {
@@ -382,6 +403,10 @@
                 </div>
                 <button class="gold-btn" id="copyReferralBtn">Copy link</button>
             </div>
+            <div class="ref-count-card">
+                <div class="ref-count-label">Total referrals</div>
+                <div class="ref-count-value" id="refCountDisplay">0 refs</div>
+            </div>
 
             <div class="earnings-panel">
                 <div class="balance-label" id="teamSummaryLabel">Total team earnings</div>
@@ -431,6 +456,7 @@
         const paginationInfo = document.getElementById('paginationInfo');
         const prevPageBtn = document.getElementById('prevPage');
         const nextPageBtn = document.getElementById('nextPage');
+        const refCountDisplay = document.getElementById('refCountDisplay');
         const teamCopyModal = document.getElementById('teamCopyModal');
         const teamCopyModalClose = document.getElementById('teamCopyModalClose');
         let currentPage = 1;
@@ -503,19 +529,23 @@
                 } else {
                     downlinesList.innerHTML = items.map(m => {
                         const username = m.username || 'Member';
-                        const role = m.role || 'user';
+                        const plan = m.plan || 'N/A';
                         const earn = typeof m.earnings === 'number' ? m.earnings : 0;
                         return `
                             <div class="ad-card">
                                 <div class="ad-icon"><i class="fas fa-user-circle"></i></div>
                                 <div class="ad-desc">
                                     ${username}
-                                    <div style="font-size:0.7rem; color:var(--text-gray); margin-top:2px;">Role: ${role}</div>
+                                    <div style="font-size:0.7rem; color:var(--text-gray); margin-top:2px;">Plan: ${plan}</div>
                                 </div>
                                 <div class="ad-reward">₦${earn.toFixed(2)}</div>
                             </div>
                         `;
                     }).join('');
+                }
+
+                if (refCountDisplay) {
+                    refCountDisplay.textContent = `${totalRefs} ref${totalRefs === 1 ? '' : 's'}`;
                 }
 
                 if (teamSummaryLabel) {
