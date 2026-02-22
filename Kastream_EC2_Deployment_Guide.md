@@ -180,3 +180,106 @@ automatically when certificates exist.
 ------------------------------------------------------------------------
 
 Deployment Complete ✅
+
+
+tips
+
+2️⃣ Clean up before adding new clusters
+
+Stop all old PM2 processes:
+
+pm2 delete all
+
+Check PM2 list:
+
+pm2 list
+
+Should be empty. No “kastream” or “start” left.
+
+3️⃣ Start proper PM2 cluster
+
+Now, spawn your app in cluster mode with 2 instances (or max to match CPUs):
+
+cd ~/Kastream/server
+pm2 start start.js --name kastream -i max
+
+--name kastream → gives all cluster processes a single friendly name.
+
+-i max → spawns 2 processes (1 per CPU) on your 2 vCPU EC2.
+
+PM2 will automatically load-balance incoming requests between these cluster instances.
+
+✅ PM2 cluster mode uses Node’s cluster module, which automatically shares the same port among workers. You don’t need to do anything manually — requests are distributed safely between processes.
+
+4️⃣ Verify cluster setup
+pm2 list
+pm2 logs kastream
+
+You should see 2 processes under kastream, both online, sharing the same port (3000). Logs will show multiple MongoDB Connected messages — that’s normal because each worker establishes its own DB connection.
+
+5️⃣ Optional: scale later
+
+Want 4 processes (maybe after upgrading EC2 to 4 vCPU)?
+
+pm2 scale kastream 4
+
+PM2 will spawn or kill extra cluster processes automatically.
+
+6️⃣ Key tips
+
+Do not run multiple pm2 start commands without --name — it creates duplicate entries.
+
+Cluster mode automatically balances traffic — you don’t need a load balancer inside Node. Nginx in front is fine and still handles SSL.
+
+MongoDB connections: Each worker makes its own connection. With 2 workers, total DB connections ≈ 2 × your pool size. This is safe as long as your DB can handle it.
+
+💡 TL;DR
+
+Delete all old PM2 processes.
+
+Start your app with cluster mode and a single name:
+
+pm2 delete all
+pm2 start start.js --name kastream -i max
+
+PM2 will handle traffic distribution automatically.
+
+Multiple MongoDB connections are normal.
+
+
+cluster restarts
+
+1️⃣ Restart the whole cluster
+pm2 restart kastream
+
+kastream is the name of your app (the one you set with --name kastream).
+
+PM2 will restart all cluster workers one by one, so traffic is minimally affected.
+
+2️⃣ Restart a specific worker (optional)
+
+List all processes first:
+
+pm2 list
+
+Each worker has an id (0, 1, etc.). Restart a specific worker:
+
+pm2 restart <id>
+
+Example:
+
+pm2 restart 0
+
+Only worker 0 restarts; worker 1 keeps serving requests.
+
+3️⃣ Soft reload for zero-downtime (recommended for clusters)
+pm2 reload kastream
+
+reload tells PM2 to reload workers one by one instead of killing them all at once.
+Ensures no downtime for users — cluster keeps running while workers restart.
+
+Summary
+Command	Effect
+pm2 restart kastream	Restart all workers (quick, may have tiny downtime)
+pm2 reload kastream	Zero-downtime reload; preferred in production
+pm2 restart <id>	Restart one specific worker only
