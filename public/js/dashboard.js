@@ -151,4 +151,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (e.target === copyModal) hideCopyModal();
         });
     }
+
+    const dailyTaskBtn = document.querySelector('.btn-engage');
+    if (dailyTaskBtn) {
+        dailyTaskBtn.addEventListener('click', () => {
+            window.location.href = 'articles.html';
+        });
+    }
 });

@@ -145,6 +145,14 @@ const UserSchema = new mongoose.Schema({
         description: {
             type: String
         },
+        refType: {
+            type: String,
+            default: null
+        },
+        refId: {
+            type: String,
+            default: null
+        },
         createdAt: {
             type: Date,
             default: Date.now

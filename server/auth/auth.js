@@ -7,6 +7,7 @@ const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const User = require('../models/User');
 const Coupon = require('../models/Coupon');
+const Article = require('../models/Article');
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
@@ -21,6 +22,11 @@ const upload = multer({
 
 const SECRET_KEY = 'your-secret-key';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '2m';
+
+const ARTICLE_CONFIG = {
+    rewardAmount: Number(process.env.ARTICLE_REWARD_AMOUNT) || 100,
+    earnWindowHours: 24
+};
 
 const GAME_CONFIG = {
     timeLimitSeconds: Number(process.env.GAME_TIME_LIMIT_SECONDS) || 120,
@@ -849,6 +855,236 @@ router.get('/admin/plans', verifyToken, requireAdmin, (req, res) => {
     }
 });
 
+router.get('/admin/articles', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const pageRaw = req.query.page;
+        const limitRaw = req.query.limit;
+        let page = parseInt(pageRaw, 10);
+        if (!page || page < 1) page = 1;
+
+        let limit = parseInt(limitRaw, 10);
+        if (!limit || limit < 1 || limit > 100) limit = 20;
+
+        const skip = (page - 1) * limit;
+
+        const [total, articles] = await Promise.all([
+            Article.countDocuments({}),
+            Article.find({})
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit)
+        ]);
+
+        const items = articles.map(a => ({
+            id: a.id,
+            title: a.title,
+            description: a.description,
+            coverImageUrl: a.coverImageUrl || '',
+            createdAt: a.createdAt
+        }));
+
+        res.json({
+            page,
+            pageSize: limit,
+            total,
+            totalPages: total === 0 ? 0 : Math.ceil(total / limit),
+            items
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/admin/articles', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const body = req.body || {};
+        const title = (body.title || '').trim();
+        const description = (body.description || '').trim();
+        const bodyHtml = String(body.bodyHtml || '');
+        const coverImageUrl = String(body.coverImageUrl || '');
+
+        if (!title) {
+            return res.status(400).json({ message: 'Title is required' });
+        }
+
+        const article = new Article({
+            title,
+            description,
+            bodyHtml,
+            coverImageUrl
+        });
+        await article.save();
+
+        res.status(201).json({
+            message: 'Article created',
+            article: {
+                id: article.id,
+                title: article.title,
+                description: article.description,
+                coverImageUrl: article.coverImageUrl || '',
+                createdAt: article.createdAt
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/admin/articles/cover-upload', verifyToken, requireAdmin, upload.single('cover'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        if (!req.file.mimetype || !req.file.mimetype.startsWith('image/')) {
+            return res.status(400).json({ message: 'Only image uploads are allowed' });
+        }
+
+        if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+            return res.status(500).json({ message: 'Image upload service is not configured' });
+        }
+
+        const uploadResult = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                { folder: 'protege_articles_covers' },
+                (error, result) => {
+                    if (error) return reject(error);
+                    resolve(result);
+                }
+            );
+            stream.end(req.file.buffer);
+        });
+
+        const url = uploadResult.secure_url || uploadResult.url;
+        if (!url) {
+            return res.status(500).json({ message: 'Upload did not return a URL' });
+        }
+
+        res.json({
+            message: 'Cover image uploaded',
+            url
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/admin/articles/body-upload', verifyToken, requireAdmin, upload.single('image'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        if (!req.file.mimetype || !req.file.mimetype.startsWith('image/')) {
+            return res.status(400).json({ message: 'Only image uploads are allowed' });
+        }
+
+        if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+            return res.status(500).json({ message: 'Image upload service is not configured' });
+        }
+
+        const uploadResult = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                { folder: 'protege_articles_body' },
+                (error, result) => {
+                    if (error) return reject(error);
+                    resolve(result);
+                }
+            );
+            stream.end(req.file.buffer);
+        });
+
+        const url = uploadResult.secure_url || uploadResult.url;
+        if (!url) {
+            return res.status(500).json({ message: 'Upload did not return a URL' });
+        }
+
+        res.json({
+            message: 'Body image uploaded',
+            url
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.put('/admin/articles/:id', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const body = req.body || {};
+        const title = (body.title || '').trim();
+        const description = (body.description || '').trim();
+        const bodyHtml = String(body.bodyHtml || '');
+        const coverImageUrl = String(body.coverImageUrl || '');
+
+        if (!title) {
+            return res.status(400).json({ message: 'Title is required' });
+        }
+
+        const article = await Article.findByIdAndUpdate(
+            req.params.id,
+            { title, description, bodyHtml, coverImageUrl },
+            { new: true }
+        );
+
+        if (!article) {
+            return res.status(404).json({ message: 'Article not found' });
+        }
+
+        res.json({
+            message: 'Article updated',
+            article: {
+                id: article.id,
+                title: article.title,
+                description: article.description,
+                coverImageUrl: article.coverImageUrl || '',
+                createdAt: article.createdAt
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.get('/admin/articles/:id', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const article = await Article.findById(req.params.id);
+        if (!article) {
+            return res.status(404).json({ message: 'Article not found' });
+        }
+
+        res.json({
+            id: article.id,
+            title: article.title,
+            description: article.description,
+            coverImageUrl: article.coverImageUrl || '',
+            bodyHtml: article.bodyHtml || '',
+            createdAt: article.createdAt
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.delete('/admin/articles/:id', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const article = await Article.findByIdAndDelete(req.params.id);
+        if (!article) {
+            return res.status(404).json({ message: 'Article not found' });
+        }
+
+        res.json({ message: 'Article deleted' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 function generateCouponCode() {
     const segment = () => Math.random().toString(36).substring(2, 6).toUpperCase();
     return 'PROT-' + segment() + '-' + segment();
@@ -1000,6 +1236,70 @@ router.get('/admin/users', verifyToken, requireAdmin, async (req, res) => {
     }
 });
 
+router.delete('/admin/users/:id', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({ message: 'User id is required' });
+        }
+
+        let user = null;
+        if (id.match(/^[0-9a-fA-F]{24}$/)) {
+            user = await User.findById(id);
+        }
+        if (!user) {
+            user = await User.findOne({ userId: id });
+        }
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        await User.deleteOne({ _id: user._id });
+
+        res.json({ message: 'User deleted' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/admin/users/:id/password', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const id = req.params.id;
+        const newPassword = (req.body && req.body.newPassword) || '';
+
+        if (!id) {
+            return res.status(400).json({ message: 'User id is required' });
+        }
+
+        if (!newPassword || newPassword.length < 6) {
+            return res.status(400).json({ message: 'Password must be at least 6 characters' });
+        }
+
+        let user = null;
+        if (id.match(/^[0-9a-fA-F]{24}$/)) {
+            user = await User.findById(id);
+        }
+        if (!user) {
+            user = await User.findOne({ userId: id });
+        }
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const hashed = await bcrypt.hash(newPassword, 10);
+        user.password = hashed;
+        await user.save();
+
+        res.json({ message: 'Password updated' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Monetization connections (Protected)
 router.get('/monetization', verifyToken, async (req, res) => {
     try {
@@ -1073,6 +1373,167 @@ router.get('/streak', verifyToken, async (req, res) => {
                 dayOfMonth: day,
                 daysInMonth
             }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.get('/articles', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const pageRaw = req.query.page;
+        const limitRaw = req.query.limit;
+
+        let page = parseInt(pageRaw, 10);
+        if (!page || page < 1) page = 1;
+
+        let limit = parseInt(limitRaw, 10);
+        if (!limit || limit < 1 || limit > 100) limit = 10;
+
+        const skip = (page - 1) * limit;
+
+        const [total, articles] = await Promise.all([
+            Article.countDocuments({}),
+            Article.find({})
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit)
+        ]);
+
+        const now = Date.now();
+        const windowMs = ARTICLE_CONFIG.earnWindowHours * 60 * 60 * 1000;
+
+        const items = articles.map(a => {
+            const createdAt = a.createdAt || a.created_at || new Date();
+            const ageMs = now - createdAt.getTime();
+            const isExpired = ageMs > windowMs;
+
+            let alreadyClaimed = false;
+            if (Array.isArray(user.transactions)) {
+                alreadyClaimed = user.transactions.some(tx => tx.refType === 'article' && tx.refId === a.id);
+            }
+
+            return {
+                id: a.id,
+                title: a.title,
+                description: a.description,
+                coverImageUrl: a.coverImageUrl || '',
+                createdAt,
+                isExpired,
+                alreadyClaimed
+            };
+        });
+
+        res.json({
+            page,
+            pageSize: limit,
+            total,
+            totalPages: total === 0 ? 0 : Math.ceil(total / limit),
+            items
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.get('/articles/:id', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const article = await Article.findById(req.params.id);
+        if (!article) {
+            return res.status(404).json({ message: 'Article not found' });
+        }
+
+        const now = Date.now();
+        const createdAt = article.createdAt || new Date();
+        const ageMs = now - createdAt.getTime();
+        const isExpired = ageMs > ARTICLE_CONFIG.earnWindowHours * 60 * 60 * 1000;
+
+        let alreadyClaimed = false;
+        if (Array.isArray(user.transactions)) {
+            alreadyClaimed = user.transactions.some(tx => tx.refType === 'article' && tx.refId === article.id);
+        }
+
+        const canEarn = !isExpired && !alreadyClaimed;
+
+        res.json({
+            id: article.id,
+            title: article.title,
+            description: article.description,
+            bodyHtml: article.bodyHtml || '',
+            coverImageUrl: article.coverImageUrl || '',
+            createdAt,
+            isExpired,
+            alreadyClaimed,
+            canEarn,
+            rewardAmount: ARTICLE_CONFIG.rewardAmount
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/articles/:id/claim', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const article = await Article.findById(req.params.id);
+        if (!article) {
+            return res.status(404).json({ message: 'Article not found' });
+        }
+
+        const now = Date.now();
+        const createdAt = article.createdAt || new Date();
+        const ageMs = now - createdAt.getTime();
+        const windowMs = ARTICLE_CONFIG.earnWindowHours * 60 * 60 * 1000;
+
+        if (ageMs > windowMs) {
+            return res.status(400).json({ message: 'Article earning window has expired' });
+        }
+
+        if (!Array.isArray(user.transactions)) {
+            user.transactions = [];
+        }
+
+        const alreadyClaimed = user.transactions.some(tx => tx.refType === 'article' && tx.refId === article.id);
+        if (alreadyClaimed) {
+            return res.status(400).json({ message: 'You have already claimed this article reward' });
+        }
+
+        const reward = ARTICLE_CONFIG.rewardAmount;
+        user.taskBalance = (user.taskBalance || 0) + reward;
+        user.transactions.push({
+            type: 'article',
+            amount: reward,
+            currency: 'NGN',
+            direction: 'credit',
+            source: 'article',
+            description: 'Article earning: ' + article.title,
+            refType: 'article',
+            refId: article.id
+        });
+
+        await user.save();
+
+        res.json({
+            message: 'Article reward claimed',
+            reward,
+            taskBalance: user.taskBalance
         });
     } catch (error) {
         console.error(error);

@@ -216,6 +216,210 @@
         .sidebar-item.danger {
             color: var(--accent-red);
         }
+
+        .articles-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .articles-count {
+            font-size: 0.8rem;
+        }
+
+        .articles-list {
+            margin-top: 8px;
+        }
+
+        .article-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 0.8rem;
+        }
+
+        .article-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .article-title {
+            font-size: 0.86rem;
+            color: #f5f5f5;
+        }
+
+        .article-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .article-status {
+            font-size: 0.75rem;
+            color: var(--primary-gold);
+        }
+
+        .article-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .article-action-buttons {
+            display: flex;
+            gap: 4px;
+        }
+
+        .article-action-btn {
+            padding: 3px 8px;
+            border-radius: 999px;
+            border: 1px solid #333;
+            background: #111;
+            color: #f5f5f5;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        .article-action-btn.danger {
+            border-color: rgba(255,77,79,0.7);
+            color: var(--accent-red);
+        }
+
+        .articles-empty {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 18px 0 6px;
+        }
+
+        .fab-button {
+            position: fixed;
+            right: 18px;
+            bottom: 20px;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #AA771C 0%, #FCF6BA 40%, #D4AF37 100%);
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.6), 0 10px 25px rgba(0,0,0,0.8);
+            z-index: 1100;
+        }
+
+        .fab-button i {
+            font-size: 1.1rem;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1200;
+        }
+
+        .modal-card {
+            background: #050505;
+            border-radius: 14px;
+            border: 1px solid rgba(212,175,55,0.5);
+            padding: 16px 14px 14px;
+            width: 94%;
+            max-width: 420px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--primary-gold);
+            margin-bottom: 6px;
+        }
+
+        .modal-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .modal-field-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .modal-input,
+        .modal-textarea {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #333;
+            background: #050505;
+            color: #f5f5f5;
+            font-size: 0.8rem;
+            padding: 8px 10px;
+            margin-bottom: 10px;
+        }
+
+        .modal-textarea {
+            min-height: 120px;
+            max-height: 55vh;
+            overflow-y: auto;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+
+        .editor-btn {
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid #333;
+            background: #111;
+            color: #f5f5f5;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .modal-btn {
+            padding: 7px 14px;
+            border-radius: 999px;
+            border: 1px solid #333;
+            background: #111;
+            color: #f5f5f5;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .modal-btn.primary {
+            border-color: rgba(212,175,55,0.8);
+            background: linear-gradient(135deg, #AA771C 0%, #FCF6BA 40%, #D4AF37 100%);
+            color: #000;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -285,16 +489,523 @@
 
         <div class="section-title">Articles</div>
 
+        <div class="articles-header">
+            <div class="articles-count" id="adminArticlesCount">Total articles: 0</div>
+        </div>
+
         <div class="card">
             <div class="card-title">Articles management</div>
             <div class="card-sub">
-                This page will manage paid and free articles, approvals and earnings mapping.
+                Create and manage articles that users can read to earn. Articles pay for 24 hours after creation.
+            </div>
+            <div class="articles-list" id="adminArticlesList">
+                <div class="articles-empty">No articles created yet.</div>
+            </div>
+        </div>
+    </div>
+
+    <button class="fab-button" id="adminArticlesFab">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <div class="modal-overlay" id="adminArticlesModal">
+        <div class="modal-card">
+            <div class="modal-title">Create article</div>
+            <div class="modal-sub">Fill in the content users will read. You can use basic formatting and images.</div>
+
+            <label class="modal-field-label" for="articleTitleInput">Title</label>
+            <input id="articleTitleInput" class="modal-input" placeholder="Enter article title">
+
+            <label class="modal-field-label" for="articleDescriptionInput">Short description</label>
+            <textarea id="articleDescriptionInput" class="modal-textarea" rows="2" placeholder="Short description shown on list"></textarea>
+
+            <label class="modal-field-label" for="articleCoverInput">Cover image URL (optional)</label>
+            <input id="articleCoverInput" class="modal-input" placeholder="https://...">
+            <button class="editor-btn" id="articleCoverUploadBtn" type="button" style="margin-bottom:10px;">Upload cover image</button>
+
+            <div class="modal-field-label">Body content</div>
+            <div class="editor-toolbar">
+                <button class="editor-btn" data-tag="b">Bold</button>
+                <button class="editor-btn" data-tag="i">Italic</button>
+                <button class="editor-btn" data-tag="u">Underline</button>
+                <button class="editor-btn" data-tag="h2">Heading</button>
+                <button class="editor-btn" data-action="bullet">Bullet list</button>
+                <button class="editor-btn" data-action="align-left">Align left</button>
+                <button class="editor-btn" data-action="align-center">Align center</button>
+                <button class="editor-btn" data-action="align-right">Align right</button>
+                <button class="editor-btn" data-action="image">Insert image</button>
+            </div>
+            <div id="articleBodyEditor" class="modal-textarea" contenteditable="true" style="min-height:220px;"></div>
+
+            <div class="modal-actions">
+                <button class="modal-btn" id="adminArticlesCancelBtn">Cancel</button>
+                <button class="modal-btn primary" id="adminArticlesPreviewBtn">Preview</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="articlePreviewModal">
+        <div class="modal-card" style="max-width:480px;">
+            <div class="modal-title">Article preview</div>
+            <div class="modal-sub">This is how users will see this article when it goes live.</div>
+            <div id="articlePreviewContent" style="border-radius:12px;border:1px solid #222;padding:10px;margin-bottom:14px;font-size:0.82rem;color:#f5f5f5;background:#050505;max-height:60vh;overflow-y:auto;"></div>
+            <div class="modal-actions">
+                <button class="modal-btn" id="articlePreviewBackBtn">Back to edit</button>
+                <button class="modal-btn primary" id="articlePreviewPublishBtn">Publish</button>
             </div>
         </div>
     </div>
 
     <script src="sidebar.js"></script>
     <script>
+        let adminArticlesState = {
+            page: 1,
+            pageSize: 20,
+            total: 0
+        };
+
+        let adminEditingArticleId = null;
+
+        function formatAdminArticleDate(value) {
+            const date = value ? new Date(value) : new Date();
+            return date.toLocaleString('en-NG', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function isArticleExpired(createdAt) {
+            const date = createdAt ? new Date(createdAt) : new Date();
+            const now = Date.now();
+            const ageMs = now - date.getTime();
+            const windowMs = 24 * 60 * 60 * 1000;
+            return ageMs > windowMs;
+        }
+
+        async function loadAdminArticles(page) {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                applyLogout();
+                return;
+            }
+
+            const pageToLoad = page && page > 0 ? page : adminArticlesState.page || 1;
+            const params = new URLSearchParams();
+            params.set('page', String(pageToLoad));
+            params.set('limit', String(adminArticlesState.pageSize));
+
+            const listEl = document.getElementById('adminArticlesList');
+            if (listEl) {
+                listEl.innerHTML = '<div class="articles-empty">Loading articles...</div>';
+            }
+
+            try {
+                const res = await fetch('/api/auth/admin/articles?' + params.toString(), {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                if (!res.ok) {
+                    if (res.status === 400 || res.status === 401 || res.status === 403) {
+                        applyLogout();
+                        return;
+                    }
+                    throw new Error('Failed to load articles');
+                }
+
+                const data = await res.json();
+                adminArticlesState.page = data.page || pageToLoad;
+                adminArticlesState.pageSize = data.pageSize || adminArticlesState.pageSize;
+                adminArticlesState.total = data.total || 0;
+
+                const countEl = document.getElementById('adminArticlesCount');
+                if (countEl) {
+                    countEl.textContent = 'Total articles: ' + adminArticlesState.total;
+                }
+
+                if (listEl) {
+                    const items = Array.isArray(data.items) ? data.items : [];
+                    if (items.length === 0) {
+                        listEl.innerHTML = '<div class="articles-empty">No articles created yet.</div>';
+                    } else {
+                        listEl.innerHTML = items.map(a => {
+                            const createdAt = a.createdAt || new Date().toISOString();
+                            const expired = isArticleExpired(createdAt);
+                            const statusText = expired ? 'Earnings expired' : 'Earning active';
+                            return (
+                                '<div class="article-row" data-id="' + (a.id || '') + '">' +
+                                '<div class="article-main">' +
+                                '<div class="article-title">' + (a.title || 'Untitled') + '</div>' +
+                                '<div class="article-meta">' + formatAdminArticleDate(createdAt) + '</div>' +
+                                '</div>' +
+                                '<div class="article-actions">' +
+                                '<div class="article-status">' + statusText + '</div>' +
+                                '<div class="article-action-buttons">' +
+                                '<button class="article-action-btn" data-action="edit">Edit</button>' +
+                                '<button class="article-action-btn danger" data-action="delete">Delete</button>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>'
+                            );
+                        }).join('');
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+                if (listEl) {
+                    listEl.innerHTML = '<div class="articles-empty">Failed to load articles.</div>';
+                }
+            }
+        }
+
+        function initAdminArticlesModal() {
+            const overlay = document.getElementById('adminArticlesModal');
+            const fab = document.getElementById('adminArticlesFab');
+            const cancelBtn = document.getElementById('adminArticlesCancelBtn');
+            const previewBtn = document.getElementById('adminArticlesPreviewBtn');
+            const titleInput = document.getElementById('articleTitleInput');
+            const descInput = document.getElementById('articleDescriptionInput');
+            const coverInput = document.getElementById('articleCoverInput');
+            const coverUploadBtn = document.getElementById('articleCoverUploadBtn');
+            const bodyEditor = document.getElementById('articleBodyEditor');
+            const toolbar = document.querySelector('.editor-toolbar');
+            const previewModal = document.getElementById('articlePreviewModal');
+            const previewContent = document.getElementById('articlePreviewContent');
+            const previewBackBtn = document.getElementById('articlePreviewBackBtn');
+            const previewPublishBtn = document.getElementById('articlePreviewPublishBtn');
+
+            if (!overlay || !fab || !cancelBtn || !previewBtn || !titleInput || !descInput || !coverInput || !coverUploadBtn || !bodyEditor || !toolbar || !previewModal || !previewContent || !previewBackBtn || !previewPublishBtn) return;
+
+            function buildPreviewHtml() {
+                const title = (titleInput.value || '').trim();
+                const description = (descInput.value || '').trim();
+                const cover = (coverInput.value || '').trim();
+                const bodyHtml = bodyEditor.innerHTML || '';
+
+                let html = '';
+                if (cover) {
+                    html += '<img src="' + cover + '" alt="" style="width:100%;max-height:180px;object-fit:cover;border-radius:10px;border:1px solid rgba(212,175,55,0.3);margin-bottom:8px;">';
+                }
+                if (title) {
+                    html += '<h3 style="font-size:0.9rem;margin:2px 0 4px;color:#fff;">' + title + '</h3>';
+                }
+                if (description) {
+                    html += '<p style="font-size:0.78rem;color:#aaa;margin-bottom:6px;">' + description + '</p>';
+                }
+                if (bodyHtml) {
+                    html += '<div style="font-size:0.78rem;line-height:1.6;color:#f0f0f0;margin-top:4px;">' + bodyHtml + '</div>';
+                }
+
+                if (!html) {
+                    html = '<span style="font-size:0.75rem;color:#666;">Nothing to preview yet. Add a title or body content.</span>';
+                }
+
+                return html;
+            }
+
+            function openCreate() {
+                adminEditingArticleId = null;
+                const titleEl = overlay.querySelector('.modal-title');
+                if (titleEl) {
+                    titleEl.textContent = 'Create article';
+                }
+                titleInput.value = '';
+                descInput.value = '';
+                coverInput.value = '';
+                bodyEditor.innerHTML = '';
+                overlay.style.display = 'flex';
+            }
+
+            function openEdit(article) {
+                adminEditingArticleId = article.id;
+                const titleEl = overlay.querySelector('.modal-title');
+                if (titleEl) {
+                    titleEl.textContent = 'Edit article';
+                }
+                titleInput.value = article.title || '';
+                descInput.value = article.description || '';
+                coverInput.value = article.coverImageUrl || '';
+                bodyEditor.innerHTML = article.bodyHtml || '';
+                overlay.style.display = 'flex';
+            }
+
+            function close() {
+                overlay.style.display = 'none';
+                adminEditingArticleId = null;
+                const titleEl = overlay.querySelector('.modal-title');
+                if (titleEl) {
+                    titleEl.textContent = 'Create article';
+                }
+            }
+
+            fab.onclick = openCreate;
+            cancelBtn.onclick = close;
+
+            overlay.addEventListener('click', e => {
+                if (e.target === overlay) {
+                    close();
+                }
+            });
+
+            toolbar.addEventListener('click', e => {
+                const target = e.target;
+                if (!target || !target.classList || !target.classList.contains('editor-btn')) return;
+                e.preventDefault();
+
+                const tag = target.getAttribute('data-tag');
+                const action = target.getAttribute('data-action');
+
+                bodyEditor.focus();
+
+                if (tag) {
+                    if (tag === 'b') {
+                        document.execCommand('bold');
+                    } else if (tag === 'i') {
+                        document.execCommand('italic');
+                    } else if (tag === 'u') {
+                        document.execCommand('underline');
+                    } else if (tag === 'h2') {
+                        document.execCommand('formatBlock', false, 'h2');
+                    }
+                } else if (action === 'bullet') {
+                    document.execCommand('insertUnorderedList');
+                } else if (action === 'align-left' || action === 'align-center' || action === 'align-right') {
+                    if (action === 'align-left') {
+                        document.execCommand('justifyLeft');
+                    } else if (action === 'align-center') {
+                        document.execCommand('justifyCenter');
+                    } else {
+                        document.execCommand('justifyRight');
+                    }
+                } else if (action === 'image') {
+                    const fileInput = document.createElement('input');
+                    fileInput.type = 'file';
+                    fileInput.accept = 'image/*';
+                    fileInput.onchange = async () => {
+                        if (!fileInput.files || !fileInput.files[0]) return;
+                        const file = fileInput.files[0];
+                        const token = localStorage.getItem('adminToken');
+                        if (!token) {
+                            applyLogout();
+                            return;
+                        }
+                        const formData = new FormData();
+                        formData.append('image', file);
+
+                        try {
+                            const res = await fetch('/api/auth/admin/articles/body-upload', {
+                                method: 'POST',
+                                headers: {
+                                    'Authorization': 'Bearer ' + token
+                                },
+                                body: formData
+                            });
+                            if (!res.ok) {
+                                if (res.status === 400 || res.status === 401 || res.status === 403) {
+                                    applyLogout();
+                                    return;
+                                }
+                                alert('Failed to upload image');
+                                return;
+                            }
+                            const data = await res.json();
+                            const url = data.url;
+                            if (url) {
+                                document.execCommand('insertImage', false, url);
+                            }
+                            bodyEditor.focus();
+                        } catch (err) {
+                            console.error(err);
+                            alert('Failed to upload image');
+                        }
+                    };
+                    fileInput.click();
+                }
+            });
+
+            coverUploadBtn.onclick = () => {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                fileInput.onchange = async () => {
+                    if (!fileInput.files || !fileInput.files[0]) return;
+                    const file = fileInput.files[0];
+                    const token = localStorage.getItem('adminToken');
+                    if (!token) {
+                        applyLogout();
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('cover', file);
+
+                    try {
+                        const res = await fetch('/api/auth/admin/articles/cover-upload', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': 'Bearer ' + token
+                            },
+                            body: formData
+                        });
+                        if (!res.ok) {
+                            if (res.status === 400 || res.status === 401 || res.status === 403) {
+                                applyLogout();
+                                return;
+                            }
+                            alert('Failed to upload cover image');
+                            return;
+                        }
+
+                        const data = await res.json();
+                        coverInput.value = data.url || '';
+                    } catch (err) {
+                        console.error(err);
+                        alert('Failed to upload cover image');
+                    }
+                };
+                fileInput.click();
+            };
+
+            previewBtn.onclick = () => {
+                const html = buildPreviewHtml();
+                previewContent.innerHTML = html;
+                previewModal.style.display = 'flex';
+            };
+
+            previewBackBtn.onclick = () => {
+                previewModal.style.display = 'none';
+            };
+
+            previewModal.addEventListener('click', e => {
+                if (e.target === previewModal) {
+                    previewModal.style.display = 'none';
+                }
+            });
+
+            previewPublishBtn.onclick = async () => {
+                const token = localStorage.getItem('adminToken');
+                if (!token) {
+                    applyLogout();
+                    return;
+                }
+
+                const title = titleInput.value.trim();
+                const description = descInput.value.trim();
+                const coverImageUrl = coverInput.value.trim();
+                const bodyHtml = bodyEditor.innerHTML.trim();
+
+                if (!title) {
+                    alert('Title is required');
+                    return;
+                }
+
+                previewPublishBtn.disabled = true;
+                previewPublishBtn.textContent = adminEditingArticleId ? 'Saving...' : 'Publishing...';
+
+                try {
+                    const url = '/api/auth/admin/articles' + (adminEditingArticleId ? '/' + encodeURIComponent(adminEditingArticleId) : '');
+                    const method = adminEditingArticleId ? 'PUT' : 'POST';
+                    const res = await fetch(url, {
+                        method,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body: JSON.stringify({
+                            title,
+                            description,
+                            coverImageUrl,
+                            bodyHtml
+                        })
+                    });
+
+                    if (!res.ok) {
+                        if (res.status === 400 || res.status === 401 || res.status === 403) {
+                            applyLogout();
+                            return;
+                        }
+                        alert('Failed to publish article');
+                        return;
+                    }
+
+                    previewModal.style.display = 'none';
+                    close();
+                    loadAdminArticles(adminArticlesState.page || 1);
+                } catch (e) {
+                    console.error(e);
+                    alert('Failed to publish article');
+                } finally {
+                    previewPublishBtn.disabled = false;
+                    previewPublishBtn.textContent = 'Publish';
+                }
+            };
+
+            const listEl = document.getElementById('adminArticlesList');
+            if (listEl) {
+                listEl.addEventListener('click', async (e) => {
+                    const btn = e.target.closest('.article-action-btn');
+                    if (!btn) return;
+                    const row = btn.closest('.article-row');
+                    if (!row) return;
+                    const articleId = row.getAttribute('data-id');
+                    if (!articleId) return;
+
+                    const action = btn.getAttribute('data-action');
+                    const token = localStorage.getItem('adminToken');
+                    if (!token) {
+                        applyLogout();
+                        return;
+                    }
+
+                    if (action === 'edit') {
+                        try {
+                            const res = await fetch('/api/auth/admin/articles/' + encodeURIComponent(articleId), {
+                                headers: {
+                                    'Authorization': 'Bearer ' + token
+                                }
+                            });
+                            if (!res.ok) {
+                                if (res.status === 400 || res.status === 401 || res.status === 403) {
+                                    applyLogout();
+                                    return;
+                                }
+                                return;
+                            }
+                            const article = await res.json();
+                            openEdit(article);
+                        } catch (err) {
+                            console.error(err);
+                        }
+                    } else if (action === 'delete') {
+                        const confirmed = window.confirm('Delete this article? This cannot be undone.');
+                        if (!confirmed) return;
+                        try {
+                            const res = await fetch('/api/auth/admin/articles/' + encodeURIComponent(articleId), {
+                                method: 'DELETE',
+                                headers: {
+                                    'Authorization': 'Bearer ' + token
+                                }
+                            });
+                            if (!res.ok) {
+                                if (res.status === 400 || res.status === 401 || res.status === 403) {
+                                    applyLogout();
+                                    return;
+                                }
+                                return;
+                            }
+                            loadAdminArticles(adminArticlesState.page || 1);
+                        } catch (err) {
+                            console.error(err);
+                        }
+                    }
+                });
+            }
+        }
+
         document.getElementById('adminLogoutBtn').onclick = () => {
             applyLogout();
         };
@@ -303,6 +1014,8 @@
             if (!guardAdminAccess()) return;
             initAdminHeader();
             initSidebarNav();
+            initAdminArticlesModal();
+            loadAdminArticles(1);
         };
     </script>
 </body>
