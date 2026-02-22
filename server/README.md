@@ -58,13 +58,13 @@ All env variables are read from `server/.env`. Only the most important keys are 
   - Default: `3000`.
 - `DOMAIN`
   - Public domain for redirects in production.
-  - Default: `cashx.name.ng`.
+  - Default: `protege.name.ng`.
 - `SSL_KEY`
   - Path to TLS private key file (used by `start.js`).
-  - Default: `/etc/letsencrypt/live/cashx.name.ng/privkey.pem`.
+  - Default: `/etc/letsencrypt/live/protege.name.ng/privkey.pem`.
 - `SSL_CERT`
   - Path to TLS certificate chain file (used by `start.js`).
-  - Default: `/etc/letsencrypt/live/cashx.name.ng/fullchain.pem`.
+  - Default: `/etc/letsencrypt/live/protege.name.ng/fullchain.pem`.
 - `ACME_CHALLENGE_DIR`
   - Directory for Certbot HTTP-01 ACME challenges.
   - Default: `/var/www/letsencrypt/.well-known/acme-challenge`.
@@ -261,9 +261,9 @@ MONGO_URI=mongodb+srv://USERNAME:PASSWORD@cluster.mongodb.net/DATABASE
 
 # --- HTTP / HTTPS / Domain ---
 PORT=3000
-DOMAIN=cashx.name.ng
-SSL_KEY=/etc/letsencrypt/live/cashx.name.ng/privkey.pem
-SSL_CERT=/etc/letsencrypt/live/cashx.name.ng/fullchain.pem
+DOMAIN=protege.name.ng
+SSL_KEY=/etc/letsencrypt/live/protege.name.ng/privkey.pem
+SSL_CERT=/etc/letsencrypt/live/protege.name.ng/fullchain.pem
 ACME_CHALLENGE_DIR=/var/www/letsencrypt/.well-known/acme-challenge
 # Force dev-style single HTTP server even on Linux (optional)
 FORCE_DEV=1

@@ -36,11 +36,11 @@ app.use('/api/auth', authRoutes);
 // Protected Routes
 app.use('/api/notifications', verifyToken, notificationRoutes);
 
-const DOMAIN = process.env.DOMAIN || "cashx.name.ng";
+const DOMAIN = process.env.DOMAIN || "protege.name.ng";
 
 // HTTPS certs paths
-const SSL_KEY = "/etc/letsencrypt/live/cashx.name.ng/privkey.pem";
-const SSL_CERT = "/etc/letsencrypt/live/cashx.name.ng/fullchain.pem";
+const SSL_KEY = "/etc/letsencrypt/live/protege.name.ng/privkey.pem";
+const SSL_CERT = "/etc/letsencrypt/live/protege.name.ng/fullchain.pem";
 
 // Check if we are in Local Development (Windows) or Production (Linux/EC2)
 if (process.platform === 'win32') {

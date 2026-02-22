@@ -220,6 +220,17 @@ if (couponCheckBtn) {
     });
 }
 
+(function prefillReferrerFromQuery() {
+    try {
+        const params = new URLSearchParams(window.location.search || '');
+        const ref = params.get('ref');
+        const refInput = document.getElementById('referrer');
+        if (ref && refInput && !refInput.value) {
+            refInput.value = ref;
+        }
+    } catch (e) {}
+})();
+
 // Hamburger menu functionality
 const hamburgerMenu = document.getElementById('hamburgerMenu');
 const navDropdown = document.getElementById('navDropdown');

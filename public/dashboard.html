@@ -298,12 +298,12 @@
             <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
         </div>
         <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
-        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>
-        <a href="ads.html" class="sidebar-item"><i class="fas fa-tv"></i> ADs</a>
-        <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a>
         <a href="coupon.html" class="sidebar-item"><i class="fas fa-key"></i> Coupon</a>
-        <a href="loans.html" class="sidebar-item"><i class="fas fa-university"></i> Loans/scholarship</a>
-        <a href="#" class="sidebar-item" style="color: #ff4d4d; border-top: 2px solid #222;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a>
+        <a href="teams.html" class="sidebar-item"><i class="fas fa-users"></i> Teams</a>
+        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>
+        <a href="loans.html" class="sidebar-item"><i class="fas fa-university"></i> Loans</a>
+        <a href="#" id="logoutBtn" class="sidebar-item" style="color: #ff4d4d; border-top: 2px solid #222;"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
     <div class="phone-wrapper">
@@ -335,8 +335,8 @@
             <div class="referral-section">
                 <p class="label">My Referral Link</p>
                 <div class="referral-link">
-                    <code>cashx.pro/ref/user123</code>
-                    <button class="copy-btn">Copy</button>
+                    <code>https://protege.pro/ref/user123</code>
+                    <button class="copy-btn" id="copyReferralBtnMain">Copy</button>
                 </div>
             </div>
 
@@ -361,6 +361,14 @@
             <button class="btn-engage">Perform Daily Task</button>
         </div>
 
+        <div id="copyModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index:2500;">
+            <div style="background:#111111; border-radius:16px; padding:20px; width:80%; max-width:320px; text-align:center; border:1px solid rgba(212,175,55,0.4);">
+                <h3 style="color:var(--primary-gold); margin-bottom:10px; font-size:1rem;">Referral Link Copied</h3>
+                <p style="font-size:0.8rem; color:var(--text-gray); margin-bottom:15px;">Your Protege referral link has been copied. Share it with your team.</p>
+                <button id="copyModalClose" style="padding:8px 16px; border-radius:8px; border:none; background:var(--gradient-gold); color:#000; font-weight:700; cursor:pointer;">OK</button>
+            </div>
+        </div>
+
         <nav class="bottom-nav">
             <a href="dashboard.html" class="nav-btn active"><i class="fas fa-house"></i>Home</a>
             <a href="articles.html" class="nav-btn"><i class="fas fa-newspaper"></i>News</a>
@@ -370,26 +378,9 @@
     </div>
 
     <script src="js/auth-guard.js"></script>
+    <script src="js/layout.js"></script>
     <script src="js/dashboard.js"></script>
     <script>
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
-        const sidebar = document.getElementById('sidebar');
-        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
-        const overlay = document.getElementById('overlay');
-
-        hamburgerBtn.onclick = () => {
-            sidebar.classList.add('active');
-            overlay.style.display = 'block';
-        };
-
-        const closeMenu = () => {
-            sidebar.classList.remove('active');
-            overlay.style.display = 'none';
-        };
-
-        closeSidebarBtn.onclick = closeMenu;
-        overlay.onclick = closeMenu;
-
         // Image Upload Logic
         const imageUpload = document.getElementById('imageUpload');
         const userAvatar = document.getElementById('userAvatar');

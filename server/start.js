@@ -48,10 +48,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/notifications", verifyToken, notificationRoutes);
 
 // SSL paths
-const SSL_KEY = process.env.SSL_KEY || "/etc/letsencrypt/live/cashx.name.ng/privkey.pem";
-const SSL_CERT = process.env.SSL_CERT || "/etc/letsencrypt/live/cashx.name.ng/fullchain.pem";
+const SSL_KEY = process.env.SSL_KEY || "/etc/letsencrypt/live/protege.name.ng/privkey.pem";
+const SSL_CERT = process.env.SSL_CERT || "/etc/letsencrypt/live/protege.name.ng/fullchain.pem";
 
-const DOMAIN = process.env.DOMAIN || "cashx.name.ng";
+const DOMAIN = process.env.DOMAIN || "protege.name.ng";
 
 function startHttpRedirect() {
   http

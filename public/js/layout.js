@@ -1,16 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- SIDEBAR TOGGLE LOGIC ---
+    // --- SIDEBAR TOGGLE LOGIC (SHARED FOR USER PAGES) ---
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
+    const overlay = document.getElementById('overlay') || document.getElementById('mainOverlay');
+    const closeSidebarBtn = document.getElementById('closeSidebarBtn');
 
     function toggleSidebar() {
-        if (sidebar) sidebar.classList.toggle('active');
-        if (overlay) overlay.classList.toggle('active');
+        if (!sidebar || !overlay) return;
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
     }
 
     if (hamburgerBtn) hamburgerBtn.addEventListener('click', toggleSidebar);
     if (overlay) overlay.addEventListener('click', toggleSidebar);
+    if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', toggleSidebar);
 
     // Logout Logic handled globally in auth-guard.js
 

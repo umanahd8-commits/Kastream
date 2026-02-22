@@ -232,7 +232,7 @@
 </head>
 <body>
 
-    <div class="overlay" id="mainOverlay" onclick="toggleSidebar()"></div>
+    <div class="overlay" id="mainOverlay"></div>
 
     <div class="modal-overlay" id="monetizationModal">
         <div class="modal-box">
@@ -245,19 +245,19 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3 style="letter-spacing: 2px;">MENU</h3>
-            <i class="fas fa-times fa-lg" onclick="toggleSidebar()" style="cursor:pointer"></i>
+            <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
         </div> 
         <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i>Dashboard</a>
-        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>   
-        <a href="loans.html" class="sidebar-item"><i class="fas fa-university"></i> Loans/scholarship</a> 
-        <a href="ads.html" class="sidebar-item"><i class="fas fa-tv"></i> ADs</a> 
-        <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a> 
         <a href="coupon.html" class="sidebar-item"><i class="fas fa-key"></i>Coupon</a>
-        <a href="#" class="sidebar-item" style="color: var(--accent-red);"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a> 
+        <a href="teams.html" class="sidebar-item"><i class="fas fa-users"></i> Teams</a> 
+        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>   
+        <a href="loans.html" class="sidebar-item"><i class="fas fa-university"></i> Loans</a> 
+        <a href="#" id="logoutBtn" class="sidebar-item" style="color: var(--accent-red);"><i class="fas fa-sign-out-alt"></i> Logout</a>
       </div>
               <div class="phone-wrapper"> 
                   <header  class="header"> 
-                    <div class="nav-trigger" onclick="toggleSidebar()">
+                    <div class="nav-trigger" id="hamburgerBtn">
                        <i class="fas fa-bars fa-lg"></i>
                 <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo" class="header-logo">
             </div>
@@ -354,14 +354,8 @@
     </div>
 
     <script src="js/auth-guard.js"></script>
+    <script src="js/layout.js"></script>
     <script>
-        function toggleSidebar() {
-            const sb = document.getElementById('sidebar');
-            const ov = document.getElementById('mainOverlay');
-            sb.classList.toggle('active');
-            ov.style.display = sb.classList.contains('active') ? 'block' : 'none';
-        }
-
         function openMonetizationModal(title, message) {
             const overlay = document.getElementById('monetizationModal');
             const titleEl = document.getElementById('monetizationModalTitle');

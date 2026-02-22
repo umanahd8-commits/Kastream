@@ -215,9 +215,14 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ message: 'You must accept the Terms & Conditions' });
         }
 
-        const userExists = await User.findOne({ $or: [{ email }, { username }] });
-        if (userExists) {
-            return res.status(400).json({ message: 'User already exists' });
+        const usernameTaken = await User.findOne({ username });
+        if (usernameTaken) {
+            return res.status(400).json({ message: 'Username already taken' });
+        }
+
+        const emailTaken = await User.findOne({ email });
+        if (emailTaken) {
+            return res.status(400).json({ message: 'Email already registered' });
         }
 
         const normalizedCoupon = String(couponCode || '').trim().toUpperCase();
@@ -237,6 +242,20 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ message: 'Package type does not match coupon plan' });
         }
 
+        let normalizedReferrer = null;
+        if (referrer && typeof referrer === 'string' && referrer.trim()) {
+            const code = referrer.trim();
+            const upline = await User.findOne({
+                $or: [{ username: code }, { referralCode: code }]
+            });
+
+            if (!upline) {
+                return res.status(400).json({ message: 'Invalid referral code' });
+            }
+
+            normalizedReferrer = upline.username || upline.referralCode;
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const rawPrefix = process.env.USER_ID_PREFIX || 'PROTE';
@@ -249,7 +268,7 @@ router.post('/register', async (req, res) => {
             email,
             username,
             userId,
-            referrer,
+            referrer: normalizedReferrer || undefined,
             country,
             password: hashedPassword,
             phone,
@@ -257,6 +276,42 @@ router.post('/register', async (req, res) => {
             packageType: coupon.planName,
             referralCode: username
         });
+
+        const plans = getPlanConfig();
+        const selectedPlan = plans.find(p => String(p.name).toLowerCase() === couponPackage) || null;
+        const planPrice = selectedPlan ? Number(selectedPlan.price) || 0 : 0;
+
+        const rawPercent = process.env.REFERRAL_EARNING_PERCENTAGE;
+        let refPercent = typeof rawPercent === 'string' && rawPercent.trim()
+            ? Number(rawPercent)
+            : NaN;
+        if (!Number.isFinite(refPercent) || refPercent < 0) refPercent = 0;
+        if (refPercent > 100) refPercent = 100;
+
+        let referralReward = 0;
+
+        if (normalizedReferrer && planPrice > 0 && refPercent > 0) {
+            const upline = await User.findOne({
+                $or: [{ username: normalizedReferrer }, { referralCode: normalizedReferrer }]
+            });
+
+            if (upline) {
+                referralReward = Math.floor((refPercent / 100) * planPrice);
+
+                upline.balance = (upline.balance || 0) + referralReward;
+                upline.transactions = upline.transactions || [];
+                upline.transactions.push({
+                    type: 'referral',
+                    amount: referralReward,
+                    currency: 'NGN',
+                    direction: 'credit',
+                    source: 'referral',
+                    description: `Referral bonus from ${username} (${coupon.planName})`
+                });
+
+                await upline.save();
+            }
+        }
 
         await newUser.save();
 
@@ -509,6 +564,101 @@ router.get('/withdraw-info', verifyToken, async (req, res) => {
             taskBalance: user.taskBalance || 0,
             country: user.country,
             bankAccounts: user.bankAccounts || []
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Team / Referrals Overview (Protected, user-facing)
+router.get('/team/overview', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const earnings = Array.isArray(user.transactions)
+            ? user.transactions.filter(tx => tx.type === 'referral' && tx.direction === 'credit')
+            : [];
+
+        const totalEarnings = earnings.reduce((sum, tx) => sum + (tx.amount || 0), 0);
+
+        res.json({ totalEarnings });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Team / Referrals List (Protected, paginated)
+router.get('/team/list', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+        const limit = Math.max(Math.min(parseInt(req.query.limit, 10) || 20, 100), 1);
+
+        const code = user.username || user.referralCode;
+        if (!code) {
+            return res.json({
+                page,
+                pageSize: limit,
+                total: 0,
+                totalPages: 0,
+                items: []
+            });
+        }
+
+        const filter = { referrer: code };
+        const [total, refs] = await Promise.all([
+            User.countDocuments(filter),
+            User.find(filter)
+                .sort({ createdAt: -1 })
+                .skip((page - 1) * limit)
+                .limit(limit)
+                .select('username fullName role packageType createdAt transactions')
+        ]);
+
+        const uplineTxs = Array.isArray(user.transactions) ? user.transactions : [];
+
+        const items = refs.map(ref => {
+            const downlineUsername = ref.username;
+
+            const refEarn = uplineTxs
+                .filter(tx => {
+                    if (!tx || tx.type !== 'referral' || tx.direction !== 'credit') return false;
+                    if (tx.refUsername && tx.refUsername === downlineUsername) return true;
+                    const desc = typeof tx.description === 'string' ? tx.description : '';
+                    return desc.includes(`from ${downlineUsername}`);
+                })
+                .reduce((sum, tx) => sum + (tx.amount || 0), 0);
+
+            return {
+                id: ref.userId || ref.id,
+                username: ref.username,
+                fullName: ref.fullName,
+                role: ref.role || 'user',
+                plan: ref.packageType || null,
+                joinedAt: ref.createdAt,
+                earnings: refEarn
+            };
+        });
+
+        const totalPages = total === 0 ? 0 : Math.ceil(total / limit);
+
+        res.json({
+            page,
+            pageSize: limit,
+            total,
+            totalPages,
+            items
         });
     } catch (error) {
         console.error(error);
@@ -1275,7 +1425,7 @@ router.post('/profile/avatar', verifyToken, upload.single('avatar'), async (req,
 
         const uploadResult = await new Promise((resolve, reject) => {
             const stream = cloudinary.uploader.upload_stream(
-                { folder: 'cashx_avatars' },
+                { folder: 'protege_avatars' },
                 (error, result) => {
                     if (error) return reject(error);
                     resolve(result);

@@ -87,15 +87,100 @@
         window.location.href = 'login.html';
     });
 
-    // Global Logout Logic
     document.addEventListener('DOMContentLoaded', () => {
-        function handleLogout(e) {
-            e.preventDefault();
-            if (confirm('Are you sure you want to logout?')) {
+        let logoutModalEl = null;
+        let logoutOverlayEl = null;
+
+        function ensureLogoutModal() {
+            if (logoutModalEl && logoutOverlayEl) return;
+
+            logoutOverlayEl = document.createElement('div');
+            logoutOverlayEl.style.position = 'fixed';
+            logoutOverlayEl.style.inset = '0';
+            logoutOverlayEl.style.background = 'rgba(0,0,0,0.85)';
+            logoutOverlayEl.style.display = 'none';
+            logoutOverlayEl.style.alignItems = 'center';
+            logoutOverlayEl.style.justifyContent = 'center';
+            logoutOverlayEl.style.zIndex = '3000';
+
+            logoutModalEl = document.createElement('div');
+            logoutModalEl.style.background = '#111';
+            logoutModalEl.style.borderRadius = '16px';
+            logoutModalEl.style.padding = '20px';
+            logoutModalEl.style.width = '80%';
+            logoutModalEl.style.maxWidth = '320px';
+            logoutModalEl.style.textAlign = 'center';
+            logoutModalEl.style.border = '1px solid rgba(212,175,55,0.4)';
+            logoutModalEl.style.color = '#fff';
+            logoutModalEl.style.fontFamily = 'inherit';
+
+            const title = document.createElement('h3');
+            title.textContent = 'Logout';
+            title.style.marginBottom = '10px';
+            title.style.fontSize = '1rem';
+            title.style.color = '#D4AF37';
+
+            const msg = document.createElement('p');
+            msg.textContent = 'Are you sure you want to logout?';
+            msg.style.fontSize = '0.85rem';
+            msg.style.color = '#aaaaaa';
+            msg.style.marginBottom = '18px';
+
+            const btnRow = document.createElement('div');
+            btnRow.style.display = 'flex';
+            btnRow.style.justifyContent = 'space-between';
+            btnRow.style.gap = '10px';
+
+            const cancelBtn = document.createElement('button');
+            cancelBtn.textContent = 'Cancel';
+            cancelBtn.style.flex = '1';
+            cancelBtn.style.padding = '8px 12px';
+            cancelBtn.style.borderRadius = '8px';
+            cancelBtn.style.border = '1px solid #333';
+            cancelBtn.style.background = '#222';
+            cancelBtn.style.color = '#fff';
+            cancelBtn.style.cursor = 'pointer';
+            cancelBtn.onclick = () => {
+                if (logoutOverlayEl) logoutOverlayEl.style.display = 'none';
+            };
+
+            const confirmBtn = document.createElement('button');
+            confirmBtn.textContent = 'Logout';
+            confirmBtn.style.flex = '1';
+            confirmBtn.style.padding = '8px 12px';
+            confirmBtn.style.borderRadius = '8px';
+            confirmBtn.style.border = 'none';
+            confirmBtn.style.background = 'linear-gradient(45deg,#AA771C,#FCF6BA,#D4AF37)';
+            confirmBtn.style.color = '#000';
+            confirmBtn.style.fontWeight = '700';
+            confirmBtn.style.cursor = 'pointer';
+            confirmBtn.onclick = () => {
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
                 window.location.href = 'login.html';
-            }
+            };
+
+            btnRow.appendChild(cancelBtn);
+            btnRow.appendChild(confirmBtn);
+
+            logoutModalEl.appendChild(title);
+            logoutModalEl.appendChild(msg);
+            logoutModalEl.appendChild(btnRow);
+
+            logoutOverlayEl.appendChild(logoutModalEl);
+            logoutOverlayEl.addEventListener('click', e => {
+                if (e.target === logoutOverlayEl) {
+                    logoutOverlayEl.style.display = 'none';
+                }
+            });
+
+            document.body.appendChild(logoutOverlayEl);
+        }
+
+        function handleLogout(e) {
+            e.preventDefault();
+            ensureLogoutModal();
+            if (logoutOverlayEl) logoutOverlayEl.style.display = 'flex';
         }
 
         const logoutIds = ['logoutBtn', 'sidebarLogoutBtn'];
@@ -104,10 +189,8 @@
             if (btn) btn.addEventListener('click', handleLogout);
         });
 
-        // Also handle class-based buttons if any
         const logoutClasses = document.querySelectorAll('.logout-btn');
         logoutClasses.forEach(btn => {
-            // Avoid double binding if it has an ID we already handled
             if (!logoutIds.includes(btn.id)) {
                 btn.addEventListener('click', handleLogout);
             }

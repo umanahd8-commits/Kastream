@@ -98,15 +98,57 @@ document.addEventListener('DOMContentLoaded', async () => {
         referralCodeElement.textContent = referralLink;
     }
 
-    const copyBtn = document.querySelector('.copy-btn');
+    const copyBtn = document.getElementById('copyReferralBtnMain');
+    const copyModal = document.getElementById('copyModal');
+    const copyModalClose = document.getElementById('copyModalClose');
+
+    function showCopyModal() {
+        if (copyModal) {
+            copyModal.style.display = 'flex';
+        }
+    }
+
+    function hideCopyModal() {
+        if (copyModal) {
+            copyModal.style.display = 'none';
+        }
+    }
+
+    async function copyTextWithFallback(text) {
+        if (!text) return;
+        try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(text);
+                return;
+            }
+        } catch (e) {}
+
+        try {
+            const tempInput = document.createElement('input');
+            tempInput.style.position = 'fixed';
+            tempInput.style.opacity = '0';
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+        } catch (e) {}
+    }
+
     if (copyBtn && referralCodeElement) {
         copyBtn.addEventListener('click', async () => {
-            try {
-                await navigator.clipboard.writeText(referralCodeElement.textContent);
-                alert('Referral link copied to clipboard!');
-            } catch (e) {
-                alert('Unable to copy link. Please copy manually.');
-            }
+            await copyTextWithFallback(referralCodeElement.textContent || '');
+            showCopyModal();
+        });
+    }
+
+    if (copyModalClose) {
+        copyModalClose.addEventListener('click', hideCopyModal);
+    }
+
+    if (copyModal) {
+        copyModal.addEventListener('click', e => {
+            if (e.target === copyModal) hideCopyModal();
         });
     }
 });
