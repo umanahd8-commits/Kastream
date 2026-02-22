@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11489992379"></script>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11489992379"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -11,21 +12,53 @@
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROTEGE - About Section</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SEO Meta Tags -->
+    <title>Protege - Social Media Growth & Engagement Platform</title>
+    <meta name="description" content="Join Protege to grow your digital presence on TikTok and Telegram. Participate in challenges, upload creative content, and build your social influence via Protege.">
+    <meta name="keywords" content="Protege, ProtegeApp, Social Media Growth, Nigeria, TikTok Marketing, Telegram Engagement, Digital Marketing, Influencer Platform">
+    <meta name="author" content="Protege Platform">
+    <link rel="canonical" href="https://protege.com.ng/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://protege.com.ng/">
+    <meta property="og:title" content="Protege - Grow Your Social Influence">
+    <meta property="og:description" content="Turn your social media presence into influence. Join thousands growing daily on Protege. Engage on TikTok, Telegram, and more.">
+    <meta property="og:image" content="https://protege.com.ng/assets/hero-image-desktop.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://protege.com.ng/">
+    <meta property="twitter:title" content="Protege - Digital Growth Platform">
+    <meta property="twitter:description" content="Join the movement. Engage, grow, and build influence online with Protege.">
+    <meta property="twitter:image" content="https://protege.com.ng/assets/hero-image-desktop.png">
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <link rel="shortcut icon" href="assets/favicon/favicon.ico">
+    
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <!-- AOS Animation CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Google Fonts: Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         /* --- Core Variables & Reset --- */
         :root {
             --primary-black: #0a0a0a;
-            --secondary-black: #1a1a1a;
-            --accent-gold: #D4AF37; 
-            --gold-gradient: linear-gradient(180deg, #FFD700 0%, #D4AF37 50%, #B8860B 100%);
+            --secondary-black: #141414;
+            --card-black: #1a1a1a;
+            --accent-gold: #FFD700;
+            --accent-gold-light: #FDB931;
+            --accent-gold-dark: #C08208;
+            --gold-gradient: linear-gradient(135deg, #FFD700 0%, #FDB931 50%, #C08208 100%);
             --text-white: #ffffff;
             --error-red: #ff4d4d;
         }
@@ -42,7 +75,7 @@
 
         /* --- Clickable Assets (Global Link) --- */
         img, 
-        .feature-card,
+        .feature-card, 
         .about-image-wrapper {
             cursor: pointer;
             transition: opacity 0.2s;
@@ -55,14 +88,14 @@
 
         /* --- Buttons --- */
         .btn-glow {
-            background-color: var(--accent-gold);
-            color: var(--primary-black);
+            background: var(--gold-gradient);
+            color: #000000;
             border: none;
             border-radius: 50px;
             padding: 10px 32px;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 1rem;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
             transition: all 0.3s ease;
             text-transform: capitalize;
             cursor: pointer;
@@ -71,10 +104,9 @@
         }
 
         .btn-glow:hover {
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
             transform: translateY(-2px);
-            color: var(--primary-black);
-            background-color: #f1c40f;
+            color: #000000;
         }
 
         .btn-outline-custom {
@@ -91,14 +123,14 @@
         }
 
         .btn-outline-custom:hover {
-            background-color: rgba(212, 175, 55, 0.1);
-            color: #ffffff;
+            background-color: rgba(255, 215, 0, 0.1);
+            color: var(--accent-gold);
         }
 
         .btn-sm-glow {
             padding: 8px 20px;
             font-size: 0.85rem;
-            background: rgba(212, 175, 55, 0.1);
+            background: rgba(255, 215, 0, 0.1);
             color: var(--accent-gold);
             border: 1px solid var(--accent-gold);
             border-radius: 50px;
@@ -108,8 +140,8 @@
         }
 
         .btn-sm-glow:hover {
-            background: var(--accent-gold);
-            color: var(--primary-black);
+            background: var(--gold-gradient);
+            color: #000000;
         }
 
         /* --- Navbar --- */
@@ -130,7 +162,7 @@
             font-weight: 400;
             margin: 0 10px;
             font-size: 0.95rem;
-            transition: opacity 0.3s;
+            transition: color 0.3s;
         }
 
         .nav-link:hover {
@@ -148,15 +180,15 @@
         }
 
         .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28212, 175, 55, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
 
         .navbar-glass {
-            background-color: rgba(10, 10, 10, 0.95) !important;
+            background-color: rgba(5, 5, 5, 0.95) !important;
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.15);
             padding-top: 10px !important;
             padding-bottom: 10px !important;
         }
@@ -176,6 +208,14 @@
             padding-top: 0;
         }
 
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 20% 50%, rgba(255,215,0,0.08) 0%, transparent 60%);
+            z-index: 0;
+        }
+
         .hero-content {
             position: relative;
             z-index: 5;
@@ -193,14 +233,14 @@
             line-height: 1.6;
             margin-bottom: 30px;
             max-width: 450px;
-            color: #ccc;
+            color: rgba(255,255,255,0.85);
         }
 
         /* --- About Section --- */
         .about-section {
             position: relative;
             padding: 80px 0;
-            background: radial-gradient(circle at 70% 30%, #1a1a1a 0%, #000000 70%);
+            background: radial-gradient(circle at 70% 30%, #1f1f00 0%, #0a0a0a 70%);
             overflow: hidden;
             z-index: 2; 
         }
@@ -214,7 +254,9 @@
         }
         
         .about-header .brand-text {
-            color: var(--accent-gold); 
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .about-lead {
@@ -233,8 +275,8 @@
         }
 
         .about-pill {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgba(255, 215, 0, 0.06);
+            border: 1px solid rgba(255, 215, 0, 0.2);
             border-radius: 50px;
             padding: 14px 24px;
             font-weight: 500;
@@ -247,7 +289,7 @@
         }
 
         .about-pill:hover {
-            background: rgba(212, 175, 55, 0.1);
+            background: rgba(255, 215, 0, 0.15);
             border-color: var(--accent-gold);
             transform: translateX(10px);
         }
@@ -257,10 +299,10 @@
             display: inline-block;
             width: 12px;
             height: 12px;
-            background-color: var(--accent-gold);
+            background: var(--gold-gradient);
             border-radius: 50%;
             margin-right: 15px;
-            box-shadow: 0 0 10px var(--accent-gold);
+            box-shadow: 0 0 10px rgba(255,215,0,0.5);
         }
 
         .about-cta {
@@ -268,7 +310,9 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            color: var(--accent-gold);
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             letter-spacing: 0.5px;
             text-transform: uppercase;
             font-size: 0.9rem;
@@ -278,8 +322,8 @@
             width: 100%;
             height: auto;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,215,0,0.1);
+            border: 1px solid rgba(255,215,0,0.15);
         }
 
         /* --- Features Section --- */
@@ -289,6 +333,14 @@
             position: relative;
         }
 
+        .features-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 80% 80%, rgba(255,215,0,0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
         .section-title {
             font-size: 2.5rem;
             font-weight: 700;
@@ -296,20 +348,22 @@
         }
 
         .section-subtitle {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.7);
             font-size: 1rem;
             max-width: 600px;
             margin: 0 auto;
         }
         
         .highlight {
-            color: var(--accent-gold);
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         /* Feature Card */
         .feature-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(212, 175, 55, 0.1);
+            background: var(--card-black);
+            border: 1px solid rgba(255, 215, 0, 0.1);
             border-radius: 24px;
             overflow: hidden;
             transition: transform 0.4s ease, border-color 0.3s ease;
@@ -322,8 +376,8 @@
         .feature-card:hover {
             transform: translateY(-10px);
             border-color: var(--accent-gold);
-            background: rgba(212, 175, 55, 0.05);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            background: #1f1f00;
+            box-shadow: 0 15px 40px rgba(255,215,0,0.15);
         }
 
         .feature-img-box {
@@ -337,12 +391,10 @@
             height: auto;
             display: block;
             transition: transform 0.5s ease;
-            filter: grayscale(20%);
         }
 
         .feature-card:hover .feature-img-box img {
             transform: scale(1.03);
-            filter: grayscale(0%);
         }
 
         .feature-content {
@@ -367,50 +419,12 @@
             flex-grow: 1;
         }
 
-        /* --- FAQ Section --- */
-        .faq-section {
-            padding: 100px 0;
-            background-color: var(--primary-black);
-        }
-
-        .accordion-item {
-            background-color: transparent;
-            border: none;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            margin-bottom: 10px;
-        }
-
-        .accordion-button {
-            background-color: transparent;
-            color: #fff;
-            font-weight: 600;
-            font-size: 1.1rem;
-            padding: 20px 0;
-            box-shadow: none !important;
-        }
-
-        .accordion-button:not(.collapsed) {
-            background-color: transparent;
-            color: var(--accent-gold);
-        }
-
-        .accordion-button::after {
-            filter: invert(1) brightness(0.5) sepia(1) hue-rotate(10deg) saturate(5);
-        }
-
-        .accordion-body {
-            color: rgba(255, 255, 255, 0.7);
-            padding-left: 0;
-            padding-right: 0;
-            padding-bottom: 25px;
-        }
-
         /* --- Footer --- */
         .footer {
-            background-color: #000;
+            background-color: #050505;
             padding: 80px 0 30px 0;
             color: #fff;
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            border-top: 1px solid rgba(255,215,0,0.1);
         }
 
         .footer-brand {
@@ -457,28 +471,35 @@
             align-items: center;
             width: 40px;
             height: 40px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 215, 0, 0.05);
             color: #fff;
             border-radius: 50%;
             margin-right: 10px;
+            border: 1px solid rgba(255,215,0,0.15);
             transition: all 0.3s;
             text-decoration: none;
-            border: 1px solid rgba(212, 175, 55, 0.2);
         }
 
         .social-icons a:hover {
-            background: var(--accent-gold);
-            color: var(--primary-black);
-            border-color: var(--accent-gold);
+            background: var(--gold-gradient);
+            color: #000;
+            border-color: transparent;
         }
 
         .copyright {
             margin-top: 60px;
             padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 215, 0, 0.08);
             text-align: center;
             color: rgba(255, 255, 255, 0.4);
             font-size: 0.85rem;
+        }
+        
+        .disclaimer-text {
+            color: rgba(255,255,255,0.3);
+            font-size: 0.75rem;
+            margin-top: 20px;
+            line-height: 1.4;
         }
         
         /* Mobile Sticky Button */
@@ -486,18 +507,18 @@
             position: fixed;
             bottom: 20px;
             left: 50%;
-            transform: translateX(-50%) translateY(100px); 
+            transform: translateX(-50%) translateY(100px);
             width: 90%;
             max-width: 400px;
-            background-color: var(--accent-gold);
-            color: var(--primary-black);
+            background: var(--gold-gradient);
+            color: #000000;
             text-align: center;
             padding: 15px;
             border-radius: 50px;
             font-weight: 700;
             font-size: 1.1rem;
             text-decoration: none;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+            box-shadow: 0 10px 25px rgba(255,215,0,0.3);
             z-index: 1050;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.27);
         }
@@ -507,8 +528,59 @@
         }
         
         .mobile-sticky-btn:hover {
-            background-color: #f1c40f;
-            color: var(--primary-black);
+            color: #000;
+            box-shadow: 0 10px 35px rgba(255,215,0,0.5);
+        }
+
+        /* --- FAQ Section --- */
+        .faq-section {
+            padding: 100px 0;
+            background: radial-gradient(circle at 30% 70%, #1a1400 0%, #0a0a0a 80%);
+        }
+
+        .accordion-item {
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+            margin-bottom: 10px;
+        }
+
+        .accordion-button {
+            background-color: transparent;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 20px 0;
+            box-shadow: none !important;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: transparent;
+            color: var(--accent-gold);
+        }
+
+        .accordion-button::after {
+            filter: invert(1) sepia(1) saturate(3) hue-rotate(5deg);
+        }
+
+        .accordion-button:not(.collapsed)::after {
+            filter: invert(1) sepia(1) saturate(5) hue-rotate(5deg);
+        }
+
+        .accordion-body {
+            color: rgba(255, 255, 255, 0.7);
+            padding-left: 0;
+            padding-right: 0;
+            padding-bottom: 25px;
+        }
+
+        /* Gold divider accent */
+        .gold-divider {
+            width: 60px;
+            height: 3px;
+            background: var(--gold-gradient);
+            border-radius: 2px;
+            margin: 15px auto 30px;
         }
 
         /* Desktop Specifics */
@@ -557,12 +629,12 @@
             }
 
             .navbar-collapse {
-                background: rgba(10, 10, 10, 0.98);
+                background: rgba(5, 5, 5, 0.98);
                 backdrop-filter: blur(20px);
                 margin-top: 15px;
                 padding: 20px;
                 border-radius: 15px;
-                border: 1px solid rgba(212, 175, 55, 0.3);
+                border: 1px solid rgba(255, 215, 0, 0.15);
             }
 
             .hero-content {
@@ -621,12 +693,15 @@
 </head>
 <body>
 
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
         <div class="container">
+            <!-- Brand -->
             <a class="navbar-brand" href="#">
-                <img src="https://i.ibb.co/v4d7x9s6/1000032952-removebg-preview.png" alt="PROTEGE Logo">
+                <img src="https://i.ibb.co/8nH1K89R/IMG-20260221-013709.png" alt="Protege">
             </a>
 
+            <!-- Mobile: Register Button + Toggler -->
             <div class="d-flex align-items-center gap-3 d-lg-none ms-auto">
                 <a href="register.html" class="btn btn-glow px-4 py-2" style="font-size: 0.9rem;">Register</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -634,6 +709,7 @@
                 </button>
             </div>
 
+            <!-- Desktop Collapse -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="#heroSection">Home</a></li>
@@ -650,21 +726,28 @@
         </div>
     </nav>
 
+    <!-- WRAPPER FOR LANDING PAGE CONTENT -->
     <div id="landingPage">
 
+        <!-- Hero Section -->
         <section class="hero-section" id="heroSection">
+            <!-- Desktop Image Asset -->
             <img src="https://i.ibb.co/8nH1K89R/IMG-20260221-013709.png" class="hero-img-desktop d-none d-lg-block" alt="Man on phone" data-aos="fade-left" data-aos-delay="200">
             
             <div class="container h-100">
                 <div class="row h-100 align-items-center">
+                    <!-- Content Column -->
                     <div class="col-lg-6 col-12">
                         <div class="hero-content" data-aos="fade-up">
+                            <!-- Logo as H1/Title -->
                             <img src="https://i.ibb.co/8nH1K89R/IMG-20260221-013709.png" class="hero-title-logo" alt="Protege">
                             
+                            <!-- Description -->
                             <p class="hero-desc">
                                 engage, grow, and build influence online through smart participation and collaboration.
                             </p>
                             
+                            <!-- Buttons -->
                             <div class="button-group">
                                 <a href="register.html" class="btn btn-glow">Signup</a>
                                 <a href="#about" class="btn btn-outline-custom">Learn-more</a>
@@ -674,26 +757,65 @@
                 </div>
             </div>
 
+            <!-- Mobile Image Asset -->
             <img src="https://i.ibb.co/GQHkphht/1000034134-removebg-preview.png" class="hero-img-mobile d-lg-none" alt="Man on phone">
         </section>
 
+        <!-- About Section -->
         <section class="about-section" id="about">
             <div class="container">
-                
-                <div class="about-section">
-                    <h2 class="about-heading">WHAT IS <span>PROTEGE?</span></h2>
-                    <div class="about-image">
-                        <img src="https://i.ibb.co/7xfP1t6P/IMG-20260214-WA0002.jpg" alt="About PROTEGE">
+                <div class="row align-items-center">
+                    <!-- Text Content -->
+                    <div class="col-lg-6 mb-5 mb-lg-0">
+                        <div class="about-header" data-aos="fade-right">
+                            <h2>What is<br><span class="brand-text">Protege?</span></h2>
+                        </div>
+                        
+                        <p class="about-lead" data-aos="fade-up" data-aos-delay="100">
+                            PROTEGE is a digital growth and engagement platform designed to help individuals connect, grow, and build influence online through smart participation and collaboration.
+                        </p>
+                        
+                        <p style="opacity: 0.8; margin-bottom: 1.5rem; color: #fff;" class="text-center text-lg-start" data-aos="fade-up" data-aos-delay="150">It is a movement created for people who want to:</p>
+
+                        <div class="about-pill-container" data-aos="fade-up" data-aos-delay="200">
+                            <div class="about-pill">Global Rewards System</div>
+                            <div class="about-pill">Build digital presence</div>
+                            <div class="about-pill">Grow through teamwork and consistency</div>
+                            <div class="about-pill">Be part of a global opportunity</div>
+                        </div>
+
+                        <div class="about-cta" data-aos="fade-up" data-aos-delay="250">
+                            <i class="fas fa-circle" style="font-size: 8px;"></i> Join the Movement now!
+                        </div>
                     </div>
-                    <div class="about-text">
-                        <p>Protege is an innovative, people driven, and globally connected ecosystem built to redefine wealth creation and personal growth. Our purpose is to merge technology, community, and opportunity into one seamless platform where individuals can thrive.</p>
-                        <p>With Protege, you gain access to a dynamic affiliate marketing network, premium skill acquisition programs, and our groundbreaking walk-and-earn technology that transforms your daily steps into real income.</p>
+
+                    <!-- Image/Visual Content -->
+                    <div class="col-lg-6" data-aos="fade-left">
+                        <div class="about-image-wrapper">
+                            <img src="https://i.ibb.co/Q7rt182r/IMG-20260221-WA0008.jpg" alt="What is Protege" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section" id="features">
+            <div class="container">
+                <div class="row justify-content-center mb-5">
+                    <div class="col-lg-8 text-center" data-aos="fade-up">
+                        <h2 class="section-title">Ways to <span class="highlight">Engage</span></h2>
+                        <div class="gold-divider"></div>
+                        <p class="section-subtitle">Unlock multiple engagement streams across social media and gaming with Protege.</p>
                     </div>
                 </div>
 
+                <!-- Grid Layout -->
                 <div class="row g-4 justify-content-center">
                     
+                    <!-- Card 1: Casino -->
                     <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="100">
+                        <a href="register.html" style="text-decoration:none;display:block;height:100%;">
                         <div class="feature-card">
                             <div class="feature-img-box">
                                 <img src="https://i.ibb.co/jPZG6WDc/IMG-20260221-WA0009.jpg" alt="Protege Casino">
@@ -701,12 +823,15 @@
                             <div class="feature-content">
                                 <h3 class="feature-title">Protege Prediction Game</h3>
                                 <p class="feature-desc">Test your foresight on global events. Participate in daily prediction challenges and win rewards.</p>
-                                <a href="register.html" class="btn-sm-glow mt-auto align-self-start">Start Playing</a>
+                                <span class="btn-sm-glow mt-auto align-self-start">Start Playing</span>
                             </div>
                         </div>
+                        </a>
                     </div>
 
+                    <!-- Card 2: Snap & Earn -->
                     <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="150">
+                        <a href="register.html" style="text-decoration:none;display:block;height:100%;">
                         <div class="feature-card">
                             <div class="feature-img-box">
                                 <img src="https://i.ibb.co/tpJMfTsC/IMG-20260221-WA0006.jpg" alt="Snap & Earn">
@@ -714,12 +839,15 @@
                             <div class="feature-content">
                                 <h3 class="feature-title">Snap & Share</h3>
                                 <p class="feature-desc">Snap it, Upload it, Share it. Rewards for top creators and quality content uploads.</p>
-                                <a href="register.html" class="btn-sm-glow mt-auto align-self-start">Upload Now</a>
+                                <span class="btn-sm-glow mt-auto align-self-start">Upload Now</span>
                             </div>
                         </div>
+                        </a>
                     </div>
 
+                    <!-- Card 3: Telegram Earn -->
                     <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="200">
+                        <a href="register.html" style="text-decoration:none;display:block;height:100%;">
                         <div class="feature-card">
                             <div class="feature-img-box">
                                 <img src="https://i.ibb.co/Ps3SpCSC/IMG-20260221-WA0007.jpg" alt="Telegram Monetization">
@@ -727,12 +855,15 @@
                             <div class="feature-content">
                                 <h3 class="feature-title">Telegram Engagement</h3>
                                 <p class="feature-desc">Own a Telegram account? Grow your community. Rewards for active engagement and reach.</p>
-                                <a href="register.html" class="btn-sm-glow mt-auto align-self-start">Engage Now</a>
+                                <span class="btn-sm-glow mt-auto align-self-start">Engage Now</span>
                             </div>
                         </div>
+                        </a>
                     </div>
 
+                    <!-- Card 4: Telegram Live -->
                     <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="250">
+                        <a href="register.html" style="text-decoration:none;display:block;height:100%;">
                         <div class="feature-card">
                             <div class="feature-img-box">
                                 <img src="https://i.ibb.co/27sc2x4G/IMG-20260221-WA0005.jpg" alt="Telegram Live">
@@ -740,12 +871,15 @@
                             <div class="feature-content">
                                 <h3 class="feature-title">Telegram Live</h3>
                                 <p class="feature-desc">Go live on Telegram with Protege. Stream to your audience and receive engagement bonuses.</p>
-                                <a href="register.html" class="btn-sm-glow mt-auto align-self-start">Go Live</a>
+                                <span class="btn-sm-glow mt-auto align-self-start">Go Live</span>
                             </div>
                         </div>
+                        </a>
                     </div>
 
+                    <!-- Card 5: TikTok Challenges -->
                     <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="300">
+                        <a href="register.html" style="text-decoration:none;display:block;height:100%;">
                         <div class="feature-card">
                             <div class="feature-img-box">
                                 <img src="https://i.ibb.co/xSjFnQmV/IMG-20260221-WA0002.jpg" alt="TikTok Challenges">
@@ -753,34 +887,99 @@
                             <div class="feature-content">
                                 <h3 class="feature-title">TikTok Challenges</h3>
                                 <p class="feature-desc">Post Protege videos, go viral, and win community prizes. Your creativity has value.</p>
-                                <a href="register.html" class="btn-sm-glow mt-auto align-self-start">Join Challenge</a>
+                                <span class="btn-sm-glow mt-auto align-self-start">Join Challenge</span>
                             </div>
                         </div>
-                    </div>
-                    <div class="about-text">
-                        <p>Turn your sweat into cash on Protege. With our groundbreaking walk-and-earn technology, your movement turns into momentum, and your momentum turns into real rewards. Every step counts.</p>
+                        </a>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Frequently Asked Questions Section -->
         <section class="faq-section" id="faqs">
             <div class="container">
                 <div class="row justify-content-center mb-5">
                     <div class="col-lg-8 text-center" data-aos="fade-up">
                         <h2 class="section-title">Frequently Asked <span class="highlight">Questions</span></h2>
-                        <p class="section-subtitle">Common questions about the platform and how to get started.</p>
+                        <div class="gold-divider"></div>
+                        <p class="section-subtitle">Got questions? We've got answers. Here's everything you need to know about Protege.</p>
                     </div>
-                    <div class="about-text">
-                        <p>Protege Digital Real Estate. Welcome to a new era of ownership. Buy valuable virtual properties, build your portfolio, and sell for profit as their value grows. Own the future.</p>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+                        <div class="accordion" id="accordionFaq">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        What is Protege and how does it work?
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionFaq">
+                                    <div class="accordion-body">
+                                        Protege is a digital growth and engagement platform that rewards users for participating in social media activities across TikTok, Telegram, and more. Simply register, complete engagement tasks, and earn rewards based on your activity and reach.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        How do I get started on Protege?
+                                    </button>
+                                </h2>
+                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionFaq">
+                                    <div class="accordion-body">
+                                        Getting started is simple. Click the Register button, create your account, and you'll instantly gain access to all engagement features including TikTok challenges, Telegram engagement, Snap & Share, and more.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        How are rewards processed?
+                                    </button>
+                                </h2>
+                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionFaq">
+                                    <div class="accordion-body">
+                                        Rewards are processed weekly. You can request a withdrawal once you reach the minimum threshold in your account. Payments are made directly to your registered withdrawal method.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingFour">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                        Can I use multiple social media accounts?
+                                    </button>
+                                </h2>
+                                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionFaq">
+                                    <div class="accordion-body">
+                                        Yes, you can link multiple eligible social media accounts — TikTok, Telegram, and X — to maximize your participation, provided they meet our verification criteria.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingFive">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                        Is Protege available globally?
+                                    </button>
+                                </h2>
+                                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionFaq">
+                                    <div class="accordion-body">
+                                        Yes, Protege is a global platform. Users from various countries can participate and withdraw in their local currency equivalents where supported.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Footer Section -->
         <footer class="footer">
             <div class="container">
                 <div class="row justify-content-between">
+                    <!-- Brand Column -->
                     <div class="col-lg-5 mb-4 mb-lg-0">
                         <a href="#" class="d-inline-block footer-brand">
                             <img src="https://i.ibb.co/8nH1K89R/IMG-20260221-013709.png" alt="Protege" style="height: 30px;">
@@ -788,12 +987,47 @@
                         <p class="footer-desc">
                             Protege empowers you to monetize your social influence and creativity. Join thousands of users earning daily through smart engagement.
                         </p>
-                        
-         <a href="register.html" id="mobileStickyBtn" class="mobile-sticky-btn d-lg-none">
+                        <div class="social-icons">
+                            <a href="https://x.com/Protege" target="_blank"><i class="fab fa-x-twitter"></i></a>
+                            <a href="https://www.tiktok.com/@protegeofficial" target="_blank"><i class="fab fa-tiktok"></i></a>
+                            <a href="https://t.me/Protegeoffical" target="_blank"><i class="fab fa-telegram"></i></a>
+                            <a href="https://youtube.com/@theprotegeoffical" target="_blank"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links Column -->
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <h5>Quick Links</h5>
+                        <ul class="footer-links">
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="register.html">Contact Us</a></li>
+                            <li><a href="#about">About Us</a></li>
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="merchants.html">Merchants</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                
+                <div class="text-center mt-3" style="font-size: 0.8rem;">
+                    <a href="register.html" class="text-white-50 text-decoration-none mx-2">Privacy Policy</a> | 
+                    <a href="register.html" class="text-white-50 text-decoration-none mx-2">Terms of Service</a>
+                </div>
+
+                <div class="copyright">
+                    <p>&copy; 2026 Protege Platform. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+        
+        <!-- Mobile Sticky Signup Button -->
+        <a href="register.html" id="mobileStickyBtn" class="mobile-sticky-btn d-lg-none">
             Signup Now
         </a>
 
-    </div> 
+    </div> <!-- END LANDING PAGE WRAPPER -->
+
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
