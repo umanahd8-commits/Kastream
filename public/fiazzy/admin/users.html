@@ -465,6 +465,10 @@
                 <i class="fas fa-users"></i>
                 <span>Users</span>
             </a>
+            <a href="vendors.html" class="sidebar-item">
+                <i class="fas fa-store"></i>
+                <span>Vendors</span>
+            </a>
             <a href="articles.html" class="sidebar-item">
                 <i class="fas fa-newspaper"></i>
                 <span>Articles</span>
@@ -635,11 +639,12 @@
                             return (
                                 '<tr>' +
                                 '<td>' + sn + '</td>' +
-                                '<td>' + (u.username || '') + '</td>' +
+                                '<td>' + (u.username || '') + '<br><small style="color:#666">' + (u.fullName || '') + '</small></td>' +
                                 '<td>' + planLabel + '</td>' +
                                 '<td>' + (u.role || 'user') + '</td>' +
                                 '<td class="right">' + mainBalance + '</td>' +
                                 '<td class="right"><div class="user-actions">' +
+                                '<button class="user-action-btn" data-action="promote" data-id="' + id + '" data-username="' + (u.username || '') + '">Promote</button>' +
                                 '<button class="user-action-btn" data-action="password" data-id="' + id + '">Edit password</button>' +
                                 '<button class="user-action-btn danger" data-action="delete" data-id="' + id + '">Delete</button>' +
                                 '</div></td>' +
@@ -678,6 +683,13 @@
             const titleEl = document.getElementById('userModalTitle');
             const textEl = document.getElementById('userModalText');
             const passwordInput = document.getElementById('userModalPasswordInput');
+            const genericInput = document.getElementById('userModalGenericInput') || (function(){
+                const inp = document.createElement('input');
+                inp.id = 'userModalGenericInput';
+                inp.className = 'modal-input';
+                passwordInput.parentNode.insertBefore(inp, passwordInput.nextSibling);
+                return inp;
+            })();
             const confirmBtn = document.getElementById('userModalConfirmBtn');
             const cancelBtn = document.getElementById('userModalCancelBtn');
 
@@ -687,6 +699,10 @@
             textEl.textContent = options.text || '';
             passwordInput.value = '';
             passwordInput.style.display = options.showPassword ? 'block' : 'none';
+            
+            genericInput.value = '';
+            genericInput.placeholder = options.inputPlaceholder || '';
+            genericInput.style.display = options.showInput ? 'block' : 'none';
 
             overlay.style.display = 'flex';
 
@@ -704,7 +720,14 @@
                 if (options.showPassword) {
                     const value = passwordInput.value.trim();
                     if (!value) {
-                        alert('Please enter a new password');
+                        alert('Please enter a value');
+                        return;
+                    }
+                    await options.onConfirm(value, close);
+                } else if (options.showInput) {
+                    const value = genericInput.value.trim();
+                    if (!value) {
+                        alert('Please enter a value');
                         return;
                     }
                     await options.onConfirm(value, close);
@@ -798,6 +821,41 @@
                                 } catch (e) {
                                     console.error(e);
                                     alert('Failed to delete user');
+                                }
+                            }
+                        });
+                    } else if (action === 'promote') {
+                        const username = target.getAttribute('data-username');
+                        openUserModal({
+                            title: 'Promote to Vendor',
+                            text: 'Enter the bank name supported by ' + username + ' to promote them to vendor.',
+                            showInput: true,
+                            inputPlaceholder: 'Bank Name (e.g. OPay)',
+                            onConfirm: async (bankName, close) => {
+                                try {
+                                    const res = await fetch('/api/auth/admin/vendors/promote', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': 'Bearer ' + token
+                                        },
+                                        body: JSON.stringify({ userId, bankName })
+                                    });
+                                    if (!res.ok) {
+                                        if (res.status === 400 || res.status === 401 || res.status === 403) {
+                                            applyLogout();
+                                            return;
+                                        }
+                                        const data = await res.json();
+                                        alert(data.message || 'Failed to promote to vendor');
+                                        return;
+                                    }
+                                    close();
+                                    alert('User promoted to vendor successfully');
+                                    loadUsers(adminUsersState.page);
+                                } catch (e) {
+                                    console.error(e);
+                                    alert('Failed to promote user');
                                 }
                             }
                         });

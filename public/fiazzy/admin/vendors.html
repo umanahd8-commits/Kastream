@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Vendors | Protege</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --text-white: #ffffff;
+            --text-muted: #888;
+            --accent-red: #ff4d4f;
+            --accent-green: #00c96f;
+            --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            margin: 0;
+            padding: 16px;
+        }
+
+        .shell {
+            max-width: 1100px;
+            margin: 0 auto 60px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hamburger-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            border: 1px solid rgba(212,175,55,0.4);
+            background: transparent;
+            color: var(--primary-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand img {
+            width: 34px;
+            height: 34px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-text span:first-child {
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: var(--primary-gold);
+        }
+
+        .brand-text span:last-child {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .admin-chip {
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(212,175,55,0.4);
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: none;
+            color: var(--accent-red);
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(212,175,55,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .card-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #000;
+            color: #fff;
+            font-size: 0.85rem;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: var(--primary-gold);
+            outline: none;
+        }
+
+        .promote-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            background: var(--gradient-gold);
+            color: #000;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .search-results {
+            margin-top: 15px;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #222;
+            border-radius: 8px;
+            background: #000;
+        }
+
+        .search-item {
+            padding: 10px 14px;
+            cursor: pointer;
+            border-bottom: 1px solid #111;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-item:hover {
+            background: #0a0a0a;
+        }
+
+        .search-item.selected {
+            background: rgba(212,175,55,0.15);
+            border-left: 3px solid var(--primary-gold);
+        }
+
+        .search-item .user-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .bank-section {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #222;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 10px 8px;
+            border-bottom: 1px solid #222;
+        }
+
+        td {
+            padding: 12px 8px;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #111;
+        }
+
+        .right { text-align: right; }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .user-action-btn {
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid #333;
+            background: #111;
+            color: #f5f5f5;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        .user-action-btn.danger {
+            border-color: rgba(255, 77, 79, 0.7);
+            color: #ff4d4f;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .page-btn {
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid #333;
+            background: transparent;
+            color: #f5f5f5;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .page-btn[disabled] {
+            opacity: 0.4;
+            cursor: default;
+        }
+
+        /* Sidebar styles */
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 900;
+            display: none;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -260px;
+            width: 240px;
+            height: 100%;
+            background: #050505;
+            border-right: 1px solid rgba(212,175,55,0.3);
+            z-index: 1000;
+            padding: 18px 16px;
+            transition: left 0.3s ease;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            color: var(--primary-gold);
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-close-btn {
+            background: transparent;
+            border: none;
+            color: var(--primary-gold);
+            cursor: pointer;
+        }
+
+        .sidebar-nav {
+            margin-top: 8px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 4px;
+            border-radius: 8px;
+            color: #f0f0f0;
+            font-size: 0.8rem;
+            text-decoration: none;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .sidebar-item i {
+            width: 20px;
+            text-align: center;
+            color: var(--primary-gold);
+        }
+
+        .sidebar-item.active {
+            background: rgba(212,175,55,0.12);
+        }
+
+        .sidebar-item.danger {
+            color: var(--accent-red);
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span>Admin menu</span>
+            <button class="sidebar-close-btn" id="sidebarCloseBtn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="sidebar-nav">
+            <a href="dashboard.html" class="sidebar-item">
+                <i class="fas fa-gauge"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="coupons.html" class="sidebar-item">
+                <i class="fas fa-ticket-alt"></i>
+                <span>Coupons</span>
+            </a>
+            <a href="users.html" class="sidebar-item">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+            </a>
+            <a href="vendors.html" class="sidebar-item active">
+                <i class="fas fa-store"></i>
+                <span>Vendors</span>
+            </a>
+            <a href="articles.html" class="sidebar-item">
+                <i class="fas fa-newspaper"></i>
+                <span>Articles</span>
+            </a>
+            <a href="withdraw.html" class="sidebar-item">
+                <i class="fas fa-wallet"></i>
+                <span>Withdraw</span>
+            </a>
+            <a href="profile.html" class="sidebar-item">
+                <i class="fas fa-user-circle"></i>
+                <span>Profile</span>
+            </a>
+            <button class="sidebar-item danger" id="sidebarLogoutItem" type="button">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="shell">
+        <div class="topbar">
+            <div class="topbar-left">
+                <button class="hamburger-btn" id="hamburgerBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="brand">
+                    <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo">
+                    <div class="brand-text">
+                        <span>Protege admin</span>
+                        <span id="adminSubtitle">Loading admin...</span>
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <div class="admin-chip" id="adminChip">
+                    <i class="fas fa-user-shield"></i>
+                    <span id="adminName">Admin</span>
+                </div>
+                <button class="logout-btn" id="adminLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="section-title">Vendors</div>
+
+        <div class="card">
+            <div class="card-title">Promote user to vendor</div>
+            <div class="card-sub">Search for a user by name or ID, select them, and enter the bank they support.</div>
+            
+            <div class="form-row">
+                <div class="input-group">
+                    <input type="text" id="userSearchInput" placeholder="Search by name, username or ID...">
+                </div>
+                <button class="promote-btn" id="searchUserBtn" style="background: transparent; border: 1px solid var(--primary-gold); color: var(--primary-gold);">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+
+            <div id="searchResultList" class="search-results"></div>
+
+            <div class="bank-section" id="bankSection">
+                <div class="card-title" style="font-size: 0.85rem;">Bank Details for <span id="selectedUserName" style="color: var(--primary-gold);"></span></div>
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="input-group">
+                        <input type="text" id="promoteBankName" placeholder="Enter bank name supported (e.g. OPay, Kuda)">
+                    </div>
+                    <button class="promote-btn" id="promoteBtn">Promote to Vendor</button>
+                </div>
+            </div>
+
+            <div id="promoteStatus" style="font-size: 0.8rem; margin-top: 15px;"></div>
+        </div>
+
+        <div class="section-title">Approved Vendors</div>
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Bank Support</th>
+                        <th>Status</th>
+                        <th class="right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="vendorTableBody">
+                    <tr>
+                        <td colspan="6" class="empty-state">Loading vendors...</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination">
+                <div id="vendorPageInfo">Page 1</div>
+                <div class="pagination-buttons">
+                    <button class="page-btn" id="vendorPrevBtn" disabled>Previous</button>
+                    <button class="page-btn" id="vendorNextBtn" disabled>Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="sidebar.js"></script>
+    <script>
+        let vendorState = {
+            page: 1,
+            pageSize: 20,
+            totalCount: 0
+        };
+
+        async function loadVendors(page) {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const pageToLoad = page || vendorState.page;
+            const tbody = document.getElementById('vendorTableBody');
+            if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Loading vendors...</td></tr>';
+
+            try {
+                const res = await fetch(`/api/auth/admin/vendors?page=${pageToLoad}&limit=${vendorState.pageSize}`, {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (!res.ok) throw new Error('Failed to load vendors');
+
+                const data = await res.json();
+                vendorState.page = data.page;
+                vendorState.totalCount = data.totalCount;
+
+                if (tbody) {
+                    if (data.vendors.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No vendors found.</td></tr>';
+                    } else {
+                        tbody.innerHTML = data.vendors.map((v, i) => `
+                            <tr>
+                                <td>${(vendorState.page - 1) * vendorState.pageSize + i + 1}</td>
+                                <td>${v.fullName}</td>
+                                <td>${v.username}</td>
+                                <td>${v.vendorBankName || 'N/A'}</td>
+                                <td><span style="color:${v.vendorStatus === 'active' ? 'var(--accent-green)' : 'var(--accent-red)'}">${v.vendorStatus}</span></td>
+                                <td class="right">
+                                    <button class="user-action-btn danger" onclick="removeVendor('${v.id}')">Remove</button>
+                                </td>
+                            </tr>
+                        `).join('');
+                    }
+                }
+
+                document.getElementById('vendorPageInfo').textContent = `Page ${vendorState.page} • Total: ${vendorState.totalCount}`;
+                document.getElementById('vendorPrevBtn').disabled = vendorState.page <= 1;
+                document.getElementById('vendorNextBtn').disabled = vendorState.page >= Math.ceil(vendorState.totalCount / vendorState.pageSize);
+
+            } catch (err) {
+                console.error(err);
+                if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Error loading vendors.</td></tr>';
+            }
+        }
+
+        async function removeVendor(userId) {
+            if (!confirm('Are you sure you want to remove this vendor status?')) return;
+            const token = localStorage.getItem('adminToken');
+            try {
+                const res = await fetch('/api/auth/admin/vendors/remove', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ userId })
+                });
+                if (!res.ok) throw new Error('Failed to remove vendor');
+                loadVendors();
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+
+        let selectedUserForPromotion = null;
+
+        async function searchUsersForPromotion() {
+            const query = document.getElementById('userSearchInput').value.trim();
+            const resultsList = document.getElementById('searchResultList');
+            const bankSection = document.getElementById('bankSection');
+            const statusEl = document.getElementById('promoteStatus');
+
+            if (!query) return;
+
+            resultsList.style.display = 'block';
+            resultsList.innerHTML = '<div style="padding: 15px; text-align: center; font-size: 0.8rem; color: var(--text-muted);"><i class="fas fa-spinner fa-spin"></i> Searching users...</div>';
+            bankSection.style.display = 'none';
+            statusEl.textContent = '';
+            selectedUserForPromotion = null;
+
+            const token = localStorage.getItem('adminToken');
+            try {
+                // We use the existing admin users endpoint with a search query
+                const res = await fetch(`/api/auth/admin/users?search=${encodeURIComponent(query)}&limit=10`, {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (!res.ok) throw new Error('Search failed');
+
+                const data = await res.json();
+                const users = data.users || [];
+
+                if (users.length === 0) {
+                    resultsList.innerHTML = '<div style="padding: 15px; text-align: center; font-size: 0.8rem; color: var(--text-muted);">No users found matching "' + query + '"</div>';
+                    return;
+                }
+
+                resultsList.innerHTML = users.map(u => `
+                    <div class="search-item" onclick="selectUserForPromotion('${u.id}', '${u.fullName || u.username}', '${u.username}')">
+                        <div>
+                            <div style="font-weight: 600;">${u.fullName || 'No Name'}</div>
+                            <div class="user-meta">@${u.username} • ID: ${u.userId || u.id}</div>
+                        </div>
+                        <div class="user-meta" style="color: ${u.role === 'vendor' ? 'var(--primary-gold)' : 'inherit'}">
+                            ${u.role === 'vendor' ? '<i class="fas fa-check-circle"></i> Already Vendor' : '<i class="fas fa-plus-circle"></i> Select'}
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                console.error(err);
+                resultsList.innerHTML = '<div style="padding: 15px; text-align: center; font-size: 0.8rem; color: var(--accent-red);">Search error. Please try again.</div>';
+            }
+        }
+
+        function selectUserForPromotion(id, name, username) {
+            selectedUserForPromotion = { id, name, username };
+            
+            // UI updates
+            const items = document.querySelectorAll('.search-item');
+            items.forEach(item => item.classList.remove('selected'));
+            
+            // Find the clicked item to add selected class (optional since we show bank section)
+            document.getElementById('bankSection').style.display = 'block';
+            document.getElementById('selectedUserName').textContent = name + ' (@' + username + ')';
+            document.getElementById('promoteBankName').focus();
+            document.getElementById('promoteStatus').textContent = '';
+        }
+
+        document.getElementById('searchUserBtn').onclick = searchUsersForPromotion;
+        document.getElementById('userSearchInput').onkeypress = (e) => {
+            if (e.key === 'Enter') searchUsersForPromotion();
+        };
+
+        document.getElementById('promoteBtn').onclick = async () => {
+            if (!selectedUserForPromotion) return alert('Please search and select a user first');
+            
+            const bankName = document.getElementById('promoteBankName').value.trim();
+            const statusEl = document.getElementById('promoteStatus');
+
+            if (!bankName) return alert('Please enter the bank name supported by this vendor');
+
+            const token = localStorage.getItem('adminToken');
+            statusEl.textContent = 'Promoting ' + selectedUserForPromotion.username + '...';
+            statusEl.style.color = 'var(--text-muted)';
+
+            try {
+                const res = await fetch('/api/auth/admin/vendors/promote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ 
+                        userId: selectedUserForPromotion.id, 
+                        bankName: bankName 
+                    })
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'Promotion failed');
+
+                statusEl.textContent = selectedUserForPromotion.username + ' promoted successfully!';
+                statusEl.style.color = 'var(--accent-green)';
+                
+                // Reset promotion UI
+                document.getElementById('userSearchInput').value = '';
+                document.getElementById('searchResultList').style.display = 'none';
+                document.getElementById('bankSection').style.display = 'none';
+                document.getElementById('promoteBankName').value = '';
+                selectedUserForPromotion = null;
+                
+                loadVendors();
+            } catch (err) {
+                statusEl.textContent = err.message;
+                statusEl.style.color = 'var(--accent-red)';
+            }
+        };
+
+        document.getElementById('vendorPrevBtn').onclick = () => loadVendors(vendorState.page - 1);
+        document.getElementById('vendorNextBtn').onclick = () => loadVendors(vendorState.page + 1);
+        document.getElementById('adminLogoutBtn').onclick = applyLogout;
+
+        window.onload = () => {
+            if (!guardAdminAccess()) return;
+            initAdminHeader();
+            initSidebarNav();
+            loadVendors(1);
+        };
+    </script>
+</body>
+</html>

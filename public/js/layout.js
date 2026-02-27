@@ -112,6 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
     }
 
-    // Initial Fetch
-    fetchNotifications();
+    // Initial Fetch - Only if UI elements exist and NOT on merchants page
+    if (notificationBtn && notificationModal && !window.location.pathname.includes('merchants.html')) {
+        fetchNotifications();
+    }
 });

@@ -76,7 +76,17 @@ const UserSchema = new mongoose.Schema({
     },
     role: {
         type: String,
+        enum: ['user', 'admin', 'vendor'],
         default: 'user'
+    },
+    vendorBankName: {
+        type: String,
+        default: null
+    },
+    vendorStatus: {
+        type: String,
+        enum: ['active', 'inactive'],
+        default: 'inactive'
     },
     bankAccounts: [{
         type: {

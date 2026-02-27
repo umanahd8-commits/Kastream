@@ -1218,6 +1218,7 @@ router.get('/admin/users', verifyToken, requireAdmin, async (req, res) => {
         const mapped = users.map(u => ({
             id: u.userId || String(u._id),
             username: u.username,
+            fullName: u.fullName,
             plan: u.packageType || null,
             role: u.role || 'user',
             balance: u.balance || 0
@@ -1294,6 +1295,161 @@ router.post('/admin/users/:id/password', verifyToken, requireAdmin, async (req, 
         await user.save();
 
         res.json({ message: 'Password updated' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Admin: Promote user to vendor
+router.post('/admin/vendors/promote', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const { userId, bankName } = req.body || {};
+
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required' });
+        }
+        if (!bankName) {
+            return res.status(400).json({ message: 'Bank name is required' });
+        }
+
+        let user = null;
+        if (userId.match(/^[0-9a-fA-F]{24}$/)) {
+            user = await User.findById(userId);
+        }
+        if (!user) {
+            user = await User.findOne({ userId: userId });
+        }
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        user.role = 'vendor';
+        user.vendorBankName = bankName;
+        user.vendorStatus = 'active';
+        await user.save();
+
+        res.json({
+            message: 'User promoted to vendor successfully',
+            vendor: {
+                id: user.id,
+                username: user.username,
+                fullName: user.fullName,
+                role: user.role,
+                vendorBankName: user.vendorBankName,
+                vendorStatus: user.vendorStatus
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Admin: Get vendors list
+router.get('/admin/vendors', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const pageRaw = req.query.page;
+        const limitRaw = req.query.limit;
+        const search = (req.query.search || '').trim();
+
+        let page = parseInt(pageRaw, 10);
+        if (!page || page < 1) page = 1;
+
+        let limit = parseInt(limitRaw, 10);
+        if (!limit || limit < 1 || limit > 100) limit = 20;
+
+        const filter = { role: 'vendor' };
+        if (search) {
+            const regex = new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+            filter.$or = [
+                { fullName: regex },
+                { username: regex },
+                { email: regex },
+                { userId: regex }
+            ];
+        }
+
+        const [totalCount, vendors] = await Promise.all([
+            User.countDocuments(filter),
+            User.find(filter)
+                .sort({ createdAt: -1 })
+                .skip((page - 1) * limit)
+                .limit(limit)
+        ]);
+
+        const mapped = vendors.map(v => ({
+            id: v.id,
+            userId: v.userId,
+            username: v.username,
+            fullName: v.fullName,
+            email: v.email,
+            packageType: v.packageType,
+            vendorBankName: v.vendorBankName,
+            vendorStatus: v.vendorStatus,
+            avatarUrl: v.avatarUrl,
+            createdAt: v.createdAt
+        }));
+
+        res.json({
+            totalCount,
+            page,
+            pageSize: limit,
+            vendors: mapped
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Admin: Remove vendor status
+router.post('/admin/vendors/remove', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const { userId } = req.body || {};
+        if (!userId) return res.status(400).json({ message: 'User ID is required' });
+
+        let user = null;
+        if (userId.match(/^[0-9a-fA-F]{24}$/)) {
+            user = await User.findById(userId);
+        }
+        if (!user) {
+            user = await User.findOne({ userId: userId });
+        }
+
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        user.role = 'user';
+        user.vendorStatus = 'inactive';
+        // Keep vendorBankName in case they are re-promoted? Or clear it.
+        // user.vendorBankName = null; 
+        await user.save();
+
+        res.json({ message: 'Vendor status removed' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Public: Get active vendors list
+router.get('/public/vendors', async (req, res) => {
+    try {
+        const filter = { role: 'vendor', vendorStatus: 'active' };
+        const vendors = await User.find(filter).sort({ fullName: 1 });
+
+        const mapped = vendors.map(v => ({
+            id: v.id,
+            username: v.username,
+            fullName: v.fullName,
+            packageType: v.packageType,
+            vendorBankName: v.vendorBankName,
+            avatarUrl: v.avatarUrl,
+            whatsappNumber: v.whatsappNumber
+        }));
+
+        res.json({ vendors: mapped });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });

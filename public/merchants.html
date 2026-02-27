@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CASHX - Verified Distributors</title>
+    <title>Protege - Verified Vendors</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
@@ -15,6 +15,7 @@
             --bg-black: #000000;
             --card-bg: #0a0a0a;
             --text-white: #ffffff;
+            --text-gray: #888888;
             --gold-glow: rgba(212, 175, 55, 0.4);
             --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
         }
@@ -30,80 +31,124 @@
             background-color: var(--bg-black);
             color: var(--text-white);
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
         }
 
-        /* Navigation */
-        .navbar {
+        .phone-wrapper {
+            width: 100%;
+            max-width: 450px;
             background: var(--bg-black);
-            padding: 15px 20px;
+            min-height: 100vh;
+            padding-bottom: 40px;
+            position: relative;
+        }
+
+        /* Sidebar Styles (Consistent with layout.js) */
+        .sidebar {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: #111111;
+            z-index: 2000;
+            transition: 0.4s ease;
+            border-right: 2px solid var(--primary-gold);
+            padding: 25px;
+            box-shadow: 20px 0 50px rgba(0,0,0,0.9);
+        }
+
+        .sidebar.active { left: 0; }
+
+        .sidebar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            color: var(--primary-gold);
+            margin-bottom: 35px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #222;
         }
 
-        .logo-container {
+        .sidebar-item {
             display: flex;
             align-items: center;
+            padding: 18px;
+            color: #ffffff;
             text-decoration: none;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 1rem;
+            font-weight: 600;
         }
 
-        .logo-img {
-            width: 45px;
-            height: auto;
-            /* No circle or border as requested */
+        .sidebar-item i { 
+            color: var(--primary-gold); 
+            margin-right: 15px; 
+            width: 25px; 
+            font-size: 1.2rem;
+            text-align: center; 
         }
 
-        .logo-text {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--primary-gold);
-            margin-left: 10px;
-            letter-spacing: 1px;
+        .sidebar-item:hover { 
+            background: #1a1a1a;
+            color: var(--primary-gold); 
         }
 
-        .nav-actions {
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1500;
+        }
+
+        /* Navigation */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            position: sticky;
+            top: 0;
+            background: var(--bg-black);
+            z-index: 100;
+        }
+
+        .nav-trigger {
             display: flex;
             align-items: center;
             gap: 12px;
-        }
-
-        .nav-btn {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            font-size: 18px;
             color: var(--primary-gold);
-            transition: 0.3s;
+            cursor: pointer;
         }
 
-        .nav-btn:hover {
-            background: var(--primary-gold);
-            color: black;
+        .header-logo {
+            width: 40px;
+            height: auto;
         }
 
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff4757;
-            color: white;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            font-size: 11px;
+        .header-icons {
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 15px;
+        }
+
+        .profile-img-container {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-gold);
+            overflow: hidden;
+            background: #111;
+            cursor: pointer;
+        }
+
+        .profile-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         /* Hero Section */
@@ -112,353 +157,208 @@
             text-align: center;
         }
 
-        .breadcrumb {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            font-size: 13px;
-            margin-bottom: 15px;
-        }
-
-        .breadcrumb a { color: #888; text-decoration: none; }
-        .breadcrumb .active { color: var(--primary-gold); }
-
         .hero-title {
-            font-size: 28px;
+            font-size: 24px;
             color: var(--primary-gold);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-transform: uppercase;
+            font-weight: 700;
         }
 
         .hero-subtitle {
-            font-size: 14px;
+            font-size: 13px;
             color: #aaa;
-            max-width: 500px;
-            margin: 0 auto 25px;
+            max-width: 320px;
+            margin: 0 auto 20px;
         }
 
-        .stats-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            min-width: 120px;
-        }
-
-        .stat-number {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-gold);
-        }
-
-        .stat-label { font-size: 12px; color: #888; }
-
-        /* Distributors Grid */
-        .distributors-section { padding: 20px; }
-
-        .section-title {
-            font-size: 20px;
-            color: var(--primary-gold);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .distributors-grid {
+        /* Vendors Grid */
+        .vendors-grid {
+            padding: 0 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            width: 90%;
-            max-width: 1000px;
-            margin: 0 auto;
+            grid-template-columns: 1fr;
+            gap: 15px;
         }
 
-        .distributor-card {
+        .vendor-card {
             background: var(--card-bg);
-            border-radius: 15px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 15px;
             border: 1px solid rgba(212, 175, 55, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 15px;
             position: relative;
         }
 
-        .verified-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--primary-gold);
-            color: black;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .distributor-avatar {
+        .vendor-avatar {
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: var(--bg-black);
             border: 2px solid var(--primary-gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .vendor-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .vendor-info {
+            flex-grow: 1;
+        }
+
+        .vendor-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .vendor-plan {
+            font-size: 0.75rem;
             color: var(--primary-gold);
-            font-weight: bold;
-            font-size: 20px;
-            margin-bottom: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
         }
 
-        .distributor-info h3 { color: var(--primary-gold); margin-bottom: 5px; }
-        .distributor-info p { color: #888; font-size: 13px; }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #1a1a1a;
-            font-size: 13px;
-        }
-
-        .detail-label { color: #888; }
-        .detail-value { color: white; font-weight: 500; }
-
-        /* Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
+        .vendor-bank {
+            font-size: 0.7rem;
+            color: #888;
+            margin-top: 4px;
         }
 
         .btn-whatsapp {
-            flex: 2;
-            background: #25D366; /* Kept WhatsApp green for recognition */
+            background: #25D366;
             color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-profile {
-            flex: 1;
-            background: var(--gradient-gold);
-            color: black;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        /* Vertical Side Menu */
-        .side-menu {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 280px;
-            height: 100%;
-            background: #0a0a0a;
-            border-left: 1px solid var(--primary-gold);
-            z-index: 1000;
-            transition: 0.4s;
-            padding: 20px;
-        }
-
-        .side-menu.active { right: 0; }
-
-        .menu-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-        }
-
-        .close-menu {
-            background: none;
-            border: none;
-            color: var(--primary-gold);
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .menu-list { list-style: none; }
-
-        .menu-item { margin-bottom: 5px; }
-
-        .menu-item a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            border-bottom: 1px solid #1a1a1a;
-        }
-
-        .menu-item a:hover {
-            background: rgba(212, 175, 55, 0.1);
-            color: var(--primary-gold);
-        }
-
-        .menu-item i { color: var(--primary-gold); width: 20px; }
-
-        .scroll-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 45px;
-            height: 45px;
-            background: var(--gradient-gold);
-            color: black;
-            border: none;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
+            text-decoration: none;
+            font-size: 18px;
+            flex-shrink: 0;
         }
 
-        @media (max-width: 600px) {
-            .hero-title { font-size: 22px; }
-            .distributors-grid { grid-template-columns: 1fr; width: 95%; }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .loader {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary-gold);
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <a href="index.html" class="logo-container">
-            <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="CASHX Logo" class="logo-img">
-            <span class="logo-text">PROTEGE</span>
-        </a>
-        
-        <div class="nav-actions">
-            <button class="nav-btn" id="notificationBtn" style="position: relative;">
-                <i class="fas fa-bell"></i>
-                <span class="notification-badge">3</span>
-            </button>
-            <button class="nav-btn" id="menuBtn">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-    </nav>
+    <div class="overlay" id="mainOverlay"></div>
 
-    <section class="hero-section">
-        <div class="breadcrumb">
-            <a href="index.html">Home</a>
-            <span style="color:#444">/</span>
-            <span class="active">Distributors</span>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3 style="letter-spacing: 2px;">MENU</h3>
+            <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
         </div>
-        
-        <h1 class="hero-title">Verified Distributors</h1>
-        <p class="hero-subtitle">Message any of our trusted partners to secure your transactions instantly.</p>
-        
-        <div class="stats-container">
-            <div class="stat-card">
-                <div class="stat-number">24+</div>
-                <div class="stat-label">Active</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">100%</div>
-                <div class="stat-label">Secured</div>
-            </div>
-        </div>
-    </section>
-
-    <section class="distributors-section">
-        <div class="distributors-grid">
-            <div class="distributor-card">
-                <div class="verified-badge"><i class="fas fa-check-circle"></i> Verified</div>
-                <div class="distributor-avatar">WT</div>
-                <div class="distributor-info">
-                    <h3>WEALTHTV</h3>
-                    <p>Premium Distributor</p>
-                </div>
-                
-                <div class="distributor-details">
-                    <div class="detail-row">
-                        <span class="detail-label">Bank</span>
-                        <span class="detail-value">Fidelity Bank</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Hours</span>
-                        <span class="detail-value">24/7</span>
-                    </div>
-                </div>
-                
-                <div class="action-buttons">
-                    <button class="btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</button>
-                    <button class="btn-profile">Profile</button>
-                </div>
-            </div>
-
-            <div class="distributor-card">
-                <div class="verified-badge"><i class="fas fa-check-circle"></i> Verified</div>
-                <div class="distributor-avatar">A</div>
-                <div class="distributor-info">
-                    <h3>Almusty</h3>
-                    <p>Elite Distributor</p>
-                </div>
-                
-                <div class="distributor-details">
-                    <div class="detail-row">
-                        <span class="detail-label">Bank</span>
-                        <span class="detail-value">UBA</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Hours</span>
-                        <span class="detail-value">24/7</span>
-                    </div>
-                </div>
-                
-                <div class="action-buttons">
-                    <button class="btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</button>
-                    <button class="btn-profile">Profile</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="side-menu" id="sideMenu">
-        <div class="menu-header">
-            <span class="logo-text">MENU</span>
-            <button class="close-menu" id="closeMenu"><i class="fas fa-times"></i></button>
-        </div>
-
-        <ul class="menu-list">
-            <li class="menu-item"><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-            <li class="menu-item"><a href="merchants.html"><i class="fas fa-users"></i> Distributors</a></li>
-            <li class="menu-item"><a href="#"><i class="fas fa-star"></i> Reviews</a></li>
-            <li class="menu-item"><a href="#"><i class="fas fa-headset"></i> Support</a></li>
-        </ul>
+        <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="merchants.html" class="sidebar-item" style="color: var(--primary-gold);"><i class="fas fa-store"></i> Vendors</a>
+        <a href="articles.html" class="sidebar-item"><i class="fas fa-newspaper"></i> News</a>
+        <a href="coupon.html" class="sidebar-item"><i class="fas fa-key"></i> Coupon</a>
+        <a href="history.html" class="sidebar-item"><i class="fas fa-history"></i> History</a>
+        <a href="monetization.html" class="sidebar-item"><i class="fas fa-bolt"></i> Streak</a>
+        <a href="teams.html" class="sidebar-item"><i class="fas fa-users"></i> Teams</a>
+        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>
+        <a href="profile.html" class="sidebar-item"><i class="fas fa-user-circle"></i> Profile</a>
+        <a href="#" id="logoutBtn" class="sidebar-item" style="color: #ff4d4d;"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
-    <button class="scroll-top" id="scrollTop"><i class="fas fa-arrow-up"></i></button>
+    <div class="phone-wrapper">
+        <header class="header">
+            <div class="nav-trigger" id="hamburgerBtn">
+                <i class="fas fa-bars fa-lg"></i>
+                <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo" class="header-logo" style="margin-left: 10px;">
+            </div>
+            <div class="header-icons">
+                <div class="profile-img-container" id="headerProfileImg">
+                    <img id="headerAvatar" src="https://via.placeholder.com/150/111111/D4AF37?text=U" alt="User">
+                </div>
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <h1 class="hero-title">Verified Vendors</h1>
+            <p class="hero-subtitle">Purchase coupon codes from our trusted partners to upgrade your account.</p>
+        </section>
+
+        <div id="vendorsList" class="vendors-grid">
+            <div class="loader"><i class="fas fa-spinner fa-spin"></i> Loading vendors...</div>
+        </div>
+    </div>
+
+    <script src="js/layout.js"></script>
     <script>
-        const menuBtn = document.getElementById('menuBtn');
-        const closeMenu = document.getElementById('closeMenu');
-        const sideMenu = document.getElementById('sideMenu');
+        document.addEventListener('DOMContentLoaded', () => {
+            const vendorsList = document.getElementById('vendorsList');
+            const headerAvatar = document.getElementById('headerAvatar');
+            const headerProfileImg = document.getElementById('headerProfileImg');
 
-        menuBtn.onclick = () => sideMenu.classList.add('active');
-        closeMenu.onclick = () => sideMenu.classList.remove('active');
+            // Handle guest vs logged in user for avatar
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    if (user.avatarUrl) headerAvatar.src = user.avatarUrl;
+                    headerProfileImg.onclick = () => location.href = 'profile.html';
+                } catch(e) {}
+            } else {
+                headerProfileImg.onclick = () => location.href = 'login.html';
+            }
 
-        window.onscroll = function() {
-            const btn = document.getElementById('scrollTop');
-            btn.style.display = (window.pageYOffset > 300) ? 'flex' : 'none';
-        };
+            async function fetchVendors() {
+                try {
+                    const res = await fetch('/api/auth/public/vendors');
+                    const data = await res.json();
+                    
+                    if (!res.ok) throw new Error(data.message || 'Failed to load vendors');
 
-        document.getElementById('scrollTop').onclick = () => window.scrollTo({top: 0, behavior: 'smooth'});
+                    if (data.vendors.length === 0) {
+                        vendorsList.innerHTML = '<div class="empty-state">No approved vendors found at the moment.</div>';
+                        return;
+                    }
+
+                    vendorsList.innerHTML = data.vendors.map(v => `
+                        <div class="vendor-card">
+                            <div class="vendor-avatar">
+                                <img src="${v.avatarUrl || 'https://via.placeholder.com/150/111111/D4AF37?text=' + (v.fullName ? v.fullName.charAt(0) : 'V')}" alt="${v.fullName || 'Vendor'}">
+                            </div>
+                            <div class="vendor-info">
+                                <div class="vendor-name">${v.fullName || 'Verified Vendor'}</div>
+                                <div class="vendor-plan">${v.packageType ? v.packageType + ' Vendor' : 'Verified Vendor'}</div>
+                                <div class="vendor-bank">Supports: ${v.vendorBankName || 'Multiple Banks'}</div>
+                            </div>
+                            ${v.whatsappNumber ? `
+                                <a href="https://wa.me/${v.whatsappNumber.replace(/\D/g, '')}" target="_blank" class="btn-whatsapp">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            ` : ''}
+                        </div>
+                    `).join('');
+
+                } catch (err) {
+                    console.error(err);
+                    vendorsList.innerHTML = '<div class="empty-state">Unable to load vendors list. Please try again later.</div>';
+                }
+            }
+
+            fetchVendors();
+        });
     </script>
 </body>
 </html>
