@@ -21,6 +21,158 @@
             --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
         }
 
+        /* --- Inline Notification Modal CSS --- */
+        .modal-notify-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-notify-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-notify-card {
+            background: #0d0d0d;
+            border: 1px solid #1a1a1a;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-notify-overlay.active .modal-notify-card {
+            transform: scale(1);
+        }
+
+        .modal-notify-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            font-size: 32px;
+        }
+
+        .modal-notify-icon.success { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); }
+        .modal-notify-icon.error { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .modal-notify-icon.warning { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+
+        .modal-notify-title { color: #fff; font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+        .modal-notify-message { color: #94a3b8; font-size: 15px; line-height: 1.6; margin-bottom: 25px; }
+
+        .modal-notify-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            border: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-notify-btn.success { background: #22c55e; color: #000; }
+        .modal-notify-btn.error { background: #ef4444; color: #fff; }
+        .modal-notify-btn.warning { background: #f59e0b; color: #000; }
+        .modal-notify-btn:active { transform: scale(0.98); }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: #111111;
+            z-index: 100000;
+            transition: 0.4s ease;
+            border-right: 2px solid var(--primary-gold);
+            padding: 25px;
+            box-shadow: 20px 0 50px rgba(0,0,0,0.9);
+        }
+
+        .sidebar.active { left: 0; }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-gold);
+            margin-bottom: 35px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #222;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            color: #ffffff;
+            text-decoration: none;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .sidebar-item i { 
+            color: var(--primary-gold); 
+            margin-right: 15px; 
+            width: 25px; 
+            font-size: 1.2rem;
+            text-align: center; 
+        }
+
+        .sidebar-item:hover { 
+            background: #1a1a1a;
+            color: var(--primary-gold); 
+        }
+
+        .overlay-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 99999;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay-sidebar.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .nav-trigger {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 100;
+            color: var(--primary-gold);
+            gap: 12px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -499,7 +651,7 @@
         </div>
     </div>
 
-    <div class="overlay" id="mainOverlay"></div>
+    <div class="overlay-sidebar" id="mainSidebarOverlay"></div>
 
     <!-- Account Selection Modal -->
     <div class="overlay" id="accountModalOverlay">
@@ -700,14 +852,12 @@
             <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
         </div>
         <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
-        <a href="articles.html" class="sidebar-item"><i class="fas fa-newspaper"></i> News</a>
         <a href="coupon.html" class="sidebar-item"><i class="fas fa-key"></i> Coupon</a>
-        <a href="history.html" class="sidebar-item"><i class="fas fa-history"></i> History</a>
-        <a href="monetization.html" class="sidebar-item"><i class="fas fa-bolt"></i> Streak</a>
+        <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a>
         <a href="teams.html" class="sidebar-item"><i class="fas fa-users"></i> Teams</a>
         <a href="withdraw.html" class="sidebar-item active"><i class="fas fa-wallet"></i> Withdraw</a>
-        <a href="profile.html" class="sidebar-item"><i class="fas fa-user-circle"></i> Profile</a>
-        <a href="#" id="logoutBtn" class="sidebar-item" style="color: var(--accent-red); border-top: 2px solid #222;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="loans.html" class="sidebar-item"><i class="fas fa-university"></i> Loans</a>
+        <a href="#" id="logoutBtn" class="sidebar-item" style="color: #ff4d4d; border-top: 2px solid #222; margin-top: auto;"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
     <div class="phone-wrapper">
@@ -798,6 +948,52 @@
     <script src="js/auth-guard.js"></script>
     <script src="js/layout.js"></script>
     <script>
+        /* --- Inline Notification Modal JS --- */
+        const CustomNotify = {
+            _init() {
+                if (document.getElementById('modal-notify-overlay')) return;
+                const modalHtml = `
+                    <div id="modal-notify-overlay" class="modal-notify-overlay">
+                        <div class="modal-notify-card">
+                            <div id="modal-notify-icon" class="modal-notify-icon">
+                                <i id="modal-notify-icon-inner" class="fas fa-check"></i>
+                            </div>
+                            <h2 id="modal-notify-title" class="modal-notify-title">Notification</h2>
+                            <p id="modal-notify-message" class="modal-notify-message">Something happened</p>
+                            <button id="modal-notify-btn" class="modal-notify-btn">Continue</button>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                this.overlay = document.getElementById('modal-notify-overlay');
+                this.iconInner = document.getElementById('modal-notify-icon-inner');
+                this.title = document.getElementById('modal-notify-title');
+                this.message = document.getElementById('modal-notify-message');
+                this.btn = document.getElementById('modal-notify-btn');
+                this.btn.onclick = () => this.hide();
+                this.overlay.onclick = (e) => { if (e.target === this.overlay) this.hide(); };
+            },
+            show(type = 'success', title = 'Success', message = '', callback = null) {
+                this._init();
+                document.getElementById('modal-notify-icon').className = 'modal-notify-icon ' + type;
+                this.btn.className = 'modal-notify-btn ' + type;
+                this.title.innerText = title;
+                this.message.innerText = message;
+                if (type === 'success') this.iconInner.className = 'fas fa-check-circle';
+                else if (type === 'error') this.iconInner.className = 'fas fa-times-circle';
+                else if (type === 'warning') this.iconInner.className = 'fas fa-exclamation-triangle';
+                this.btn.onclick = () => { this.hide(); if (callback) callback(); };
+                this.overlay.style.display = 'flex';
+                setTimeout(() => this.overlay.classList.add('active'), 10);
+            },
+            hide() {
+                this.overlay.classList.remove('active');
+                setTimeout(() => { this.overlay.style.display = 'none'; }, 300);
+            }
+        };
+        window.showError = (msg, cb) => CustomNotify.show('error', 'Error', msg, cb);
+        window.showSuccess = (msg, cb) => CustomNotify.show('success', 'Success', msg, cb);
+
         let currentMethod = 'Direct Bank';
         let userCountry = 'NG';
         let savedAccounts = [];
@@ -1063,7 +1259,7 @@
             const accId = document.getElementById('selectedAccountId').value;
 
             if (!amtValue) {
-                alert('Please enter an amount to withdraw');
+                showError('Please enter an amount to withdraw');
                 return;
             }
 
@@ -1077,12 +1273,12 @@
             }
 
             if (amt < minAmt) {
-                alert(`Please enter an amount of at least ${currencySymbol}${minAmt.toLocaleString(undefined, {minimumFractionDigits: 2})}`);
+                showError(`Please enter an amount of at least ${currencySymbol}${minAmt.toLocaleString(undefined, {minimumFractionDigits: 2})}`);
                 return;
             }
 
             if (!accId) {
-                alert('Please select an account for withdrawal');
+                showError('Please select an account for withdrawal');
                 return;
             }
 
@@ -1103,25 +1299,37 @@
             document.getElementById('history-detail-card').classList.add('payout-hidden');
         }
 
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('mainOverlay') || document.getElementById('overlay');
-            if (sidebar && overlay) {
-                sidebar.classList.toggle('active');
-                overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             loadWithdrawInfo();
 
+            // --- Fixed Hamburger & Sidebar Logic ---
             const hamburgerBtn = document.getElementById('hamburgerBtn');
             const closeSidebarBtn = document.getElementById('closeSidebarBtn');
-            const overlay = document.getElementById('mainOverlay') || document.getElementById('overlay');
+            const sidebar = document.getElementById('sidebar');
+            const mainOverlay = document.getElementById('mainSidebarOverlay');
+            const headerAvatar = document.getElementById('headerAvatar');
 
-            if (hamburgerBtn) hamburgerBtn.onclick = toggleSidebar;
-            if (closeSidebarBtn) closeSidebarBtn.onclick = toggleSidebar;
-            if (overlay) overlay.onclick = toggleSidebar;
+            function toggleSidebar() {
+                if (sidebar) sidebar.classList.toggle('active');
+                if (mainOverlay) {
+                    mainOverlay.classList.toggle('active');
+                }
+            }
+
+            if (hamburgerBtn) hamburgerBtn.addEventListener('click', toggleSidebar);
+            if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', toggleSidebar);
+            if (mainOverlay) mainOverlay.addEventListener('click', toggleSidebar);
+
+            // --- Fixed User Avatar Logic ---
+            const userStr = localStorage.getItem('user');
+            const savedAvatar = localStorage.getItem('userAvatar');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    if (user.avatarUrl && headerAvatar) headerAvatar.src = user.avatarUrl;
+                    else if (savedAvatar && headerAvatar) headerAvatar.src = savedAvatar;
+                } catch(e) {}
+            }
 
             const confirmBtn = document.getElementById('confirm-payout-btn');
             const cancelBtn = document.getElementById('cancel-payout-btn');
@@ -1173,7 +1381,7 @@
                     setTimeout(() => toastContainer.classList.add('payout-hidden'), 4000);
 
                 } catch (err) {
-                    alert(err.message);
+                    showError(err.message);
                     confirmBtn.disabled = false;
                     confirmBtn.textContent = 'Confirm Withdrawal';
                 }
