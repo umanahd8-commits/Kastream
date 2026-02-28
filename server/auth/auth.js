@@ -9,6 +9,7 @@ const User = require('../models/User');
 const Coupon = require('../models/Coupon');
 const Article = require('../models/Article');
 const Settings = require('../models/Settings');
+const verifyToken = require('../middleware/auth');
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
@@ -21,8 +22,13 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 }
 });
 
-const SECRET_KEY = 'your-secret-key';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '2m';
+const SECRET_KEY = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '30m';
+
+console.log('JWT Configuration Loaded:', { 
+    expiresIn: JWT_EXPIRES_IN,
+    secretProvided: !!process.env.JWT_SECRET 
+});
 
 const ARTICLE_CONFIG = {
     rewardAmount: Number(process.env.ARTICLE_REWARD_AMOUNT) || 100,
@@ -270,6 +276,9 @@ router.post('/register', async (req, res) => {
         const randomDigits = Math.floor(100000 + Math.random() * 900000);
         const userId = `${safePrefix}${randomDigits}`;
 
+        // Single Session Token for Register
+        const sessionToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
+
         const newUser = new User({
             fullName,
             email,
@@ -281,7 +290,8 @@ router.post('/register', async (req, res) => {
             phone,
             couponCode: normalizedCoupon,
             packageType: coupon.planName,
-            referralCode: username
+            referralCode: username,
+            sessionToken: sessionToken
         });
 
         const plans = getPlanConfig();
@@ -327,7 +337,11 @@ router.post('/register', async (req, res) => {
         coupon.usedAt = new Date();
         await coupon.save();
 
-        const token = jwt.sign({ id: newUser.id, username: newUser.username }, SECRET_KEY, { expiresIn: JWT_EXPIRES_IN });
+        const token = jwt.sign(
+            { id: newUser.id, username: newUser.username, sessionToken }, 
+            SECRET_KEY, 
+            { expiresIn: JWT_EXPIRES_IN }
+        );
 
         res.status(201).json({
             message: 'User registered successfully',
@@ -399,7 +413,16 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, { expiresIn: JWT_EXPIRES_IN });
+        // Single Session Enforcement: Generate a unique session token
+        const sessionToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
+        user.sessionToken = sessionToken;
+        await user.save();
+
+        const token = jwt.sign(
+            { id: user.id, username: user.username, sessionToken }, 
+            SECRET_KEY, 
+            { expiresIn: JWT_EXPIRES_IN }
+        );
 
         res.json({ 
             message: 'Login successful',  
@@ -423,7 +446,20 @@ router.post('/login', async (req, res) => {
     }
 });
 
-const verifyToken = require('../middleware/auth');
+// Logout Route
+router.post('/logout', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (user) {
+            user.sessionToken = null;
+            await user.save();
+        }
+        res.json({ message: 'Logged out successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 
 function requireAdmin(req, res, next) {
     if (!req.user || req.user.role !== 'admin') {

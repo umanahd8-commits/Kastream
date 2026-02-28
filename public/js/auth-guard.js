@@ -10,6 +10,12 @@
         headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(response => {
+        if (response.status === 401) {
+            // Specific handling for session conflict/expiry
+            return response.json().then(data => {
+                throw new Error(data.message || 'Session expired');
+            });
+        }
         if (!response.ok) {
             throw new Error('Invalid token');
         }
@@ -82,6 +88,79 @@
     })
     .catch(error => {
         console.error('Auth check failed:', error);
+        
+        // Check if it was a session conflict
+        if (error.message.includes('Session expired') || error.message.includes('login detected')) {
+            // Create and show a custom modal for session conflict
+            const sessionOverlay = document.createElement('div');
+            sessionOverlay.style.position = 'fixed';
+            sessionOverlay.style.inset = '0';
+            sessionOverlay.style.background = 'rgba(0,0,0,0.9)';
+            sessionOverlay.style.backdropFilter = 'blur(10px)';
+            sessionOverlay.style.display = 'flex';
+            sessionOverlay.style.alignItems = 'center';
+            sessionOverlay.style.justifyContent = 'center';
+            sessionOverlay.style.zIndex = '100000';
+
+            const sessionModal = document.createElement('div');
+            sessionModal.style.background = '#111';
+            sessionModal.style.borderRadius = '24px';
+            sessionModal.style.padding = '40px 30px';
+            sessionModal.style.width = '90%';
+            sessionModal.style.maxWidth = '380px';
+            sessionModal.style.textAlign = 'center';
+            sessionModal.style.border = '1px solid rgba(212,175,55,0.3)';
+            sessionModal.style.boxShadow = '0 25px 50px rgba(0,0,0,0.5)';
+
+            const icon = document.createElement('div');
+            icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+            icon.style.fontSize = '48px';
+            icon.style.color = '#D4AF37';
+            icon.style.marginBottom = '20px';
+
+            const title = document.createElement('h3');
+            title.textContent = 'Session Expired';
+            title.style.color = '#fff';
+            title.style.fontSize = '22px';
+            title.style.marginBottom = '12px';
+            title.style.fontFamily = 'Montserrat, sans-serif';
+
+            const msg = document.createElement('p');
+            msg.textContent = 'You have been logged in on another device. For security reasons, this session has been closed.';
+            msg.style.color = '#888';
+            msg.style.fontSize = '15px';
+            msg.style.lineHeight = '1.6';
+            msg.style.marginBottom = '30px';
+
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = 'Back to Login';
+            closeBtn.style.width = '100%';
+            closeBtn.style.padding = '16px';
+            closeBtn.style.borderRadius = '14px';
+            closeBtn.style.border = 'none';
+            closeBtn.style.background = 'linear-gradient(45deg,#AA771C,#FCF6BA,#D4AF37)';
+            closeBtn.style.color = '#000';
+            closeBtn.style.fontWeight = '700';
+            closeBtn.style.fontSize = '16px';
+            closeBtn.style.cursor = 'pointer';
+            closeBtn.style.transition = 'transform 0.2s';
+            
+            closeBtn.onclick = () => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'login.html';
+            };
+
+            sessionModal.appendChild(icon);
+            sessionModal.appendChild(title);
+            sessionModal.appendChild(msg);
+            sessionModal.appendChild(closeBtn);
+            sessionOverlay.appendChild(sessionModal);
+            document.body.appendChild(sessionOverlay);
+            
+            return; // Don't redirect immediately, let them see the modal
+        }
+        
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = 'login.html';
@@ -154,7 +233,18 @@
             confirmBtn.style.color = '#000';
             confirmBtn.style.fontWeight = '700';
             confirmBtn.style.cursor = 'pointer';
-            confirmBtn.onclick = () => {
+            confirmBtn.onclick = async () => {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    try {
+                        await fetch('/api/auth/logout', {
+                            method: 'POST',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                    } catch (err) {
+                        console.error('Logout request failed:', err);
+                    }
+                }
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
                 window.location.href = 'login.html';

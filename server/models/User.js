@@ -130,6 +130,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    sessionToken: {
+        type: String,
+        default: null
+    },
     transactions: [{
         type: {
             type: String,
