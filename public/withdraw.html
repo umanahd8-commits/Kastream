@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Withdraw Funds | CASHX</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Withdraw Funds | Protege</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -17,6 +17,7 @@
             --text-white: #ffffff;
             --text-gray: #888888;
             --accent-green: #00ff88;
+            --accent-red: #ff4d4f;
             --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
         }
 
@@ -24,7 +25,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
@@ -162,6 +163,98 @@
         .wallet-option.active { border-color: var(--accent-green); background: rgba(0, 255, 136, 0.05); }
         .wallet-label { display: block; font-size: 0.7rem; color: var(--text-gray); margin-bottom: 4px; text-transform: uppercase; }
         .wallet-amount { display: block; font-size: 1rem; font-weight: 700; color: white; }
+
+        /* Select Account Styling */
+        .account-select-section {
+            background: var(--card-bg);
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: 0.3s;
+        }
+        .account-select-section:hover { border-color: var(--primary-gold); }
+        .account-info { display: flex; align-items: center; gap: 12px; }
+        .account-icon { 
+            width: 40px; 
+            height: 40px; 
+            background: rgba(212, 175, 55, 0.1); 
+            border-radius: 8px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: var(--primary-gold);
+            font-size: 1.2rem;
+        }
+        .account-details { display: flex; flex-direction: column; }
+        .account-label { font-size: 0.7rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; }
+        .account-value { font-size: 0.9rem; font-weight: 600; color: white; margin-top: 2px; }
+        .select-chevron { color: #444; font-size: 0.8rem; }
+
+        /* Modal Styles */
+        .account-modal {
+            background: #0a0a0a;
+            border: 1px solid var(--primary-gold);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-title { color: var(--primary-gold); font-size: 1rem; font-weight: 700; }
+        .modal-close { color: #666; cursor: pointer; font-size: 1.2rem; }
+        
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .saved-account-item {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .saved-account-item:hover { border-color: var(--primary-gold); background: rgba(212, 175, 55, 0.05); }
+        .saved-account-name { font-size: 0.9rem; font-weight: 600; color: white; }
+        .saved-account-sub { font-size: 0.75rem; color: var(--text-gray); }
+
+        .add-account-btn {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px dashed var(--primary-gold);
+            border-radius: 12px;
+            padding: 15px;
+            color: var(--primary-gold);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
 
         .amount-input-group {
             background: var(--card-bg);
@@ -313,6 +406,30 @@
             box-sizing: border-box;
             transition: opacity 0.2s;
         }
+
+        /* History Item Styling */
+        .history-item {
+            background: #050505;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .history-item:hover { border-color: var(--primary-gold); }
+        .history-left { display: flex; flex-direction: column; gap: 4px; }
+        .history-right { text-align: right; display: flex; flex-direction: column; gap: 4px; }
+        .history-amount { font-weight: 700; color: white; font-size: 0.95rem; }
+        .history-date { font-size: 0.7rem; color: var(--text-gray); }
+        .history-status { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+        .status-pending { background: rgba(212, 175, 55, 0.1); color: var(--primary-gold); }
+        .status-successful { background: rgba(34, 197, 94, 0.1); color: var(--accent-green); }
+        .status-failed { background: rgba(239, 68, 68, 0.1); color: var(--accent-red); }
+
         .payout-btn:hover { opacity: 0.8; }
         .btn-confirm-p { background-color: #22c55e; color: #000000; }
         .btn-cancel-p { background-color: #ef4444; color: #ffffff; }
@@ -382,8 +499,86 @@
         </div>
     </div>
 
+    <div class="overlay" id="mainOverlay"></div>
+
+    <!-- Account Selection Modal -->
+    <div class="overlay" id="accountModalOverlay">
+        <div class="account-modal">
+            <div class="modal-header">
+                <span class="modal-title" id="accountModalTitle">Select Bank Account</span>
+                <span class="modal-close" onclick="closeAccountModal()"><i class="fas fa-times"></i></span>
+            </div>
+            <div class="modal-body" id="accountModalBody">
+                <!-- Saved accounts will be injected here -->
+                <div class="add-account-btn" onclick="location.href='bank-details.html'">
+                    <i class="fas fa-plus"></i> Add New Account
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Payout Overlay (Preview + Receipt) -->
     <div id="payout-overlay">
+        <!-- History Detail Card (Dynamic Receipt) -->
+        <div id="history-detail-card" class="payout-card payout-hidden">
+            <div class="payout-card-header">
+                <div>
+                    <h1>Withdrawal</h1>
+                    <h2 id="detail-status-text">Details</h2>
+                    <p class="payout-timestamp" id="detail-timestamp"></p>
+                </div>
+                <div class="logo-wrapper">
+                    <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Protege Logo">
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="payout-amount-section">
+                <label>Amount Requested</label>
+                <div class="payout-amount highlight-gold" id="detail-amount">₦0.00</div>
+            </div>
+
+            <div class="payout-row">
+                <div>
+                    <label>Transaction ID</label>
+                    <p id="detail-ref">-</p>
+                </div>
+                <div class="payout-text-right">
+                    <label>Wallet Used</label>
+                    <p id="detail-wallet">-</p>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="payout-row">
+                <div>
+                    <label id="detail-fee-label">Fee</label>
+                    <p id="detail-fee">-</p>
+                </div>
+                <div class="payout-text-right">
+                    <label>Net Payout</label>
+                    <p id="detail-total" style="color: var(--accent-green);">-</p>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="details-list">
+                <div class="detail-item">
+                    <label>Payout Destination</label>
+                    <p id="detail-description">-</p>
+                </div>
+            </div>
+
+            <div class="payout-button-group">
+                <button onclick="document.getElementById('payout-overlay').classList.remove('active')" class="payout-btn btn-white-p">
+                    <span>×</span> Close
+                </button>
+            </div>
+        </div>
+
         <!-- Preview Card -->
         <div id="preview-card" class="payout-card">
             <div class="payout-card-header">
@@ -392,7 +587,7 @@
                     <h2>Preview</h2>
                 </div>
                 <div class="logo-wrapper">
-                    <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="CASHX Logo">
+                    <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Protege Logo">
                 </div>
             </div>
 
@@ -418,7 +613,7 @@
 
             <div class="payout-row">
                 <div>
-                    <label>Fee (2%)</label>
+                    <label id="preview-fee-label">Fee</label>
                     <p id="preview-fee">-</p>
                 </div>
                 <div class="payout-text-right">
@@ -453,7 +648,7 @@
                     <p class="payout-timestamp" id="receipt-timestamp"></p>
                 </div>
                 <div class="logo-wrapper">
-                    <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="CASHX Logo">
+                    <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Protege Logo">
                 </div>
             </div>
 
@@ -505,19 +700,21 @@
             <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
         </div>
         <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="articles.html" class="sidebar-item"><i class="fas fa-newspaper"></i> News</a>
         <a href="coupon.html" class="sidebar-item"><i class="fas fa-key"></i> Coupon</a>
-        <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a>
+        <a href="history.html" class="sidebar-item"><i class="fas fa-history"></i> History</a>
+        <a href="monetization.html" class="sidebar-item"><i class="fas fa-bolt"></i> Streak</a>
         <a href="teams.html" class="sidebar-item"><i class="fas fa-users"></i> Teams</a>
-        <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>
-        <a href="loans.html" class="sidebar-item"><i class="fas fa-university"></i> Loans</a>
-        <a href="#" id="logoutBtn" class="sidebar-item" style="color: var(--accent-red);"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="withdraw.html" class="sidebar-item active"><i class="fas fa-wallet"></i> Withdraw</a>
+        <a href="profile.html" class="sidebar-item"><i class="fas fa-user-circle"></i> Profile</a>
+        <a href="#" id="logoutBtn" class="sidebar-item" style="color: var(--accent-red); border-top: 2px solid #222;"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
     <div class="phone-wrapper">
         <header class="header">
             <div class="nav-trigger" id="hamburgerBtn">
                 <i class="fas fa-bars fa-lg"></i>
-                <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo" class="header-logo">
+                <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo" class="header-logo" style="margin-left: 10px;">
             </div>
             <div class="header-icons">
                  <div class="profile-img-container" onclick="location.href='profile.html'">
@@ -545,18 +742,33 @@
             
             <h4 class="section-title">Select Wallet</h4>
             <div class="wallet-select">
-                <div class="wallet-option active" onclick="selectWallet('Commission', this)">
-                    <span class="wallet-label">Commission</span>
+                <div class="wallet-option active" onclick="selectWallet('Main balance', this)">
+                    <span class="wallet-label">Main Balance</span>
                     <span class="wallet-amount" id="commissionBalance">₦0.00</span>
                     <i class="fas fa-check-circle" style="position:absolute; top:8px; right:8px; color:var(--accent-green); font-size: 0.8rem;"></i>
                 </div>
-                <div class="wallet-option" onclick="selectWallet('Tasks earnings', this)">
-                    <span class="wallet-label">Tasks</span>
+                <div class="wallet-option" onclick="selectWallet('Task balance', this)">
+                    <span class="wallet-label">Task Balance</span>
                     <span class="wallet-amount" id="tasksBalance">₦0.00</span>
                     <i class="fas fa-check-circle" style="position:absolute; top:8px; right:8px; color:var(--accent-green); display:none; font-size: 0.8rem;"></i>
                 </div>
             </div>
-            <input type="hidden" id="selectedWallet" value="Commission">
+            <input type="hidden" id="selectedWallet" value="Main balance">
+
+            <h4 class="section-title" id="accountSectionTitle">Select Account</h4>
+            <div class="account-select-section" onclick="openAccountModal()">
+                <div class="account-info">
+                    <div class="account-icon" id="selectedAccountIcon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="account-details">
+                        <span class="account-label" id="selectedAccountLabel">Bank Account</span>
+                        <span class="account-value" id="selectedAccountValue">Tap to select account</span>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right select-chevron"></i>
+            </div>
+            <input type="hidden" id="selectedAccountId" value="">
 
             <h4 class="section-title">Amount to Withdraw</h4>
             <div class="amount-input-group">
@@ -579,16 +791,156 @@
     <nav class="bottom-nav">
         <a href="dashboard.html" class="nav-btn"><i class="fas fa-house"></i>Home</a>
         <a href="articles.html" class="nav-btn"><i class="fas fa-newspaper"></i>News</a>
-        <a href="history.html" class="nav-btn"><i class="fas fa-history"></i>History</a>
+        <a href="history.html" class="nav-btn active"><i class="fas fa-history"></i>History</a>
         <a href="profile.html" class="nav-btn"><i class="fas fa-user"></i>Profile</a>
     </nav>
 
     <script src="js/auth-guard.js"></script>
     <script src="js/layout.js"></script>
     <script>
-        // Avatar Persistent Loader
-        const savedAvatar = localStorage.getItem('userAvatar');
-        if(savedAvatar) document.getElementById('headerAvatar').src = savedAvatar;
+        let currentMethod = 'Direct Bank';
+        let userCountry = 'NG';
+        let savedAccounts = [];
+        let withdrawalHistory = [];
+        let currencySymbol = '₦';
+        let withdrawConfig = {
+            withdrawal_fee_percent: 2,
+            min_withdrawal_main: 1000,
+            min_withdrawal_task: 1000
+        };
+
+        async function getNgnToUsdRate() {
+            const cached = sessionStorage.getItem('ngnToUsdRate');
+            if (cached) {
+                const num = parseFloat(cached);
+                if (!Number.isNaN(num) && num > 0) return num;
+            }
+            try {
+                const res = await fetch('https://open.er-api.com/v6/latest/NGN');
+                if (!res.ok) throw new Error('Rate request failed');
+                const data = await res.json();
+                const rate = data && data.rates && data.rates.USD ? Number(data.rates.USD) : null;
+                if (!rate || !isFinite(rate) || rate <= 0) throw new Error('Invalid rate');
+                sessionStorage.setItem('ngnToUsdRate', String(rate));
+                return rate;
+            } catch (e) { return 1; }
+        }
+
+        // Initial Data Loader
+        async function loadWithdrawInfo() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const res = await fetch('/api/auth/withdraw-info', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    userCountry = data.country || 'NG';
+                    currencySymbol = userCountry === 'NG' ? '₦' : '$';
+                    document.getElementById('currencySymbol').textContent = currencySymbol;
+                    
+                    if (data.config) {
+                        withdrawConfig = data.config;
+                    }
+                    
+                    const rate = userCountry === 'NG' ? 1 : await getNgnToUsdRate();
+                    
+                    // Initial Min Withdrawal Display
+                    updateMinWithdrawalDisplay();
+
+                    // Set Balances
+                    document.getElementById('commissionBalance').textContent = `${currencySymbol}${(data.balance * rate).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+                    document.getElementById('tasksBalance').textContent = `${currencySymbol}${(data.taskBalance * rate).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+
+                    savedAccounts = data.bankAccounts || [];
+                    withdrawalHistory = data.history || [];
+                    
+                    updateSelectedAccountDisplay();
+                    renderHistory();
+                }
+            } catch (err) {
+                console.error('Failed to load withdraw info:', err);
+            }
+        }
+
+        function updateMinWithdrawalDisplay() {
+            const wallet = document.getElementById('selectedWallet').value;
+            let minNgn = wallet === 'Main balance' ? withdrawConfig.min_withdrawal_main : withdrawConfig.min_withdrawal_task;
+            
+            // Conversion logic for display (must match API logic)
+            let displayMin = minNgn;
+            if (userCountry !== 'NG') {
+                displayMin = minNgn / 1500; // rough conversion consistent with API
+                if (displayMin < 5) displayMin = 5;
+            }
+
+            document.getElementById('minWithdrawalDisplay').textContent = `Minimum: ${currencySymbol}${displayMin.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        }
+
+        function renderHistory() {
+            const listEl = document.getElementById('historyList');
+            if (!withdrawalHistory || withdrawalHistory.length === 0) {
+                listEl.innerHTML = '<p style="color:#444; text-align:center; padding: 30px; background: #050505; border-radius: 15px; font-size: 0.8rem; border: 1px dashed #1a1a1a;">No transaction history found.</p>';
+                return;
+            }
+
+            listEl.innerHTML = withdrawalHistory.map(tx => {
+                const statusClass = `status-${tx.status || 'pending'}`;
+                const displayStatus = tx.status || 'pending';
+                // Handle both old 'date' and new 'createdAt' fields
+                const timestamp = tx.createdAt || tx.date;
+                const date = timestamp ? new Date(timestamp).toLocaleString() : 'N/A';
+                
+                // For history, we show original currency stored or current symbol
+                const symbol = tx.currency === 'USD' ? '$' : '₦';
+                
+                return `
+                    <div class="history-item" onclick="showHistoryDetail('${tx._id}')">
+                        <div class="history-left">
+                            <span class="history-amount">${symbol}${tx.amount.toLocaleString()}</span>
+                            <span class="history-date">${date}</span>
+                        </div>
+                        <div class="history-right">
+                            <span class="history-status ${statusClass}">${displayStatus}</span>
+                            <span style="font-size: 0.6rem; color: #444;">ID: ${tx._id.slice(-6).toUpperCase()}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function showHistoryDetail(txId) {
+            const tx = withdrawalHistory.find(t => t._id === txId);
+            if (!tx) return;
+
+            const symbol = tx.currency === 'USD' ? '$' : '₦';
+            const feePercent = withdrawConfig.withdrawal_fee_percent || 2;
+            const fee = tx.metadata && tx.metadata.fee ? tx.metadata.fee : (tx.amount * (feePercent / 100));
+            const net = tx.metadata && tx.metadata.netAmount ? tx.metadata.netAmount : (tx.amount - fee);
+
+            document.getElementById('detail-status-text').textContent = (tx.status || 'Pending').toUpperCase();
+            document.getElementById('detail-timestamp').textContent = new Date(tx.createdAt || tx.date).toLocaleString();
+            document.getElementById('detail-amount').textContent = `${symbol}${tx.amount.toLocaleString()}`;
+            document.getElementById('detail-ref').textContent = '#' + (tx.metadata && tx.metadata.ref ? tx.metadata.ref : tx._id.slice(-8).toUpperCase());
+            
+            // Extract wallet from description if possible
+            const walletMatch = tx.description ? tx.description.match(/\(([^)]+)\)/) : null;
+            document.getElementById('detail-wallet').textContent = walletMatch ? walletMatch[1] : 'Withdrawal';
+            
+            document.getElementById('detail-fee-label').textContent = `Fee (${feePercent}%)`;
+            document.getElementById('detail-fee').textContent = `${symbol}${fee.toLocaleString()}`;
+            document.getElementById('detail-total').textContent = `${symbol}${net.toLocaleString()}`;
+            document.getElementById('detail-description').textContent = tx.description || 'Withdrawal request';
+
+            // Show Overlay
+            document.getElementById('payout-overlay').classList.add('active');
+            document.getElementById('history-detail-card').classList.remove('payout-hidden');
+            document.getElementById('preview-card').classList.add('payout-hidden');
+            document.getElementById('receipt-card').classList.add('payout-hidden');
+        }
 
         // Wallet Selection Logic
         function selectWallet(walletName, element) {
@@ -599,41 +951,178 @@
             element.classList.add('active');
             element.querySelector('.fa-check-circle').style.display = 'block';
             document.getElementById('selectedWallet').value = walletName;
+            updateMinWithdrawalDisplay();
         }
 
-        let currentMethod = "Direct Bank";
-        
-        function setMethod(el, val) {
-            document.querySelectorAll('.method-card').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
-            currentMethod = val;
-            document.getElementById('currencySymbol').textContent = (val === 'Direct Bank') ? '₦' : '$';
-            document.getElementById('minWithdrawalDisplay').textContent = (val === 'Direct Bank') ? 'Minimum: ₦1,000.00' : 'Minimum: $10.00';
+        // Method Selection
+        function setMethod(element, method) {
+            document.querySelectorAll('.method-card').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            currentMethod = method;
+
+            // Update UI based on method
+            const icon = document.getElementById('selectedAccountIcon');
+            const label = document.getElementById('selectedAccountLabel');
+            const value = document.getElementById('selectedAccountValue');
+            const title = document.getElementById('accountSectionTitle');
+
+            if (method === 'Direct Bank') {
+                icon.innerHTML = '<i class="fas fa-university"></i>';
+                label.textContent = 'Bank Account';
+                title.textContent = 'Select Bank Account';
+            } else if (method === 'USDT') {
+                icon.innerHTML = '<i class="fas fa-coins"></i>';
+                label.textContent = 'USDT Wallet';
+                title.textContent = 'Select USDT Wallet';
+            } else if (method === 'PayPal') {
+                icon.innerHTML = '<i class="fab fa-paypal"></i>';
+                label.textContent = 'PayPal Account';
+                title.textContent = 'Select PayPal Account';
+            }
+
+            // Reset selected account when switching method
+            document.getElementById('selectedAccountId').value = '';
+            value.textContent = 'Tap to select account';
+            
+            updateSelectedAccountDisplay();
         }
 
-        function openPayoutPreview() {
-            const amt = parseFloat(document.getElementById('amtInput').value);
-            if (!amt || amt <= 0) return alert("Enter a valid amount");
+        // Modal Logic
+        function openAccountModal() {
+            const modalOverlay = document.getElementById('accountModalOverlay');
+            const modalTitle = document.getElementById('accountModalTitle');
+            const modalBody = document.getElementById('accountModalBody');
 
-            const symbol = (currentMethod === 'Direct Bank') ? '₦' : '$';
-            const fee = amt * 0.02;
-            const total = amt - fee;
+            modalOverlay.style.display = 'flex';
+
+            let type = 'bank';
+            if (currentMethod === 'USDT') type = 'usdt';
+            if (currentMethod === 'PayPal') type = 'paypal';
+
+            modalTitle.textContent = `Select ${currentMethod} Account`;
+
+            const filteredAccounts = savedAccounts.filter(acc => acc.type === type);
+
+            let html = '';
+            if (filteredAccounts.length === 0) {
+                html = `
+                    <p style="color:#666; font-size:0.85rem; margin-bottom:15px">No saved ${currentMethod} accounts found.</p>
+                `;
+            } else {
+                html = filteredAccounts.map(acc => {
+                    let name = acc.accountName || acc.paypalName || acc.network || 'Account';
+                    let sub = acc.accountNumber || acc.paypalEmail || acc.walletAddress || '';
+                    return `
+                        <div class="saved-account-item" onclick="selectAccount('${acc._id}', '${name}', '${sub}')">
+                            <span class="saved-account-name">${name}</span>
+                            <span class="saved-account-sub">${sub}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            html += `
+                <div class="add-account-btn" onclick="location.href='bank-details.html'">
+                    <i class="fas fa-plus"></i> Add New Account
+                </div>
+            `;
+
+            modalBody.innerHTML = html;
+        }
+
+        function closeAccountModal() {
+            document.getElementById('accountModalOverlay').style.display = 'none';
+        }
+
+        function selectAccount(id, name, sub) {
+            document.getElementById('selectedAccountId').value = id;
+            document.getElementById('selectedAccountValue').textContent = `${name} (${sub})`;
+            closeAccountModal();
+        }
+
+        function updateSelectedAccountDisplay() {
+            const selectedId = document.getElementById('selectedAccountId').value;
+            const valueEl = document.getElementById('selectedAccountValue');
+            
+            if (selectedId) {
+                const acc = savedAccounts.find(a => a._id === selectedId);
+                if (acc) {
+                    let name = acc.accountName || acc.paypalName || acc.network || 'Account';
+                    let sub = acc.accountNumber || acc.paypalEmail || acc.walletAddress || '';
+                    valueEl.textContent = `${name} (${sub})`;
+                }
+            } else {
+                valueEl.textContent = 'Tap to select account';
+            }
+        }
+
+        // Payout Preview Modal
+        async function openPayoutPreview() {
+            const amtValue = document.getElementById('amtInput').value;
             const wallet = document.getElementById('selectedWallet').value;
+            const accId = document.getElementById('selectedAccountId').value;
 
-            // Populate preview card
-            document.getElementById('preview-amount').textContent = symbol + amt.toLocaleString();
+            if (!amtValue) {
+                alert('Please enter an amount to withdraw');
+                return;
+            }
+
+            const amt = parseFloat(amtValue);
+            const minNgn = wallet === 'Main balance' ? withdrawConfig.min_withdrawal_main : withdrawConfig.min_withdrawal_task;
+            
+            let minAmt = minNgn;
+            if (userCountry !== 'NG') {
+                minAmt = minNgn / 1500;
+                if (minAmt < 5) minAmt = 5;
+            }
+
+            if (amt < minAmt) {
+                alert(`Please enter an amount of at least ${currencySymbol}${minAmt.toLocaleString(undefined, {minimumFractionDigits: 2})}`);
+                return;
+            }
+
+            if (!accId) {
+                alert('Please select an account for withdrawal');
+                return;
+            }
+
+            const feePercent = withdrawConfig.withdrawal_fee_percent || 2;
+            const fee = amt * (feePercent / 100);
+            const net = amt - fee;
+
+            // Populate Preview
+            document.getElementById('preview-amount').textContent = `${currencySymbol}${amt.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
             document.getElementById('preview-wallet').textContent = wallet;
             document.getElementById('preview-method').textContent = currentMethod;
-            document.getElementById('preview-fee').textContent = symbol + fee.toLocaleString();
-            document.getElementById('preview-total').textContent = symbol + total.toLocaleString();
+            document.getElementById('preview-fee').textContent = `${currencySymbol}${fee.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+            document.getElementById('preview-total').textContent = `${currencySymbol}${net.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
 
-            // Show overlay
             document.getElementById('payout-overlay').classList.add('active');
             document.getElementById('preview-card').classList.remove('payout-hidden');
             document.getElementById('receipt-card').classList.add('payout-hidden');
+            document.getElementById('history-detail-card').classList.add('payout-hidden');
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mainOverlay') || document.getElementById('overlay');
+            if (sidebar && overlay) {
+                sidebar.classList.toggle('active');
+                overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            loadWithdrawInfo();
+
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+            const overlay = document.getElementById('mainOverlay') || document.getElementById('overlay');
+
+            if (hamburgerBtn) hamburgerBtn.onclick = toggleSidebar;
+            if (closeSidebarBtn) closeSidebarBtn.onclick = toggleSidebar;
+            if (overlay) overlay.onclick = toggleSidebar;
+
             const confirmBtn = document.getElementById('confirm-payout-btn');
             const cancelBtn = document.getElementById('cancel-payout-btn');
             const downloadBtn = document.getElementById('download-btn');
@@ -641,30 +1130,53 @@
             const closeToastBtn = document.getElementById('close-toast-btn');
             const toastContainer = document.getElementById('toast-container');
 
-            confirmBtn.addEventListener('click', () => {
+            confirmBtn.addEventListener('click', async () => {
                 const amt = document.getElementById('amtInput').value;
-                const symbol = (currentMethod === 'Direct Bank') ? '₦' : '$';
                 const wallet = document.getElementById('selectedWallet').value;
-                const ref = 'CHX-' + Math.floor(Math.random() * 900000);
+                const accId = document.getElementById('selectedAccountId').value;
+                const token = localStorage.getItem('token');
 
-                // Populate receipt
-                document.getElementById('receipt-amount').textContent = symbol + parseFloat(amt).toLocaleString();
-                document.getElementById('receipt-ref').textContent = '#' + ref;
-                document.getElementById('receipt-type').textContent = wallet + ' Withdrawal';
-                document.getElementById('receipt-wallet').textContent = wallet;
-                document.getElementById('receipt-method').textContent = currentMethod;
+                confirmBtn.disabled = true;
+                confirmBtn.textContent = 'Processing...';
 
-                // Timestamp
-                const now = new Date();
-                document.getElementById('receipt-timestamp').textContent = now.toLocaleString();
+                try {
+                    const res = await fetch('/api/auth/withdraw', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body: JSON.stringify({
+                            amount: currencySymbol + amt, // Send with symbol (₦ or $)
+                            wallet: wallet,
+                            accountId: accId
+                        })
+                    });
 
-                // Switch cards
-                document.getElementById('preview-card').classList.add('payout-hidden');
-                document.getElementById('receipt-card').classList.remove('payout-hidden');
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.message || 'Withdrawal failed');
 
-                // Show toast
-                toastContainer.classList.remove('payout-hidden');
-                setTimeout(() => toastContainer.classList.add('payout-hidden'), 4000);
+                    // Success logic
+                    const ref = data.transactionRef || data.transactionId;
+                    
+                    document.getElementById('receipt-amount').textContent = `${currencySymbol}${parseFloat(amt).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+                    document.getElementById('receipt-ref').textContent = '#' + ref;
+                    document.getElementById('receipt-type').textContent = wallet + ' Withdrawal';
+                    document.getElementById('receipt-wallet').textContent = wallet;
+                    document.getElementById('receipt-method').textContent = currentMethod;
+                    document.getElementById('receipt-timestamp').textContent = new Date(data.timestamp).toLocaleString();
+
+                    document.getElementById('preview-card').classList.add('payout-hidden');
+                    document.getElementById('receipt-card').classList.remove('payout-hidden');
+
+                    toastContainer.classList.remove('payout-hidden');
+                    setTimeout(() => toastContainer.classList.add('payout-hidden'), 4000);
+
+                } catch (err) {
+                    alert(err.message);
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = 'Confirm Withdrawal';
+                }
             });
 
             cancelBtn.addEventListener('click', () => {
@@ -675,13 +1187,8 @@
                 toastContainer.classList.add('payout-hidden');
             });
 
-            downloadBtn.addEventListener('click', () => {
-                window.print();
-            });
-
-            closeReceiptBtn.addEventListener('click', () => {
-                location.reload();
-            });
+            downloadBtn.addEventListener('click', () => window.print());
+            closeReceiptBtn.addEventListener('click', () => location.reload());
         });
     </script>
 </body>

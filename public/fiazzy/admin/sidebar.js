@@ -41,6 +41,15 @@ function guardAdminAccess() {
     return true;
 }
 
+// Global response status handler for admin
+function handleAdminApiResponse(res) {
+    if (res.status === 400 || res.status === 401 || res.status === 403) {
+        applyLogout();
+        return false;
+    }
+    return true;
+}
+
 function applyLogout() {
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminInfo');

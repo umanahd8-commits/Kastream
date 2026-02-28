@@ -525,6 +525,7 @@
                     headers: { 'Authorization': 'Bearer ' + token }
                 });
 
+                if (!handleAdminApiResponse(res)) return;
                 if (!res.ok) throw new Error('Failed to load vendors');
 
                 const data = await res.json();

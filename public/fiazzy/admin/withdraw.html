@@ -9,11 +9,15 @@
     <style>
         :root {
             --primary-gold: #D4AF37;
+            --dark-gold: #AA771C;
+            --bright-gold: #FCF6BA;
             --bg-black: #000000;
             --card-bg: #0a0a0a;
             --text-white: #ffffff;
             --text-muted: #888;
             --accent-red: #ff4d4f;
+            --accent-green: #00c96f;
+            --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
         }
 
         body {
@@ -94,48 +98,209 @@
             gap: 6px;
         }
 
-        .admin-chip i {
-            color: var(--primary-gold);
-        }
-
         .logout-btn {
-            margin-left: 10px;
-            padding: 6px 12px;
-            border-radius: 999px;
-            border: 1px solid rgba(255,77,79,0.6);
             background: transparent;
+            border: none;
             color: var(--accent-red);
             font-size: 0.75rem;
             cursor: pointer;
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .card {
-            background-color: var(--card-bg);
-            border-radius: 14px;
-            border: 1px solid rgba(212, 175, 55, 0.18);
-            padding: 16px 14px;
-            margin-top: 10px;
+            background: var(--card-bg);
+            border: 1px solid rgba(212,175,55,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
         }
 
         .card-title {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 600;
             margin-bottom: 6px;
         }
 
-        .card-sub {
-            font-size: 0.8rem;
-            color: var(--text-muted);
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
         }
 
-        .section-title {
-            margin: 10px 0 4px;
-            font-size: 0.8rem;
+        .config-item label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .config-item input {
+            width: 100%;
+            padding: 10px;
+            background: #000;
+            border: 1px solid #222;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .config-item input:focus {
+            border-color: var(--primary-gold);
+        }
+
+        .save-config-btn {
+            background: var(--gradient-gold);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.07em;
             color: var(--text-muted);
+            padding: 10px 8px;
+            border-bottom: 1px solid #222;
         }
 
+        td {
+            padding: 12px 8px;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #111;
+        }
+
+        .status-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .status-pending { background: rgba(212, 175, 55, 0.1); color: var(--primary-gold); }
+        .status-successful { background: rgba(0, 201, 111, 0.1); color: var(--accent-green); }
+        .status-failed { background: rgba(255, 77, 79, 0.1); color: var(--accent-red); }
+
+        .action-btn {
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid #333;
+            background: #111;
+            color: #fff;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .action-btn.approve { border-color: var(--accent-green); color: var(--accent-green); }
+        .action-btn.decline { border-color: var(--accent-red); color: var(--accent-red); }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-box {
+            background: #0a0a0a;
+            border: 1px solid var(--primary-gold);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 450px;
+            padding: 25px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            color: var(--primary-gold);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .modal-close {
+            color: #666;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #111;
+        }
+
+        .detail-label {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: right;
+        }
+
+        .copy-val {
+            cursor: pointer;
+            color: var(--primary-gold);
+            margin-left: 8px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Sidebar styles */
         .sidebar-overlay {
             position: fixed;
             inset: 0;
@@ -157,9 +322,7 @@
             transition: left 0.3s ease;
         }
 
-        .sidebar.active {
-            left: 0;
-        }
+        .sidebar.active { left: 0; }
 
         .sidebar-header {
             display: flex;
@@ -179,9 +342,7 @@
             cursor: pointer;
         }
 
-        .sidebar-nav {
-            margin-top: 8px;
-        }
+        .sidebar-nav { margin-top: 8px; }
 
         .sidebar-item {
             display: flex;
@@ -199,23 +360,9 @@
             text-align: left;
         }
 
-        .sidebar-item i {
-            width: 20px;
-            text-align: center;
-            color: var(--primary-gold);
-        }
-
-        .sidebar-item span {
-            flex: 1;
-        }
-
-        .sidebar-item.active {
-            background: rgba(212,175,55,0.12);
-        }
-
-        .sidebar-item.danger {
-            color: var(--accent-red);
-        }
+        .sidebar-item i { width: 20px; text-align: center; color: var(--primary-gold); }
+        .sidebar-item.active { background: rgba(212,175,55,0.12); }
+        .sidebar-item.danger { color: var(--accent-red); }
     </style>
 </head>
 <body>
@@ -262,6 +409,7 @@
             </button>
         </div>
     </div>
+
     <div class="shell">
         <div class="topbar">
             <div class="topbar-left">
@@ -272,7 +420,7 @@
                     <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo">
                     <div class="brand-text">
                         <span>Protege admin</span>
-                        <span id="adminSubtitle">Loading admin...</span>
+                        <span id="adminSubtitle">Withdrawals</span>
                     </div>
                 </div>
             </div>
@@ -287,26 +435,299 @@
             </div>
         </div>
 
-        <div class="section-title">Withdrawals</div>
-
+        <div class="section-title">Configuration</div>
         <div class="card">
-            <div class="card-title">Withdrawals overview</div>
-            <div class="card-sub">
-                This page will handle withdrawal requests, approvals and payout history.
+            <div class="card-title">Withdrawal Settings</div>
+            <div class="config-grid">
+                <div class="config-item">
+                    <label>Fee Percentage (%)</label>
+                    <input type="number" id="configFee" placeholder="2">
+                </div>
+                <div class="config-item">
+                    <label>Min Withdraw (Main)</label>
+                    <input type="number" id="configMinMain" placeholder="1000">
+                </div>
+                <div class="config-item">
+                    <label>Min Withdraw (Task)</label>
+                    <input type="number" id="configMinTask" placeholder="1000">
+                </div>
+            </div>
+            <button class="save-config-btn" id="saveConfigBtn">Update Settings</button>
+        </div>
+
+        <div class="section-title">Withdrawal Requests</div>
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>User</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th style="text-align:right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="withdrawTableBody">
+                    <tr>
+                        <td colspan="5" style="text-align:center; padding: 40px; color: var(--text-muted);">Loading requests...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal-overlay" id="detailModalOverlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span class="modal-title">Withdrawal Details</span>
+                <span class="modal-close" id="modalCloseBtn">&times;</span>
+            </div>
+            <div id="modalContent">
+                <!-- Dynamic Content -->
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <!-- Dynamic Buttons -->
             </div>
         </div>
     </div>
 
     <script src="sidebar.js"></script>
     <script>
-        document.getElementById('adminLogoutBtn').onclick = () => {
-            applyLogout();
-        };
+        let withdrawals = [];
+        let selectedWithdrawal = null;
+
+        async function loadSettings() {
+            const token = localStorage.getItem('adminToken');
+            try {
+                const res = await fetch('/api/auth/admin/settings/withdrawal', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (!handleAdminApiResponse(res)) return;
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('configFee').value = data.withdrawal_fee_percent;
+                    document.getElementById('configMinMain').value = data.min_withdrawal_main;
+                    document.getElementById('configMinTask').value = data.min_withdrawal_task;
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        async function updateSettings() {
+            const token = localStorage.getItem('adminToken');
+            const body = {
+                withdrawal_fee_percent: document.getElementById('configFee').value,
+                min_withdrawal_main: document.getElementById('configMinMain').value,
+                min_withdrawal_task: document.getElementById('configMinTask').value
+            };
+
+            try {
+                const res = await fetch('/api/auth/admin/settings/withdrawal', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify(body)
+                });
+                if (!handleAdminApiResponse(res)) return;
+                if (res.ok) {
+                    alert('Settings updated successfully');
+                } else {
+                    alert('Failed to update settings');
+                }
+            } catch (err) { alert('Error updating settings'); }
+        }
+
+        async function loadWithdrawals() {
+            const token = localStorage.getItem('adminToken');
+            const tbody = document.getElementById('withdrawTableBody');
+            
+            try {
+                const res = await fetch('/api/auth/admin/withdrawals', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (!handleAdminApiResponse(res)) return;
+                if (!res.ok) throw new Error('Failed to load');
+
+                const data = await res.json();
+                withdrawals = data.withdrawals;
+
+                if (withdrawals.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--text-muted);">No withdrawal requests found.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = withdrawals.map(w => `
+                    <tr>
+                        <td>${new Date(w.date).toLocaleString()}</td>
+                        <td>${w.username}</td>
+                        <td style="font-weight:700;">${w.currency === 'USD' ? '$' : '₦'}${w.amount.toLocaleString()}</td>
+                        <td><span class="status-badge status-${w.status || 'pending'}">${w.status || 'pending'}</span></td>
+                        <td style="text-align:right">
+                            <button class="action-btn" onclick="openDetails('${w._id}')">View</button>
+                        </td>
+                    </tr>
+                `).join('');
+
+            } catch (err) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--accent-red);">Error loading withdrawals.</td></tr>';
+            }
+        }
+
+        function openDetails(id) {
+            const w = withdrawals.find(item => item._id === id);
+            if (!w) return;
+            selectedWithdrawal = w;
+
+            const modalOverlay = document.getElementById('detailModalOverlay');
+            const modalContent = document.getElementById('modalContent');
+            const modalFooter = document.getElementById('modalFooter');
+
+            const rate = 1500; // Fixed conversion rate
+            const isNgn = w.currency === 'NGN';
+            let symbol = isNgn ? '₦' : '$';
+            let amount = w.amount;
+            
+            // If USDT or PayPal and currency is NGN, convert to USD for display
+            if ((w.refType === 'usdt' || w.refType === 'paypal') && isNgn) {
+                symbol = '$';
+                amount = w.amount / rate;
+            }
+
+            const fee = w.metadata && w.metadata.fee ? w.metadata.fee : (w.amount * 0.02);
+            const net = amount - (fee * (symbol === '$' && isNgn ? (1/rate) : 1));
+            const ref = w.metadata && w.metadata.ref ? w.metadata.ref : w._id.slice(-8).toUpperCase();
+            const wallet = w.metadata && w.metadata.wallet ? w.metadata.wallet : 'Withdrawal';
+
+            // Structured Payout Destination Display
+            let payoutHtml = '';
+            let rawCopyText = '';
+            
+            try {
+                if (w.refType && w.refId) {
+                    const details = JSON.parse(w.refId);
+                    if (w.refType === 'bank') {
+                        payoutHtml = `
+                            <div class="detail-row"><span class="detail-label">Bank</span><span class="detail-value">${details.bankName}</span></div>
+                            <div class="detail-row"><span class="detail-label">Account Name</span><span class="detail-value">${details.accountName}</span></div>
+                            <div class="detail-row"><span class="detail-label">Account Number</span><span class="detail-value">${details.accountNumber}</span></div>
+                        `;
+                        rawCopyText = `Bank: ${details.bankName}, Name: ${details.accountName}, Acc: ${details.accountNumber}`;
+                    } else if (w.refType === 'usdt') {
+                        payoutHtml = `
+                            <div class="detail-row"><span class="detail-label">Network</span><span class="detail-value">${details.network}</span></div>
+                            <div class="detail-row"><span class="detail-label">Address</span><span class="detail-value" style="font-size:0.75rem">${details.address}</span></div>
+                        `;
+                        rawCopyText = `USDT (${details.network}): ${details.address}`;
+                    } else if (w.refType === 'paypal') {
+                        payoutHtml = `
+                            <div class="detail-row"><span class="detail-label">PayPal Name</span><span class="detail-value">${details.name}</span></div>
+                            <div class="detail-row"><span class="detail-label">PayPal Email</span><span class="detail-value">${details.email}</span></div>
+                        `;
+                        rawCopyText = `PayPal: ${details.name} (${details.email})`;
+                    }
+                } else {
+                    payoutHtml = `<div style="font-size:0.85rem">${w.description}</div>`;
+                    rawCopyText = w.description;
+                }
+            } catch (e) {
+                payoutHtml = `<div style="font-size:0.85rem">${w.description}</div>`;
+                rawCopyText = w.description;
+            }
+
+            modalContent.innerHTML = `
+                <div class="detail-row">
+                    <span class="detail-label">User</span>
+                    <span class="detail-value">${w.fullName} (@${w.username})</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Requested Amount</span>
+                    <span class="detail-value" style="color:var(--primary-gold)">${symbol}${amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Net Payout</span>
+                    <span class="detail-value" style="color:var(--accent-green)">${symbol}${net.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+                </div>
+                ${isNgn && (w.refType === 'usdt' || w.refType === 'paypal') ? `<div class="detail-row"><span class="detail-label">Orig. Amount</span><span class="detail-value">₦${w.amount.toLocaleString()}</span></div>` : ''}
+                <div class="detail-row">
+                    <span class="detail-label">Transaction Ref</span>
+                    <span class="detail-value">#${ref}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Status</span>
+                    <span class="detail-value"><span class="status-badge status-${w.status || 'pending'}">${w.status || 'pending'}</span></span>
+                </div>
+                <div class="card" style="margin-top:10px; padding:15px; border-color:#333;">
+                    <div class="card-title" style="font-size:0.75rem; color:var(--text-muted); display:flex; justify-content:space-between;">
+                        <span>PAYMENT DESTINATION (${wallet})</span>
+                        <i class="fas fa-copy copy-val" onclick="copyToClipboard('${rawCopyText.replace(/'/g, "\\'")}')" title="Copy Details"></i>
+                    </div>
+                    <div style="margin-top:10px;">
+                        ${payoutHtml}
+                    </div>
+                </div>
+            `;
+
+            if (w.status === 'pending') {
+                modalFooter.innerHTML = `
+                    <button class="modal-btn approve" style="background:var(--accent-green); color:#000;" onclick="processAction('approve')">Approve & Mark Paid</button>
+                    <button class="modal-btn decline" style="background:var(--accent-red); color:#fff;" onclick="processAction('decline')">Decline & Refund</button>
+                `;
+            } else {
+                modalFooter.innerHTML = `
+                    <button class="modal-btn" style="background:#222; color:#fff; flex:1;" onclick="closeModal()">Close</button>
+                `;
+            }
+
+            modalOverlay.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('detailModalOverlay').style.display = 'none';
+        }
+
+        async function processAction(action) {
+            if (!selectedWithdrawal) return;
+            if (!confirm(`Are you sure you want to ${action} this withdrawal?`)) return;
+
+            const token = localStorage.getItem('adminToken');
+            try {
+                const res = await fetch(`/api/auth/admin/withdrawals/${selectedWithdrawal.userId}/${selectedWithdrawal._id}/${action}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (!handleAdminApiResponse(res)) return;
+                if (res.ok) {
+                    alert(`Withdrawal ${action}d successfully`);
+                    closeModal();
+                    loadWithdrawals();
+                } else {
+                    const data = await res.json();
+                    alert(data.message || `Failed to ${action} withdrawal`);
+                }
+            } catch (err) { alert(`Error processing ${action}`); }
+        }
+
+        function copyToClipboard(text) {
+            // Extract the actual account details from description if possible
+            // Description format: "Withdrawal of 5000 to OPay (Commission)"
+            // Or better, just copy the whole thing.
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Details copied to clipboard');
+            });
+        }
+
+        document.getElementById('saveConfigBtn').onclick = updateSettings;
+        document.getElementById('modalCloseBtn').onclick = closeModal;
+        document.getElementById('adminLogoutBtn').onclick = applyLogout;
 
         window.onload = () => {
             if (!guardAdminAccess()) return;
             initAdminHeader();
             initSidebarNav();
+            loadSettings();
+            loadWithdrawals();
         };
     </script>
 </body>

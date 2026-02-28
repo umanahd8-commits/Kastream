@@ -155,6 +155,15 @@ const UserSchema = new mongoose.Schema({
         description: {
             type: String
         },
+        status: {
+            type: String,
+            enum: ['pending', 'successful', 'failed', 'completed'],
+            default: 'successful'
+        },
+        metadata: {
+            type: mongoose.Schema.Types.Mixed,
+            default: {}
+        },
         refType: {
             type: String,
             default: null

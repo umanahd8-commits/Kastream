@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bank Details | CASHX</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Bank Details | Protege</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -16,6 +16,7 @@
             --card-bg: #0a0a0a;
             --text-white: #ffffff;
             --text-gray: #888888;
+            --accent-red: #ff4d4f;
             --gradient-gold: linear-gradient(45deg, var(--dark-gold), var(--bright-gold), var(--primary-gold));
         }
 
@@ -23,7 +24,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
@@ -252,19 +253,21 @@
             <i class="fas fa-times fa-lg" id="closeSidebarBtn" style="cursor:pointer"></i>
         </div>
         <a href="dashboard.html" class="sidebar-item"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="articles.html" class="sidebar-item"><i class="fas fa-newspaper"></i> News</a>
         <a href="coupon.html" class="sidebar-item"><i class="fas fa-key"></i> Coupon</a>
-        <a href="monetization.html" class="sidebar-item"><i class="fas fa-tiktok"></i> Monetization</a>
+        <a href="history.html" class="sidebar-item"><i class="fas fa-history"></i> History</a>
+        <a href="monetization.html" class="sidebar-item"><i class="fas fa-bolt"></i> Streak</a>
         <a href="teams.html" class="sidebar-item"><i class="fas fa-users"></i> Teams</a>
         <a href="withdraw.html" class="sidebar-item"><i class="fas fa-wallet"></i> Withdraw</a>
-        <a href="loans.html" class="sidebar-item"><i class="fas fa-university"></i> Loans</a>
-        <a href="#" id="logoutBtn" class="sidebar-item" style="color: #ff4d4d;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="profile.html" class="sidebar-item"><i class="fas fa-user-circle"></i> Profile</a>
+        <a href="#" id="logoutBtn" class="sidebar-item" style="color: var(--accent-red); border-top: 2px solid #222;"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
     <div class="phone-wrapper">
         <header class="header">
             <div class="nav-trigger" id="hamburgerBtn">
                 <i class="fas fa-bars fa-lg"></i>
-                <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo" class="header-logo">
+                <img src="https://i.ibb.co/ksWTTzsJ/1000033093-removebg-preview.png" alt="Logo" class="header-logo" style="margin-left: 10px;">
             </div>
             <div class="header-icons">
                  <div class="profile-img-container" onclick="location.href='profile.html'">
@@ -301,11 +304,11 @@
                  <div id="bankFields"> 
                    <div class="form-group"> 
                      <label class="form-label">Bank Name</label> 
-                     <input type="text" id="bankName" class="form-input" placeholder="e.g. First Bank" required> 
+                     <input type="text" id="bankName" class="form-input" placeholder="e.g. OPay, First Bank" required> 
                    </div> 
                    <div class="form-group"> 
                      <label class="form-label">Account Name</label> 
-                     <input type="text" id="accountName" class="form-input" placeholder="Your Name" required> 
+                     <input type="text" id="accountName" class="form-input" placeholder="Your Full Name" required> 
                    </div> 
                    <div class="form-group"> 
                      <label class="form-label">Account Number</label> 
@@ -324,23 +327,23 @@
                    </div> 
                    <div class="form-group"> 
                      <label class="form-label">Wallet Address</label> 
-                     <input type="text" id="walletAddress" class="form-input" placeholder="Paste Address"> 
+                     <input type="text" id="walletAddress" class="form-input" placeholder="Paste Wallet Address"> 
                    </div> 
                  </div> 
              
                  <div id="paypalFields" style="display:none;"> 
                    <div class="form-group"> 
                      <label class="form-label">PayPal Name</label> 
-                     <input type="text" id="paypalName" class="form-input" placeholder="Full name"> 
+                     <input type="text" id="paypalName" class="form-input" placeholder="Your PayPal Full Name"> 
                    </div> 
                    <div class="form-group"> 
                      <label class="form-label">PayPal Email</label> 
-                     <input type="email" id="paypalEmail" class="form-input" placeholder="name@example.com"> 
+                     <input type="email" id="paypalEmail" class="form-input" placeholder="example@gmail.com"> 
                    </div> 
                  </div> 
              
                  <button type="submit" class="save-btn" id="saveBtn">Link Account</button> 
-                 <p id="bankError" style="margin-top:8px; font-size:0.75rem; color:#ff4d4f; text-align:center; display:none;"></p>
+                 <p id="bankError" style="margin-top:8px; font-size:0.75rem; color:var(--accent-red); text-align:center; display:none;"></p>
                </form> 
              </div>
 
@@ -419,37 +422,37 @@
             }
             listEl.innerHTML = accounts.map(acc => {
                 let iconClass = 'fas fa-university';
-                let typeLabel = (acc.type || 'payout').toUpperCase();
+                let typeLabel = (acc.bankName || acc.type || 'payout').toUpperCase();
                 let subtitle = acc.accountNumber || acc.walletAddress || acc.paypalEmail || '';
 
                 if (acc.type === 'usdt') {
                     iconClass = 'fas fa-coins';
-                    if (acc.walletAddress) {
-                        const addr = acc.walletAddress;
-                        if (addr.length > 18) {
-                            subtitle = addr.slice(0, 10) + '...' + addr.slice(-4);
-                        } else {
-                            subtitle = addr;
-                        }
+                    typeLabel = (acc.network || 'USDT').toUpperCase();
+                    const addr = acc.walletAddress || '';
+                    if (addr.length > 18) {
+                        subtitle = addr.slice(0, 10) + '...' + addr.slice(-4);
+                    } else {
+                        subtitle = addr;
                     }
                 }
 
                 if (acc.type === 'paypal') {
                     iconClass = 'fab fa-paypal';
+                    typeLabel = 'PAYPAL';
                 }
 
                 return `
                 <div class="bank-item">
                     <div style="display:flex; align-items:center; gap:12px;">
-                        <div style="background:rgba(212,175,55,0.1); width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
-                            <i class="${iconClass}" style="color:var(--primary-gold); font-size:0.9rem;"></i>
+                        <div style="background:rgba(212,175,55,0.1); width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                            <i class="${iconClass}" style="color:var(--primary-gold); font-size:1rem;"></i>
                         </div>
                         <div class="bank-info">
-                            <h4>${typeLabel}</h4>
-                            <p>${subtitle}</p>
+                            <h4 style="font-size:0.85rem; font-weight:700;">${typeLabel}</h4>
+                            <p style="font-size:0.75rem;">${subtitle}</p>
                         </div>
                     </div>
-                    <i class="fas fa-trash-alt delete-btn" onclick="deleteAccount('${acc._id}')"></i>
+                    <i class="fas fa-trash-alt delete-btn" style="font-size:0.8rem;" onclick="deleteAccount('${acc._id}')"></i>
                 </div>`;
             }).join('');
         }

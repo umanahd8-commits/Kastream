@@ -8,6 +8,7 @@ const cloudinary = require('cloudinary').v2;
 const User = require('../models/User');
 const Coupon = require('../models/Coupon');
 const Article = require('../models/Article');
+const Settings = require('../models/Settings');
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
@@ -565,12 +566,191 @@ router.get('/withdraw-info', verifyToken, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        const history = (user.transactions || [])
+            .filter(tx => tx.type === 'withdrawal')
+            .sort((a, b) => b.createdAt - a.createdAt);
+
+        // Get settings
+        const keys = ['withdrawal_fee_percent', 'min_withdrawal_main', 'min_withdrawal_task'];
+        const settings = await Settings.find({ key: { $in: keys } });
+        
+        const config = {
+            withdrawal_fee_percent: 2,
+            min_withdrawal_main: 1000,
+            min_withdrawal_task: 1000
+        };
+        settings.forEach(s => {
+            config[s.key] = s.value;
+        });
+
         res.json({
             balance: user.balance || 0,
             taskBalance: user.taskBalance || 0,
             country: user.country,
-            bankAccounts: user.bankAccounts || []
+            bankAccounts: user.bankAccounts || [],
+            history: history,
+            config: config
         });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Process Withdrawal Request (Protected)
+router.post('/withdraw', verifyToken, async (req, res) => {
+    try {
+        let { amount, wallet, accountId } = req.body || {};
+        const userId = req.user.id;
+
+        if (!amount) {
+            return res.status(400).json({ message: 'Amount is required' });
+        }
+
+        // Parse currency symbol if present
+        let currencySymbol = '₦';
+        let amountValue = 0;
+
+        if (typeof amount === 'string') {
+            if (amount.startsWith('$')) {
+                currencySymbol = '$';
+                amountValue = parseFloat(amount.substring(1));
+            } else if (amount.startsWith('₦')) {
+                currencySymbol = '₦';
+                amountValue = parseFloat(amount.substring(1));
+            } else {
+                amountValue = parseFloat(amount);
+            }
+        } else {
+            amountValue = parseFloat(amount);
+        }
+
+        if (isNaN(amountValue) || amountValue <= 0) {
+            return res.status(400).json({ message: 'Invalid amount' });
+        }
+
+        if (!wallet || !['Main balance', 'Task balance'].includes(wallet)) {
+            return res.status(400).json({ message: 'Invalid wallet selection' });
+        }
+
+        if (!accountId) {
+            return res.status(400).json({ message: 'Withdrawal account is required' });
+        }
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Get settings
+        const keys = ['withdrawal_fee_percent', 'min_withdrawal_main', 'min_withdrawal_task'];
+        const settings = await Settings.find({ key: { $in: keys } });
+        const config = {
+            withdrawal_fee_percent: 2,
+            min_withdrawal_main: 1000,
+            min_withdrawal_task: 1000
+        };
+        settings.forEach(s => { config[s.key] = s.value; });
+
+        // Check if account exists
+        const account = user.bankAccounts.id(accountId);
+        if (!account) {
+            return res.status(404).json({ message: 'Selected withdrawal account not found' });
+        }
+
+        // Conversion Logic: All balances are in NGN
+        const rate = 1500; // Fixed rate 1500 NGN/$
+        let amountInNgn = amountValue;
+        if (currencySymbol === '$') {
+            amountInNgn = amountValue * rate;
+        }
+
+        // Check minimum withdrawal (enforced in NGN)
+        const minAmtSetting = wallet === 'Main balance' ? config.min_withdrawal_main : config.min_withdrawal_task;
+        
+        if (amountInNgn < minAmtSetting) {
+            const displayMin = currencySymbol === '$' ? (minAmtSetting / rate).toFixed(2) : minAmtSetting;
+            return res.status(400).json({ message: `Minimum withdrawal is ${currencySymbol}${displayMin}` });
+        }
+
+        // Check balance (all in NGN)
+        const balanceField = wallet === 'Main balance' ? 'balance' : 'taskBalance';
+        if (user[balanceField] < amountInNgn) {
+            return res.status(400).json({ message: 'Insufficient balance' });
+        }
+
+        // Calculate fee (based on original amount)
+        const feePercent = config.withdrawal_fee_percent || 2;
+        const fee = amountValue * (feePercent / 100);
+        const netTotal = amountValue - fee;
+
+        // Deduct from balance (always in NGN)
+        user[balanceField] -= amountInNgn;
+
+        // Create transaction record
+        const transactionRef = 'PRT-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+        
+        // Payout info for structured recording
+        const payoutInfo = {
+            type: account.type,
+            details: {}
+        };
+
+        if (account.type === 'bank') {
+            payoutInfo.details = {
+                bankName: account.bankName,
+                accountName: account.accountName,
+                accountNumber: account.accountNumber
+            };
+        } else if (account.type === 'usdt') {
+            payoutInfo.details = {
+                network: account.network,
+                address: account.walletAddress
+            };
+        } else if (account.type === 'paypal') {
+            payoutInfo.details = {
+                name: account.paypalName,
+                email: account.paypalEmail
+            };
+        }
+
+        user.transactions.push({
+            type: 'withdrawal',
+            amount: amountValue, // Original requested amount ($ or ₦)
+            currency: currencySymbol === '$' ? 'USD' : 'NGN',
+            direction: 'debit',
+            description: `Withdrawal of ${currencySymbol}${amountValue} (${wallet})`,
+            status: 'pending',
+            createdAt: new Date(),
+            // Store structured data in refType/refId as requested
+            refType: payoutInfo.type,
+            refId: JSON.stringify(payoutInfo.details),
+            metadata: {
+                fee: fee,
+                netAmount: netTotal,
+                wallet: wallet,
+                ref: transactionRef,
+                amountInNgn: amountInNgn,
+                requestedCurrency: currencySymbol
+            }
+        });
+
+        await user.save();
+        const newTx = user.transactions[user.transactions.length - 1];
+
+        res.json({
+            message: 'Withdrawal request placed successfully',
+            transactionId: newTx._id,
+            transactionRef: transactionRef,
+            amount: amountValue,
+            currency: currencySymbol,
+            fee: fee,
+            netTotal: netTotal,
+            timestamp: newTx.createdAt,
+            newBalance: user.balance,
+            newTaskBalance: user.taskBalance
+        });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
@@ -1450,6 +1630,149 @@ router.get('/public/vendors', async (req, res) => {
         }));
 
         res.json({ vendors: mapped });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Admin: Get all withdrawal requests
+router.get('/admin/withdrawals', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+        const limit = Math.max(Math.min(parseInt(req.query.limit, 10) || 50, 100), 1);
+        const status = req.query.status; // optional filter
+
+        // We need to find all users who have transactions of type 'withdrawal'
+        // This is tricky because transactions are embedded in User
+        // For performance in a real app, we'd have a separate Withdrawal model
+        // But following the current architecture:
+        
+        const users = await User.find({ 'transactions.type': 'withdrawal' });
+        
+        let allWithdrawals = [];
+        users.forEach(user => {
+            const userWithdrawals = user.transactions
+                .filter(tx => tx.type === 'withdrawal')
+                .map(tx => ({
+                    ...tx.toObject(),
+                    userId: user.id,
+                    username: user.username,
+                    fullName: user.fullName,
+                    country: user.country,
+                    date: tx.createdAt // map for frontend
+                }));
+            allWithdrawals = allWithdrawals.concat(userWithdrawals);
+        });
+
+        // Filter by status if provided
+        if (status) {
+            allWithdrawals = allWithdrawals.filter(w => w.status === status);
+        }
+
+        // Sort by date descending
+        allWithdrawals.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const totalCount = allWithdrawals.length;
+        const paginated = allWithdrawals.slice((page - 1) * limit, page * limit);
+
+        res.json({
+            totalCount,
+            page,
+            pageSize: limit,
+            withdrawals: paginated
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Admin: Approve/Decline withdrawal
+router.post('/admin/withdrawals/:userId/:transactionId/:action', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const { userId, transactionId, action } = req.params;
+        
+        if (!['approve', 'decline'].includes(action)) {
+            return res.status(400).json({ message: 'Invalid action' });
+        }
+
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        const tx = user.transactions.id(transactionId);
+        if (!tx || tx.type !== 'withdrawal') {
+            return res.status(404).json({ message: 'Withdrawal request not found' });
+        }
+
+        if (tx.status !== 'pending') {
+            return res.status(400).json({ message: `Transaction already ${tx.status}` });
+        }
+
+        if (action === 'approve') {
+            tx.status = 'successful';
+        } else {
+            tx.status = 'failed';
+            // Refund the exact amount deducted from balance (in NGN)
+            const refundAmountNgn = (tx.metadata && tx.metadata.amountInNgn) ? tx.metadata.amountInNgn : tx.amount;
+            
+            const walletMatch = tx.description ? tx.description.match(/\(([^)]+)\)/) : null;
+            const wallet = walletMatch ? walletMatch[1] : (tx.metadata && tx.metadata.wallet ? tx.metadata.wallet : 'Main balance');
+            const balanceField = wallet === 'Main balance' ? 'balance' : 'taskBalance';
+            
+            user[balanceField] += refundAmountNgn;
+        }
+
+        await user.save();
+        res.json({ message: `Withdrawal ${action}d successfully` });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Admin: Get/Update Withdrawal Settings
+router.get('/admin/settings/withdrawal', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const keys = ['withdrawal_fee_percent', 'min_withdrawal_main', 'min_withdrawal_task'];
+        const settings = await Settings.find({ key: { $in: keys } });
+        
+        const config = {
+            withdrawal_fee_percent: 2,
+            min_withdrawal_main: 1000,
+            min_withdrawal_task: 1000
+        };
+
+        settings.forEach(s => {
+            config[s.key] = s.value;
+        });
+
+        res.json(config);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/admin/settings/withdrawal', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const { withdrawal_fee_percent, min_withdrawal_main, min_withdrawal_task } = req.body;
+
+        const updates = [
+            { key: 'withdrawal_fee_percent', value: Number(withdrawal_fee_percent) },
+            { key: 'min_withdrawal_main', value: Number(min_withdrawal_main) },
+            { key: 'min_withdrawal_task', value: Number(min_withdrawal_task) }
+        ];
+
+        for (const item of updates) {
+            await Settings.findOneAndUpdate(
+                { key: item.key },
+                { value: item.value, updatedAt: new Date() },
+                { upsert: true }
+            );
+        }
+
+        res.json({ message: 'Settings updated' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });

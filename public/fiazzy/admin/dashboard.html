@@ -523,11 +523,8 @@
                     }
                 });
 
+                if (!handleAdminApiResponse(res)) return;
                 if (!res.ok) {
-                    if (res.status === 400 || res.status === 401 || res.status === 403) {
-                        applyLogout();
-                        return;
-                    }
                     throw new Error('Failed to load overview');
                 }
 
